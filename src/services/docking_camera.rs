@@ -27,10 +27,22 @@ impl Camera {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `image`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn image_stream(&self) -> crate::Result<crate::Stream<Vec<u8>>> {
+        self.client.stream("DockingCamera", "Camera_get_Image", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Get the part containing this Camera.
     pub async fn part(&self) -> crate::Result<super::space_center::Part> {
         let data = self.client.invoke("DockingCamera", "Camera_get_Part", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<super::space_center::Part>> {
+        self.client.stream("DockingCamera", "Camera_get_Part", &[codec::arg(0, &self.id)]).await
     }
 }
 
@@ -84,9 +96,21 @@ impl DockingCamera {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `available`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn available_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("DockingCamera", "get_Available", &[]).await
+    }
+
     /// Get a Camera part
     pub async fn camera(&self, part: &super::space_center::Part) -> crate::Result<Camera> {
         let data = self.client.invoke("DockingCamera", "Camera", &[codec::arg(0, &part)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `camera`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn camera_stream(&self, part: &super::space_center::Part) -> crate::Result<crate::Stream<Camera>> {
+        self.client.stream("DockingCamera", "Camera", &[codec::arg(0, &part)]).await
     }
 }

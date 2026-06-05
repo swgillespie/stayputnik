@@ -27,10 +27,22 @@ impl Line {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `color`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn color_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("Drawing", "Line_get_Color", &[codec::arg(0, &self.id)]).await
+    }
+
     /// End position of the line.
     pub async fn end(&self) -> crate::Result<(f64, f64, f64)> {
         let data = self.client.invoke("Drawing", "Line_get_End", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `end`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn end_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("Drawing", "Line_get_End", &[codec::arg(0, &self.id)]).await
     }
 
     /// Material used to render the object. Creates the material from a shader with the given name.
@@ -39,10 +51,22 @@ impl Line {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `material`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn material_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("Drawing", "Line_get_Material", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Reference frame for the positions of the object.
     pub async fn reference_frame(&self) -> crate::Result<super::space_center::ReferenceFrame> {
         let data = self.client.invoke("Drawing", "Line_get_ReferenceFrame", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `reference_frame`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn reference_frame_stream(&self) -> crate::Result<crate::Stream<super::space_center::ReferenceFrame>> {
+        self.client.stream("Drawing", "Line_get_ReferenceFrame", &[codec::arg(0, &self.id)]).await
     }
 
     /// Start position of the line.
@@ -51,16 +75,34 @@ impl Line {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `start`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn start_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("Drawing", "Line_get_Start", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Set the thickness
     pub async fn thickness(&self) -> crate::Result<f32> {
         let data = self.client.invoke("Drawing", "Line_get_Thickness", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `thickness`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn thickness_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("Drawing", "Line_get_Thickness", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the object is visible.
     pub async fn visible(&self) -> crate::Result<bool> {
         let data = self.client.invoke("Drawing", "Line_get_Visible", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `visible`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn visible_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("Drawing", "Line_get_Visible", &[codec::arg(0, &self.id)]).await
     }
 
     /// Set the color
@@ -171,10 +213,22 @@ impl Polygon {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `color`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn color_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("Drawing", "Polygon_get_Color", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Material used to render the object. Creates the material from a shader with the given name.
     pub async fn material(&self) -> crate::Result<String> {
         let data = self.client.invoke("Drawing", "Polygon_get_Material", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `material`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn material_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("Drawing", "Polygon_get_Material", &[codec::arg(0, &self.id)]).await
     }
 
     /// Reference frame for the positions of the object.
@@ -183,10 +237,22 @@ impl Polygon {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `reference_frame`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn reference_frame_stream(&self) -> crate::Result<crate::Stream<super::space_center::ReferenceFrame>> {
+        self.client.stream("Drawing", "Polygon_get_ReferenceFrame", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Set the thickness
     pub async fn thickness(&self) -> crate::Result<f32> {
         let data = self.client.invoke("Drawing", "Polygon_get_Thickness", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `thickness`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn thickness_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("Drawing", "Polygon_get_Thickness", &[codec::arg(0, &self.id)]).await
     }
 
     /// Vertices for the polygon.
@@ -195,10 +261,22 @@ impl Polygon {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `vertices`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn vertices_stream(&self) -> crate::Result<crate::Stream<Vec<(f64, f64, f64)>>> {
+        self.client.stream("Drawing", "Polygon_get_Vertices", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the object is visible.
     pub async fn visible(&self) -> crate::Result<bool> {
         let data = self.client.invoke("Drawing", "Polygon_get_Visible", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `visible`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn visible_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("Drawing", "Polygon_get_Visible", &[codec::arg(0, &self.id)]).await
     }
 
     /// Set the color
@@ -303,10 +381,22 @@ impl Text {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `alignment`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn alignment_stream(&self) -> crate::Result<crate::Stream<super::ui::TextAlignment>> {
+        self.client.stream("Drawing", "Text_get_Alignment", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Anchor.
     pub async fn anchor(&self) -> crate::Result<super::ui::TextAnchor> {
         let data = self.client.invoke("Drawing", "Text_get_Anchor", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `anchor`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn anchor_stream(&self) -> crate::Result<crate::Stream<super::ui::TextAnchor>> {
+        self.client.stream("Drawing", "Text_get_Anchor", &[codec::arg(0, &self.id)]).await
     }
 
     /// Character size.
@@ -315,10 +405,22 @@ impl Text {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `character_size`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn character_size_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("Drawing", "Text_get_CharacterSize", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Set the color
     pub async fn color(&self) -> crate::Result<(f64, f64, f64)> {
         let data = self.client.invoke("Drawing", "Text_get_Color", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `color`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn color_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("Drawing", "Text_get_Color", &[codec::arg(0, &self.id)]).await
     }
 
     /// The text string
@@ -327,10 +429,22 @@ impl Text {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `content`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn content_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("Drawing", "Text_get_Content", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Name of the font
     pub async fn font(&self) -> crate::Result<String> {
         let data = self.client.invoke("Drawing", "Text_get_Font", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `font`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn font_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("Drawing", "Text_get_Font", &[codec::arg(0, &self.id)]).await
     }
 
     /// Line spacing.
@@ -339,10 +453,22 @@ impl Text {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `line_spacing`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn line_spacing_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("Drawing", "Text_get_LineSpacing", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Material used to render the object. Creates the material from a shader with the given name.
     pub async fn material(&self) -> crate::Result<String> {
         let data = self.client.invoke("Drawing", "Text_get_Material", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `material`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn material_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("Drawing", "Text_get_Material", &[codec::arg(0, &self.id)]).await
     }
 
     /// Position of the text.
@@ -351,10 +477,22 @@ impl Text {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `position`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn position_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("Drawing", "Text_get_Position", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Reference frame for the positions of the object.
     pub async fn reference_frame(&self) -> crate::Result<super::space_center::ReferenceFrame> {
         let data = self.client.invoke("Drawing", "Text_get_ReferenceFrame", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `reference_frame`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn reference_frame_stream(&self) -> crate::Result<crate::Stream<super::space_center::ReferenceFrame>> {
+        self.client.stream("Drawing", "Text_get_ReferenceFrame", &[codec::arg(0, &self.id)]).await
     }
 
     /// Rotation of the text as a quaternion.
@@ -363,10 +501,22 @@ impl Text {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `rotation`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn rotation_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64, f64)>> {
+        self.client.stream("Drawing", "Text_get_Rotation", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Font size.
     pub async fn size(&self) -> crate::Result<i32> {
         let data = self.client.invoke("Drawing", "Text_get_Size", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `size`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn size_stream(&self) -> crate::Result<crate::Stream<i32>> {
+        self.client.stream("Drawing", "Text_get_Size", &[codec::arg(0, &self.id)]).await
     }
 
     /// Font style.
@@ -375,10 +525,22 @@ impl Text {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `style`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn style_stream(&self) -> crate::Result<crate::Stream<super::ui::FontStyle>> {
+        self.client.stream("Drawing", "Text_get_Style", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the object is visible.
     pub async fn visible(&self) -> crate::Result<bool> {
         let data = self.client.invoke("Drawing", "Text_get_Visible", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `visible`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn visible_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("Drawing", "Text_get_Visible", &[codec::arg(0, &self.id)]).await
     }
 
     /// Alignment.
@@ -476,6 +638,12 @@ impl Text {
         let data = client.invoke("Drawing", "Text_static_AvailableFonts", &[]).await?;
         Decode::decode_krpc(client, &data)
     }
+
+    /// Streamed variant of `available_fonts`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn available_fonts_stream(client: &crate::ClientRef) -> crate::Result<crate::Stream<Vec<String>>> {
+        client.stream("Drawing", "Text_static_AvailableFonts", &[]).await
+    }
 }
 
 impl PartialEq for Text {
@@ -541,6 +709,16 @@ impl Drawing {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `add_line`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn add_line_stream(&self, start: (f64, f64, f64), end: (f64, f64, f64), reference_frame: &super::space_center::ReferenceFrame, visible: Option<bool>) -> crate::Result<crate::Stream<Line>> {
+        let mut args = vec![codec::arg(0, &start), codec::arg(1, &end), codec::arg(2, &reference_frame)];
+        if let Some(v) = &visible {
+            args.push(codec::arg(3, v));
+        }
+        self.client.stream("Drawing", "AddLine", &args).await
+    }
+
     /// Draw a direction vector in the scene, starting from the origin of the given reference frame.
     ///
     /// # Arguments
@@ -559,6 +737,19 @@ impl Drawing {
         }
         let data = self.client.invoke("Drawing", "AddDirection", &args).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `add_direction`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn add_direction_stream(&self, direction: (f64, f64, f64), reference_frame: &super::space_center::ReferenceFrame, length: Option<f32>, visible: Option<bool>) -> crate::Result<crate::Stream<Line>> {
+        let mut args = vec![codec::arg(0, &direction), codec::arg(1, &reference_frame)];
+        if let Some(v) = &length {
+            args.push(codec::arg(2, v));
+        }
+        if let Some(v) = &visible {
+            args.push(codec::arg(3, v));
+        }
+        self.client.stream("Drawing", "AddDirection", &args).await
     }
 
     /// Draw a direction vector in the scene, from the center of mass of the active vessel.
@@ -581,6 +772,19 @@ impl Drawing {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `add_direction_from_com`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn add_direction_from_com_stream(&self, direction: (f64, f64, f64), reference_frame: &super::space_center::ReferenceFrame, length: Option<f32>, visible: Option<bool>) -> crate::Result<crate::Stream<Line>> {
+        let mut args = vec![codec::arg(0, &direction), codec::arg(1, &reference_frame)];
+        if let Some(v) = &length {
+            args.push(codec::arg(2, v));
+        }
+        if let Some(v) = &visible {
+            args.push(codec::arg(3, v));
+        }
+        self.client.stream("Drawing", "AddDirectionFromCom", &args).await
+    }
+
     /// Draw a polygon in the scene, defined by a list of vertices.
     ///
     /// # Arguments
@@ -595,6 +799,16 @@ impl Drawing {
         }
         let data = self.client.invoke("Drawing", "AddPolygon", &args).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `add_polygon`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn add_polygon_stream(&self, vertices: Vec<(f64, f64, f64)>, reference_frame: &super::space_center::ReferenceFrame, visible: Option<bool>) -> crate::Result<crate::Stream<Polygon>> {
+        let mut args = vec![codec::arg(0, &vertices), codec::arg(1, &reference_frame)];
+        if let Some(v) = &visible {
+            args.push(codec::arg(2, v));
+        }
+        self.client.stream("Drawing", "AddPolygon", &args).await
     }
 
     /// Draw text in the scene.
@@ -613,6 +827,16 @@ impl Drawing {
         }
         let data = self.client.invoke("Drawing", "AddText", &args).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `add_text`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn add_text_stream(&self, text: &str, reference_frame: &super::space_center::ReferenceFrame, position: (f64, f64, f64), rotation: (f64, f64, f64, f64), visible: Option<bool>) -> crate::Result<crate::Stream<Text>> {
+        let mut args = vec![codec::arg(0, &text), codec::arg(1, &reference_frame), codec::arg(2, &position), codec::arg(3, &rotation)];
+        if let Some(v) = &visible {
+            args.push(codec::arg(4, v));
+        }
+        self.client.stream("Drawing", "AddText", &args).await
     }
 
     /// Remove all objects being drawn.

@@ -32,6 +32,9 @@ pub enum Error {
     #[error("empty response from server")]
     EmptyResponse,
 
+    #[error("connection closed")]
+    Disconnected,
+
     #[error(transparent)]
     Io(#[from] std::io::Error),
 

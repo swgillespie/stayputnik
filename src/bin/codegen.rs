@@ -905,49 +905,18 @@ fn write_method(
         Receiver::Static => "client",
     };
 
+    let too_many_args = user_params.len() + 1 > 7;
+
+    // The plain RPC method.
     writeln!(out).unwrap();
     write_doc(out, "    ", &proc.documentation);
     // The receiver (or `client` parameter) counts toward clippy's
     // too-many-arguments threshold of 7.
-    if user_params.len() + 1 > 7 {
+    if too_many_args {
         writeln!(out, "    #[allow(clippy::too_many_arguments)]").unwrap();
     }
     writeln!(out, "    pub async fn {method_name}({recv}{sig_params}) -> crate::Result<{ret_type}> {{").unwrap();
-
-    // Required arguments, up to the first optional one, are emitted inline;
-    // any optional arguments require a mutable vec.
-    let mut inline_args: Vec<String> = Vec::new();
-    if receiver == Receiver::Instance {
-        inline_args.push("codec::arg(0, &self.id)".to_string());
-    }
-    let first_optional = user_params
-        .iter()
-        .position(|p| !p.default_value.is_empty())
-        .unwrap_or(user_params.len());
-    for (i, p) in user_params.iter().take(first_optional).enumerate() {
-        let name = safe_ident(&p.name);
-        inline_args.push(format!("codec::arg({}, &{name})", i + position_offset));
-    }
-
-    let args_expr = if first_optional == user_params.len() {
-        // All required: borrow an array directly.
-        format!("&[{}]", inline_args.join(", "))
-    } else {
-        writeln!(out, "        let mut args = vec![{}];", inline_args.join(", ")).unwrap();
-        for (i, p) in user_params.iter().enumerate().skip(first_optional) {
-            let name = safe_ident(&p.name);
-            let pos = i + position_offset;
-            if !p.default_value.is_empty() {
-                writeln!(out, "        if let Some(v) = &{name} {{").unwrap();
-                writeln!(out, "            args.push(codec::arg({pos}, v));").unwrap();
-                writeln!(out, "        }}").unwrap();
-            } else {
-                writeln!(out, "        args.push(codec::arg({pos}, &{name}));").unwrap();
-            }
-        }
-        "&args".to_string()
-    };
-
+    let args_expr = write_args(out, &user_params, receiver, position_offset);
     if returns_value(proc) {
         writeln!(
             out,
@@ -965,8 +934,70 @@ fn write_method(
         .unwrap();
         writeln!(out, "        Ok(())").unwrap();
     }
-
     writeln!(out, "    }}").unwrap();
+
+    // The streamed variant: the server executes the procedure repeatedly
+    // and pushes results. Only value-returning procedures are streamable.
+    if returns_value(proc) {
+        writeln!(out).unwrap();
+        writeln!(out, "    /// Streamed variant of `{method_name}`: the server pushes the value").unwrap();
+        writeln!(out, "    /// at the stream's update rate instead of being polled.").unwrap();
+        if too_many_args {
+            writeln!(out, "    #[allow(clippy::too_many_arguments)]").unwrap();
+        }
+        writeln!(out, "    pub async fn {method_name}_stream({recv}{sig_params}) -> crate::Result<crate::Stream<{ret_type}>> {{").unwrap();
+        let args_expr = write_args(out, &user_params, receiver, position_offset);
+        writeln!(
+            out,
+            "        {client_expr}.stream(\"{service_name}\", \"{}\", {args_expr}).await",
+            proc.name
+        )
+        .unwrap();
+        writeln!(out, "    }}").unwrap();
+    }
+}
+
+/// Emits the argument-building statements for a method body and returns the
+/// expression naming the arguments.
+fn write_args(
+    out: &mut String,
+    user_params: &[&proto::Parameter],
+    receiver: Receiver,
+    position_offset: usize,
+) -> String {
+    // Required arguments, up to the first optional one, are emitted inline;
+    // any optional arguments require a mutable vec.
+    let mut inline_args: Vec<String> = Vec::new();
+    if receiver == Receiver::Instance {
+        inline_args.push("codec::arg(0, &self.id)".to_string());
+    }
+    let first_optional = user_params
+        .iter()
+        .position(|p| !p.default_value.is_empty())
+        .unwrap_or(user_params.len());
+    for (i, p) in user_params.iter().take(first_optional).enumerate() {
+        let name = safe_ident(&p.name);
+        inline_args.push(format!("codec::arg({}, &{name})", i + position_offset));
+    }
+
+    if first_optional == user_params.len() {
+        // All required: borrow an array directly.
+        format!("&[{}]", inline_args.join(", "))
+    } else {
+        writeln!(out, "        let mut args = vec![{}];", inline_args.join(", ")).unwrap();
+        for (i, p) in user_params.iter().enumerate().skip(first_optional) {
+            let name = safe_ident(&p.name);
+            let pos = i + position_offset;
+            if !p.default_value.is_empty() {
+                writeln!(out, "        if let Some(v) = &{name} {{").unwrap();
+                writeln!(out, "            args.push(codec::arg({pos}, v));").unwrap();
+                writeln!(out, "        }}").unwrap();
+            } else {
+                writeln!(out, "        args.push(codec::arg({pos}, &{name}));").unwrap();
+            }
+        }
+        "&args".to_string()
+    }
 }
 
 // ---- Wire protocol helpers (self-contained; see note on `mod proto`) ----

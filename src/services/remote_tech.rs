@@ -70,10 +70,22 @@ impl Antenna {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `has_connection`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn has_connection_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("RemoteTech", "Antenna_get_HasConnection", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Get the part containing this antenna.
     pub async fn part(&self) -> crate::Result<super::space_center::Part> {
         let data = self.client.invoke("RemoteTech", "Antenna_get_Part", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<super::space_center::Part>> {
+        self.client.stream("RemoteTech", "Antenna_get_Part", &[codec::arg(0, &self.id)]).await
     }
 
     /// The object that the antenna is targetting. This property can be used to set the target to `RemoteTech.Target.None` or `RemoteTech.Target.ActiveVessel`. To set the target to a celestial body, ground station or vessel see `RemoteTech.Antenna.TargetBody`, `RemoteTech.Antenna.TargetGroundStation` and `RemoteTech.Antenna.TargetVessel`.
@@ -82,10 +94,22 @@ impl Antenna {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `target`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn target_stream(&self) -> crate::Result<crate::Stream<Target>> {
+        self.client.stream("RemoteTech", "Antenna_get_Target", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The celestial body the antenna is targetting.
     pub async fn target_body(&self) -> crate::Result<super::space_center::CelestialBody> {
         let data = self.client.invoke("RemoteTech", "Antenna_get_TargetBody", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `target_body`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn target_body_stream(&self) -> crate::Result<crate::Stream<super::space_center::CelestialBody>> {
+        self.client.stream("RemoteTech", "Antenna_get_TargetBody", &[codec::arg(0, &self.id)]).await
     }
 
     /// The ground station the antenna is targetting.
@@ -94,10 +118,22 @@ impl Antenna {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `target_ground_station`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn target_ground_station_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("RemoteTech", "Antenna_get_TargetGroundStation", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The vessel the antenna is targetting.
     pub async fn target_vessel(&self) -> crate::Result<super::space_center::Vessel> {
         let data = self.client.invoke("RemoteTech", "Antenna_get_TargetVessel", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `target_vessel`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn target_vessel_stream(&self) -> crate::Result<crate::Stream<super::space_center::Vessel>> {
+        self.client.stream("RemoteTech", "Antenna_get_TargetVessel", &[codec::arg(0, &self.id)]).await
     }
 
     /// The object that the antenna is targetting. This property can be used to set the target to `RemoteTech.Target.None` or `RemoteTech.Target.ActiveVessel`. To set the target to a celestial body, ground station or vessel see `RemoteTech.Antenna.TargetBody`, `RemoteTech.Antenna.TargetGroundStation` and `RemoteTech.Antenna.TargetVessel`.
@@ -184,10 +220,22 @@ impl Comms {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `antennas`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn antennas_stream(&self) -> crate::Result<crate::Stream<Vec<Antenna>>> {
+        self.client.stream("RemoteTech", "Comms_get_Antennas", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the vessel has any connection.
     pub async fn has_connection(&self) -> crate::Result<bool> {
         let data = self.client.invoke("RemoteTech", "Comms_get_HasConnection", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `has_connection`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn has_connection_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("RemoteTech", "Comms_get_HasConnection", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the vessel has a connection to a ground station.
@@ -196,10 +244,22 @@ impl Comms {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `has_connection_to_ground_station`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn has_connection_to_ground_station_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("RemoteTech", "Comms_get_HasConnectionToGroundStation", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the vessel has a flight computer on board.
     pub async fn has_flight_computer(&self) -> crate::Result<bool> {
         let data = self.client.invoke("RemoteTech", "Comms_get_HasFlightComputer", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `has_flight_computer`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn has_flight_computer_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("RemoteTech", "Comms_get_HasFlightComputer", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the vessel can be controlled locally.
@@ -208,10 +268,22 @@ impl Comms {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `has_local_control`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn has_local_control_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("RemoteTech", "Comms_get_HasLocalControl", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The shortest signal delay to the vessel, in seconds.
     pub async fn signal_delay(&self) -> crate::Result<f64> {
         let data = self.client.invoke("RemoteTech", "Comms_get_SignalDelay", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `signal_delay`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn signal_delay_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("RemoteTech", "Comms_get_SignalDelay", &[codec::arg(0, &self.id)]).await
     }
 
     /// The signal delay between the vessel and the closest ground station, in seconds.
@@ -220,16 +292,34 @@ impl Comms {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `signal_delay_to_ground_station`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn signal_delay_to_ground_station_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("RemoteTech", "Comms_get_SignalDelayToGroundStation", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Get the vessel.
     pub async fn vessel(&self) -> crate::Result<super::space_center::Vessel> {
         let data = self.client.invoke("RemoteTech", "Comms_get_Vessel", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `vessel`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn vessel_stream(&self) -> crate::Result<crate::Stream<super::space_center::Vessel>> {
+        self.client.stream("RemoteTech", "Comms_get_Vessel", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The signal delay between the this vessel and another vessel, in seconds.
     pub async fn signal_delay_to_vessel(&self, other: &super::space_center::Vessel) -> crate::Result<f64> {
         let data = self.client.invoke("RemoteTech", "Comms_SignalDelayToVessel", &[codec::arg(0, &self.id), codec::arg(1, &other)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `signal_delay_to_vessel`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn signal_delay_to_vessel_stream(&self, other: &super::space_center::Vessel) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("RemoteTech", "Comms_SignalDelayToVessel", &[codec::arg(0, &self.id), codec::arg(1, &other)]).await
     }
 }
 
@@ -283,10 +373,22 @@ impl RemoteTech {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `available`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn available_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("RemoteTech", "get_Available", &[]).await
+    }
+
     /// The names of the ground stations.
     pub async fn ground_stations(&self) -> crate::Result<Vec<String>> {
         let data = self.client.invoke("RemoteTech", "get_GroundStations", &[]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `ground_stations`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn ground_stations_stream(&self) -> crate::Result<crate::Stream<Vec<String>>> {
+        self.client.stream("RemoteTech", "get_GroundStations", &[]).await
     }
 
     /// Get a communications object, representing the communication capability of a particular vessel.
@@ -295,9 +397,21 @@ impl RemoteTech {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `comms`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn comms_stream(&self, vessel: &super::space_center::Vessel) -> crate::Result<crate::Stream<Comms>> {
+        self.client.stream("RemoteTech", "Comms", &[codec::arg(0, &vessel)]).await
+    }
+
     /// Get the antenna object for a particular part.
     pub async fn antenna(&self, part: &super::space_center::Part) -> crate::Result<Antenna> {
         let data = self.client.invoke("RemoteTech", "Antenna", &[codec::arg(0, &part)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `antenna`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn antenna_stream(&self, part: &super::space_center::Part) -> crate::Result<crate::Stream<Antenna>> {
+        self.client.stream("RemoteTech", "Antenna", &[codec::arg(0, &part)]).await
     }
 }

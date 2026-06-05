@@ -26,5 +26,23 @@ async fn main() -> Result<(), Box<dyn Error>> {
         println!("  {name}: mass = {mass:.3e} kg");
     }
 
+    // Stream universal time at 10 Hz.
+    let mut ut = sc.ut_stream().await?;
+    ut.set_rate(10.0).await?;
+    println!("Streaming universal time:");
+    for _ in 0..5 {
+        let t = ut.next().await?;
+        println!("  UT = {t:.2} s");
+    }
+
+    // The same stream through StreamExt combinators.
+    use tokio_stream::StreamExt;
+    let ticks = (&mut ut)
+        .take(3)
+        .collect::<stayputnik::Result<Vec<f64>>>()
+        .await?;
+    println!("Collected via StreamExt: {ticks:?}");
+    ut.remove().await?;
+
     Ok(())
 }

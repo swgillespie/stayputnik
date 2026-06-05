@@ -27,10 +27,22 @@ impl Laser {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `cloud`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn cloud_stream(&self) -> crate::Result<crate::Stream<Vec<f64>>> {
+        self.client.stream("LiDAR", "Laser_get_Cloud", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Get the part containing this LiDAR.
     pub async fn part(&self) -> crate::Result<super::space_center::Part> {
         let data = self.client.invoke("LiDAR", "Laser_get_Part", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<super::space_center::Part>> {
+        self.client.stream("LiDAR", "Laser_get_Part", &[codec::arg(0, &self.id)]).await
     }
 }
 
@@ -84,9 +96,21 @@ impl LiDAR {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `available`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn available_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("LiDAR", "get_Available", &[]).await
+    }
+
     /// Get a LaserDist part
     pub async fn laser(&self, part: &super::space_center::Part) -> crate::Result<Laser> {
         let data = self.client.invoke("LiDAR", "Laser", &[codec::arg(0, &part)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `laser`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn laser_stream(&self, part: &super::space_center::Part) -> crate::Result<crate::Stream<Laser>> {
+        self.client.stream("LiDAR", "Laser", &[codec::arg(0, &part)]).await
     }
 }

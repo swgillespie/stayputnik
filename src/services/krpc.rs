@@ -71,10 +71,22 @@ impl Expression {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `constant_double`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn constant_double_stream(client: &crate::ClientRef, value: f64) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_ConstantDouble", &[codec::arg(0, &value)]).await
+    }
+
     /// A constant value of single precision floating point type.
     pub async fn constant_float(client: &crate::ClientRef, value: f32) -> crate::Result<Expression> {
         let data = client.invoke("KRPC", "Expression_static_ConstantFloat", &[codec::arg(0, &value)]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `constant_float`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn constant_float_stream(client: &crate::ClientRef, value: f32) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_ConstantFloat", &[codec::arg(0, &value)]).await
     }
 
     /// A constant value of integer type.
@@ -83,10 +95,22 @@ impl Expression {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `constant_int`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn constant_int_stream(client: &crate::ClientRef, value: i32) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_ConstantInt", &[codec::arg(0, &value)]).await
+    }
+
     /// A constant value of boolean type.
     pub async fn constant_bool(client: &crate::ClientRef, value: bool) -> crate::Result<Expression> {
         let data = client.invoke("KRPC", "Expression_static_ConstantBool", &[codec::arg(0, &value)]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `constant_bool`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn constant_bool_stream(client: &crate::ClientRef, value: bool) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_ConstantBool", &[codec::arg(0, &value)]).await
     }
 
     /// A constant value of string type.
@@ -95,10 +119,22 @@ impl Expression {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `constant_string`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn constant_string_stream(client: &crate::ClientRef, value: &str) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_ConstantString", &[codec::arg(0, &value)]).await
+    }
+
     /// An RPC call.
     pub async fn call(client: &crate::ClientRef, call: &crate::krpc::schema::ProcedureCall) -> crate::Result<Expression> {
         let data = client.invoke("KRPC", "Expression_static_Call", &[codec::arg(0, &call)]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `call`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn call_stream(client: &crate::ClientRef, call: &crate::krpc::schema::ProcedureCall) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_Call", &[codec::arg(0, &call)]).await
     }
 
     /// Equality comparison.
@@ -107,10 +143,22 @@ impl Expression {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `equal`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn equal_stream(client: &crate::ClientRef, arg0: &Expression, arg1: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_Equal", &[codec::arg(0, &arg0), codec::arg(1, &arg1)]).await
+    }
+
     /// Inequality comparison.
     pub async fn not_equal(client: &crate::ClientRef, arg0: &Expression, arg1: &Expression) -> crate::Result<Expression> {
         let data = client.invoke("KRPC", "Expression_static_NotEqual", &[codec::arg(0, &arg0), codec::arg(1, &arg1)]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `not_equal`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn not_equal_stream(client: &crate::ClientRef, arg0: &Expression, arg1: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_NotEqual", &[codec::arg(0, &arg0), codec::arg(1, &arg1)]).await
     }
 
     /// Greater than numerical comparison.
@@ -119,10 +167,22 @@ impl Expression {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `greater_than`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn greater_than_stream(client: &crate::ClientRef, arg0: &Expression, arg1: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_GreaterThan", &[codec::arg(0, &arg0), codec::arg(1, &arg1)]).await
+    }
+
     /// Greater than or equal numerical comparison.
     pub async fn greater_than_or_equal(client: &crate::ClientRef, arg0: &Expression, arg1: &Expression) -> crate::Result<Expression> {
         let data = client.invoke("KRPC", "Expression_static_GreaterThanOrEqual", &[codec::arg(0, &arg0), codec::arg(1, &arg1)]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `greater_than_or_equal`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn greater_than_or_equal_stream(client: &crate::ClientRef, arg0: &Expression, arg1: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_GreaterThanOrEqual", &[codec::arg(0, &arg0), codec::arg(1, &arg1)]).await
     }
 
     /// Less than numerical comparison.
@@ -131,10 +191,22 @@ impl Expression {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `less_than`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn less_than_stream(client: &crate::ClientRef, arg0: &Expression, arg1: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_LessThan", &[codec::arg(0, &arg0), codec::arg(1, &arg1)]).await
+    }
+
     /// Less than or equal numerical comparison.
     pub async fn less_than_or_equal(client: &crate::ClientRef, arg0: &Expression, arg1: &Expression) -> crate::Result<Expression> {
         let data = client.invoke("KRPC", "Expression_static_LessThanOrEqual", &[codec::arg(0, &arg0), codec::arg(1, &arg1)]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `less_than_or_equal`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn less_than_or_equal_stream(client: &crate::ClientRef, arg0: &Expression, arg1: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_LessThanOrEqual", &[codec::arg(0, &arg0), codec::arg(1, &arg1)]).await
     }
 
     /// Boolean and operator.
@@ -143,10 +215,22 @@ impl Expression {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `and`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn and_stream(client: &crate::ClientRef, arg0: &Expression, arg1: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_And", &[codec::arg(0, &arg0), codec::arg(1, &arg1)]).await
+    }
+
     /// Boolean or operator.
     pub async fn or(client: &crate::ClientRef, arg0: &Expression, arg1: &Expression) -> crate::Result<Expression> {
         let data = client.invoke("KRPC", "Expression_static_Or", &[codec::arg(0, &arg0), codec::arg(1, &arg1)]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `or`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn or_stream(client: &crate::ClientRef, arg0: &Expression, arg1: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_Or", &[codec::arg(0, &arg0), codec::arg(1, &arg1)]).await
     }
 
     /// Boolean exclusive-or operator.
@@ -155,10 +239,22 @@ impl Expression {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `exclusive_or`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn exclusive_or_stream(client: &crate::ClientRef, arg0: &Expression, arg1: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_ExclusiveOr", &[codec::arg(0, &arg0), codec::arg(1, &arg1)]).await
+    }
+
     /// Boolean negation operator.
     pub async fn not(client: &crate::ClientRef, arg: &Expression) -> crate::Result<Expression> {
         let data = client.invoke("KRPC", "Expression_static_Not", &[codec::arg(0, &arg)]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `not`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn not_stream(client: &crate::ClientRef, arg: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_Not", &[codec::arg(0, &arg)]).await
     }
 
     /// Numerical addition.
@@ -167,10 +263,22 @@ impl Expression {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `add`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn add_stream(client: &crate::ClientRef, arg0: &Expression, arg1: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_Add", &[codec::arg(0, &arg0), codec::arg(1, &arg1)]).await
+    }
+
     /// Numerical subtraction.
     pub async fn subtract(client: &crate::ClientRef, arg0: &Expression, arg1: &Expression) -> crate::Result<Expression> {
         let data = client.invoke("KRPC", "Expression_static_Subtract", &[codec::arg(0, &arg0), codec::arg(1, &arg1)]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `subtract`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn subtract_stream(client: &crate::ClientRef, arg0: &Expression, arg1: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_Subtract", &[codec::arg(0, &arg0), codec::arg(1, &arg1)]).await
     }
 
     /// Numerical multiplication.
@@ -179,10 +287,22 @@ impl Expression {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `multiply`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn multiply_stream(client: &crate::ClientRef, arg0: &Expression, arg1: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_Multiply", &[codec::arg(0, &arg0), codec::arg(1, &arg1)]).await
+    }
+
     /// Numerical division.
     pub async fn divide(client: &crate::ClientRef, arg0: &Expression, arg1: &Expression) -> crate::Result<Expression> {
         let data = client.invoke("KRPC", "Expression_static_Divide", &[codec::arg(0, &arg0), codec::arg(1, &arg1)]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `divide`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn divide_stream(client: &crate::ClientRef, arg0: &Expression, arg1: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_Divide", &[codec::arg(0, &arg0), codec::arg(1, &arg1)]).await
     }
 
     /// Numerical modulo operator.
@@ -195,6 +315,12 @@ impl Expression {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `modulo`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn modulo_stream(client: &crate::ClientRef, arg0: &Expression, arg1: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_Modulo", &[codec::arg(0, &arg0), codec::arg(1, &arg1)]).await
+    }
+
     /// Numerical power operator.
     ///
     /// # Returns
@@ -205,16 +331,34 @@ impl Expression {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `power`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn power_stream(client: &crate::ClientRef, arg0: &Expression, arg1: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_Power", &[codec::arg(0, &arg0), codec::arg(1, &arg1)]).await
+    }
+
     /// Bitwise left shift.
     pub async fn left_shift(client: &crate::ClientRef, arg0: &Expression, arg1: &Expression) -> crate::Result<Expression> {
         let data = client.invoke("KRPC", "Expression_static_LeftShift", &[codec::arg(0, &arg0), codec::arg(1, &arg1)]).await?;
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `left_shift`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn left_shift_stream(client: &crate::ClientRef, arg0: &Expression, arg1: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_LeftShift", &[codec::arg(0, &arg0), codec::arg(1, &arg1)]).await
+    }
+
     /// Bitwise right shift.
     pub async fn right_shift(client: &crate::ClientRef, arg0: &Expression, arg1: &Expression) -> crate::Result<Expression> {
         let data = client.invoke("KRPC", "Expression_static_RightShift", &[codec::arg(0, &arg0), codec::arg(1, &arg1)]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `right_shift`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn right_shift_stream(client: &crate::ClientRef, arg0: &Expression, arg1: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_RightShift", &[codec::arg(0, &arg0), codec::arg(1, &arg1)]).await
     }
 
     /// Perform a cast to the given type.
@@ -225,6 +369,12 @@ impl Expression {
     pub async fn cast(client: &crate::ClientRef, arg: &Expression, r#type: &Type) -> crate::Result<Expression> {
         let data = client.invoke("KRPC", "Expression_static_Cast", &[codec::arg(0, &arg), codec::arg(1, &r#type)]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `cast`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn cast_stream(client: &crate::ClientRef, arg: &Expression, r#type: &Type) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_Cast", &[codec::arg(0, &arg), codec::arg(1, &r#type)]).await
     }
 
     /// A named parameter of type double.
@@ -242,6 +392,12 @@ impl Expression {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `parameter`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn parameter_stream(client: &crate::ClientRef, name: &str, r#type: &Type) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_Parameter", &[codec::arg(0, &name), codec::arg(1, &r#type)]).await
+    }
+
     /// A function.
     ///
     /// # Arguments
@@ -255,6 +411,12 @@ impl Expression {
     pub async fn function(client: &crate::ClientRef, parameters: Vec<Expression>, body: &Expression) -> crate::Result<Expression> {
         let data = client.invoke("KRPC", "Expression_static_Function", &[codec::arg(0, &parameters), codec::arg(1, &body)]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `function`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn function_stream(client: &crate::ClientRef, parameters: Vec<Expression>, body: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_Function", &[codec::arg(0, &parameters), codec::arg(1, &body)]).await
     }
 
     /// A function call.
@@ -272,6 +434,12 @@ impl Expression {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `invoke`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn invoke_stream(client: &crate::ClientRef, function: &Expression, args: std::collections::HashMap<String, Expression>) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_Invoke", &[codec::arg(0, &function), codec::arg(1, &args)]).await
+    }
+
     /// Construct a tuple.
     ///
     /// # Arguments
@@ -284,6 +452,12 @@ impl Expression {
     pub async fn create_tuple(client: &crate::ClientRef, elements: Vec<Expression>) -> crate::Result<Expression> {
         let data = client.invoke("KRPC", "Expression_static_CreateTuple", &[codec::arg(0, &elements)]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `create_tuple`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn create_tuple_stream(client: &crate::ClientRef, elements: Vec<Expression>) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_CreateTuple", &[codec::arg(0, &elements)]).await
     }
 
     /// Construct a list.
@@ -300,6 +474,12 @@ impl Expression {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `create_list`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn create_list_stream(client: &crate::ClientRef, values: Vec<Expression>) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_CreateList", &[codec::arg(0, &values)]).await
+    }
+
     /// Construct a set.
     ///
     /// # Arguments
@@ -312,6 +492,12 @@ impl Expression {
     pub async fn create_set(client: &crate::ClientRef, values: std::collections::HashSet<Expression>) -> crate::Result<Expression> {
         let data = client.invoke("KRPC", "Expression_static_CreateSet", &[codec::arg(0, &values)]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `create_set`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn create_set_stream(client: &crate::ClientRef, values: std::collections::HashSet<Expression>) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_CreateSet", &[codec::arg(0, &values)]).await
     }
 
     /// Construct a dictionary, from a list of corresponding keys and values.
@@ -329,6 +515,12 @@ impl Expression {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `create_dictionary`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn create_dictionary_stream(client: &crate::ClientRef, keys: Vec<Expression>, values: Vec<Expression>) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_CreateDictionary", &[codec::arg(0, &keys), codec::arg(1, &values)]).await
+    }
+
     /// Convert a collection to a list.
     ///
     /// # Arguments
@@ -343,6 +535,12 @@ impl Expression {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `to_list`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn to_list_stream(client: &crate::ClientRef, arg: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_ToList", &[codec::arg(0, &arg)]).await
+    }
+
     /// Convert a collection to a set.
     ///
     /// # Arguments
@@ -355,6 +553,12 @@ impl Expression {
     pub async fn to_set(client: &crate::ClientRef, arg: &Expression) -> crate::Result<Expression> {
         let data = client.invoke("KRPC", "Expression_static_ToSet", &[codec::arg(0, &arg)]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `to_set`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn to_set_stream(client: &crate::ClientRef, arg: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_ToSet", &[codec::arg(0, &arg)]).await
     }
 
     /// Access an element in a tuple, list or dictionary.
@@ -372,6 +576,12 @@ impl Expression {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `get`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn get_stream(client: &crate::ClientRef, arg: &Expression, index: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_Get", &[codec::arg(0, &arg), codec::arg(1, &index)]).await
+    }
+
     /// Number of elements in a collection.
     ///
     /// # Arguments
@@ -384,6 +594,12 @@ impl Expression {
     pub async fn count(client: &crate::ClientRef, arg: &Expression) -> crate::Result<Expression> {
         let data = client.invoke("KRPC", "Expression_static_Count", &[codec::arg(0, &arg)]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `count`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn count_stream(client: &crate::ClientRef, arg: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_Count", &[codec::arg(0, &arg)]).await
     }
 
     /// Sum all elements of a collection.
@@ -400,6 +616,12 @@ impl Expression {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `sum`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn sum_stream(client: &crate::ClientRef, arg: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_Sum", &[codec::arg(0, &arg)]).await
+    }
+
     /// Maximum of all elements in a collection.
     ///
     /// # Arguments
@@ -412,6 +634,12 @@ impl Expression {
     pub async fn max(client: &crate::ClientRef, arg: &Expression) -> crate::Result<Expression> {
         let data = client.invoke("KRPC", "Expression_static_Max", &[codec::arg(0, &arg)]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `max`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn max_stream(client: &crate::ClientRef, arg: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_Max", &[codec::arg(0, &arg)]).await
     }
 
     /// Minimum of all elements in a collection.
@@ -428,6 +656,12 @@ impl Expression {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `min`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn min_stream(client: &crate::ClientRef, arg: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_Min", &[codec::arg(0, &arg)]).await
+    }
+
     /// Minimum of all elements in a collection.
     ///
     /// # Arguments
@@ -440,6 +674,12 @@ impl Expression {
     pub async fn average(client: &crate::ClientRef, arg: &Expression) -> crate::Result<Expression> {
         let data = client.invoke("KRPC", "Expression_static_Average", &[codec::arg(0, &arg)]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `average`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn average_stream(client: &crate::ClientRef, arg: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_Average", &[codec::arg(0, &arg)]).await
     }
 
     /// Run a function on every element in the collection.
@@ -457,6 +697,12 @@ impl Expression {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `select`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn select_stream(client: &crate::ClientRef, arg: &Expression, func: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_Select", &[codec::arg(0, &arg), codec::arg(1, &func)]).await
+    }
+
     /// Run a function on every element in the collection.
     ///
     /// # Arguments
@@ -470,6 +716,12 @@ impl Expression {
     pub async fn r#where(client: &crate::ClientRef, arg: &Expression, func: &Expression) -> crate::Result<Expression> {
         let data = client.invoke("KRPC", "Expression_static_Where", &[codec::arg(0, &arg), codec::arg(1, &func)]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `r#where`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn r#where_stream(client: &crate::ClientRef, arg: &Expression, func: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_Where", &[codec::arg(0, &arg), codec::arg(1, &func)]).await
     }
 
     /// Determine if a collection contains a value.
@@ -487,6 +739,12 @@ impl Expression {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `contains`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn contains_stream(client: &crate::ClientRef, arg: &Expression, value: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_Contains", &[codec::arg(0, &arg), codec::arg(1, &value)]).await
+    }
+
     /// Applies an accumulator function over a sequence.
     ///
     /// # Arguments
@@ -500,6 +758,12 @@ impl Expression {
     pub async fn aggregate(client: &crate::ClientRef, arg: &Expression, func: &Expression) -> crate::Result<Expression> {
         let data = client.invoke("KRPC", "Expression_static_Aggregate", &[codec::arg(0, &arg), codec::arg(1, &func)]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `aggregate`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn aggregate_stream(client: &crate::ClientRef, arg: &Expression, func: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_Aggregate", &[codec::arg(0, &arg), codec::arg(1, &func)]).await
     }
 
     /// Applies an accumulator function over a sequence, with a given seed.
@@ -518,6 +782,12 @@ impl Expression {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `aggregate_with_seed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn aggregate_with_seed_stream(client: &crate::ClientRef, arg: &Expression, seed: &Expression, func: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_AggregateWithSeed", &[codec::arg(0, &arg), codec::arg(1, &seed), codec::arg(2, &func)]).await
+    }
+
     /// Concatenate two sequences.
     ///
     /// # Arguments
@@ -531,6 +801,12 @@ impl Expression {
     pub async fn concat(client: &crate::ClientRef, arg1: &Expression, arg2: &Expression) -> crate::Result<Expression> {
         let data = client.invoke("KRPC", "Expression_static_Concat", &[codec::arg(0, &arg1), codec::arg(1, &arg2)]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `concat`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn concat_stream(client: &crate::ClientRef, arg1: &Expression, arg2: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_Concat", &[codec::arg(0, &arg1), codec::arg(1, &arg2)]).await
     }
 
     /// Order a collection using a key function.
@@ -548,6 +824,12 @@ impl Expression {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `order_by`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn order_by_stream(client: &crate::ClientRef, arg: &Expression, key: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_OrderBy", &[codec::arg(0, &arg), codec::arg(1, &key)]).await
+    }
+
     /// Determine whether all items in a collection satisfy a boolean predicate.
     ///
     /// # Arguments
@@ -563,6 +845,12 @@ impl Expression {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `all`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn all_stream(client: &crate::ClientRef, arg: &Expression, predicate: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_All", &[codec::arg(0, &arg), codec::arg(1, &predicate)]).await
+    }
+
     /// Determine whether any item in a collection satisfies a boolean predicate.
     ///
     /// # Arguments
@@ -576,6 +864,12 @@ impl Expression {
     pub async fn any(client: &crate::ClientRef, arg: &Expression, predicate: &Expression) -> crate::Result<Expression> {
         let data = client.invoke("KRPC", "Expression_static_Any", &[codec::arg(0, &arg), codec::arg(1, &predicate)]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `any`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn any_stream(client: &crate::ClientRef, arg: &Expression, predicate: &Expression) -> crate::Result<crate::Stream<Expression>> {
+        client.stream("KRPC", "Expression_static_Any", &[codec::arg(0, &arg), codec::arg(1, &predicate)]).await
     }
 }
 
@@ -639,10 +933,22 @@ impl Type {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `double`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn double_stream(client: &crate::ClientRef) -> crate::Result<crate::Stream<Type>> {
+        client.stream("KRPC", "Type_static_Double", &[]).await
+    }
+
     /// Float type.
     pub async fn float(client: &crate::ClientRef) -> crate::Result<Type> {
         let data = client.invoke("KRPC", "Type_static_Float", &[]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `float`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn float_stream(client: &crate::ClientRef) -> crate::Result<crate::Stream<Type>> {
+        client.stream("KRPC", "Type_static_Float", &[]).await
     }
 
     /// Int type.
@@ -651,16 +957,34 @@ impl Type {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `int`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn int_stream(client: &crate::ClientRef) -> crate::Result<crate::Stream<Type>> {
+        client.stream("KRPC", "Type_static_Int", &[]).await
+    }
+
     /// Bool type.
     pub async fn bool(client: &crate::ClientRef) -> crate::Result<Type> {
         let data = client.invoke("KRPC", "Type_static_Bool", &[]).await?;
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `bool`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn bool_stream(client: &crate::ClientRef) -> crate::Result<crate::Stream<Type>> {
+        client.stream("KRPC", "Type_static_Bool", &[]).await
+    }
+
     /// String type.
     pub async fn string(client: &crate::ClientRef) -> crate::Result<Type> {
         let data = client.invoke("KRPC", "Type_static_String", &[]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `string`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn string_stream(client: &crate::ClientRef) -> crate::Result<crate::Stream<Type>> {
+        client.stream("KRPC", "Type_static_String", &[]).await
     }
 }
 
@@ -714,16 +1038,34 @@ impl KRPC {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `clients`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn clients_stream(&self) -> crate::Result<crate::Stream<Vec<(Vec<u8>, String, String)>>> {
+        self.client.stream("KRPC", "get_Clients", &[]).await
+    }
+
     /// Get the current game scene.
     pub async fn current_game_scene(&self) -> crate::Result<GameScene> {
         let data = self.client.invoke("KRPC", "get_CurrentGameScene", &[]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `current_game_scene`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn current_game_scene_stream(&self) -> crate::Result<crate::Stream<GameScene>> {
+        self.client.stream("KRPC", "get_CurrentGameScene", &[]).await
+    }
+
     /// Whether the game is paused.
     pub async fn paused(&self) -> crate::Result<bool> {
         let data = self.client.invoke("KRPC", "get_Paused", &[]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `paused`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn paused_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("KRPC", "get_Paused", &[]).await
     }
 
     /// Whether the game is paused.
@@ -738,10 +1080,22 @@ impl KRPC {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `get_client_id`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn get_client_id_stream(&self) -> crate::Result<crate::Stream<Vec<u8>>> {
+        self.client.stream("KRPC", "GetClientID", &[]).await
+    }
+
     /// Returns the name of the current client. This is an empty string if the client has no name.
     pub async fn get_client_name(&self) -> crate::Result<String> {
         let data = self.client.invoke("KRPC", "GetClientName", &[]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `get_client_name`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn get_client_name_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("KRPC", "GetClientName", &[]).await
     }
 
     /// Returns some information about the server, such as the version.
@@ -750,10 +1104,22 @@ impl KRPC {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `get_status`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn get_status_stream(&self) -> crate::Result<crate::Stream<crate::krpc::schema::Status>> {
+        self.client.stream("KRPC", "GetStatus", &[]).await
+    }
+
     /// Returns information on all services, procedures, classes, properties etc. provided by the server. Can be used by client libraries to automatically create functionality such as stubs.
     pub async fn get_services(&self) -> crate::Result<crate::krpc::schema::Services> {
         let data = self.client.invoke("KRPC", "GetServices", &[]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `get_services`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn get_services_stream(&self) -> crate::Result<crate::Stream<crate::krpc::schema::Services>> {
+        self.client.stream("KRPC", "GetServices", &[]).await
     }
 
     /// Add a streaming request and return its identifier.
@@ -764,6 +1130,16 @@ impl KRPC {
         }
         let data = self.client.invoke("KRPC", "AddStream", &args).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `add_stream`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn add_stream_stream(&self, call: &crate::krpc::schema::ProcedureCall, start: Option<bool>) -> crate::Result<crate::Stream<crate::krpc::schema::Stream>> {
+        let mut args = vec![codec::arg(0, &call)];
+        if let Some(v) = &start {
+            args.push(codec::arg(1, v));
+        }
+        self.client.stream("KRPC", "AddStream", &args).await
     }
 
     /// Start a previously added streaming request.
@@ -788,5 +1164,11 @@ impl KRPC {
     pub async fn add_event(&self, expression: &Expression) -> crate::Result<crate::krpc::schema::Event> {
         let data = self.client.invoke("KRPC", "AddEvent", &[codec::arg(0, &expression)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `add_event`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn add_event_stream(&self, expression: &Expression) -> crate::Result<crate::Stream<crate::krpc::schema::Event>> {
+        self.client.stream("KRPC", "AddEvent", &[codec::arg(0, &expression)]).await
     }
 }

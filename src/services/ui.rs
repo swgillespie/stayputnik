@@ -201,10 +201,22 @@ impl Button {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `clicked`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn clicked_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("UI", "Button_get_Clicked", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The rect transform for the text.
     pub async fn rect_transform(&self) -> crate::Result<RectTransform> {
         let data = self.client.invoke("UI", "Button_get_RectTransform", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `rect_transform`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn rect_transform_stream(&self) -> crate::Result<crate::Stream<RectTransform>> {
+        self.client.stream("UI", "Button_get_RectTransform", &[codec::arg(0, &self.id)]).await
     }
 
     /// The text for the button.
@@ -213,10 +225,22 @@ impl Button {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `text`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn text_stream(&self) -> crate::Result<crate::Stream<Text>> {
+        self.client.stream("UI", "Button_get_Text", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the UI object is visible.
     pub async fn visible(&self) -> crate::Result<bool> {
         let data = self.client.invoke("UI", "Button_get_Visible", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `visible`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn visible_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("UI", "Button_get_Visible", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the button has been clicked.
@@ -299,10 +323,22 @@ impl Canvas {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `rect_transform`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn rect_transform_stream(&self) -> crate::Result<crate::Stream<RectTransform>> {
+        self.client.stream("UI", "Canvas_get_RectTransform", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the UI object is visible.
     pub async fn visible(&self) -> crate::Result<bool> {
         let data = self.client.invoke("UI", "Canvas_get_Visible", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `visible`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn visible_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("UI", "Canvas_get_Visible", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the UI object is visible.
@@ -325,6 +361,16 @@ impl Canvas {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `add_panel`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn add_panel_stream(&self, visible: Option<bool>) -> crate::Result<crate::Stream<Panel>> {
+        let mut args = vec![codec::arg(0, &self.id)];
+        if let Some(v) = &visible {
+            args.push(codec::arg(1, v));
+        }
+        self.client.stream("UI", "Canvas_AddPanel", &args).await
+    }
+
     /// Add text to the canvas.
     ///
     /// # Arguments
@@ -338,6 +384,16 @@ impl Canvas {
         }
         let data = self.client.invoke("UI", "Canvas_AddText", &args).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `add_text`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn add_text_stream(&self, content: &str, visible: Option<bool>) -> crate::Result<crate::Stream<Text>> {
+        let mut args = vec![codec::arg(0, &self.id), codec::arg(1, &content)];
+        if let Some(v) = &visible {
+            args.push(codec::arg(2, v));
+        }
+        self.client.stream("UI", "Canvas_AddText", &args).await
     }
 
     /// Add an input field to the canvas.
@@ -354,6 +410,16 @@ impl Canvas {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `add_input_field`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn add_input_field_stream(&self, visible: Option<bool>) -> crate::Result<crate::Stream<InputField>> {
+        let mut args = vec![codec::arg(0, &self.id)];
+        if let Some(v) = &visible {
+            args.push(codec::arg(1, v));
+        }
+        self.client.stream("UI", "Canvas_AddInputField", &args).await
+    }
+
     /// Add a button to the canvas.
     ///
     /// # Arguments
@@ -367,6 +433,16 @@ impl Canvas {
         }
         let data = self.client.invoke("UI", "Canvas_AddButton", &args).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `add_button`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn add_button_stream(&self, content: &str, visible: Option<bool>) -> crate::Result<crate::Stream<Button>> {
+        let mut args = vec![codec::arg(0, &self.id), codec::arg(1, &content)];
+        if let Some(v) = &visible {
+            args.push(codec::arg(2, v));
+        }
+        self.client.stream("UI", "Canvas_AddButton", &args).await
     }
 
     /// Remove the UI object.
@@ -437,10 +513,22 @@ impl InputField {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `changed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn changed_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("UI", "InputField_get_Changed", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The rect transform for the input field.
     pub async fn rect_transform(&self) -> crate::Result<RectTransform> {
         let data = self.client.invoke("UI", "InputField_get_RectTransform", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `rect_transform`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn rect_transform_stream(&self) -> crate::Result<crate::Stream<RectTransform>> {
+        self.client.stream("UI", "InputField_get_RectTransform", &[codec::arg(0, &self.id)]).await
     }
 
     /// The text component of the input field.
@@ -451,16 +539,34 @@ impl InputField {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `text`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn text_stream(&self) -> crate::Result<crate::Stream<Text>> {
+        self.client.stream("UI", "InputField_get_Text", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The value of the input field.
     pub async fn value(&self) -> crate::Result<String> {
         let data = self.client.invoke("UI", "InputField_get_Value", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `value`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn value_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("UI", "InputField_get_Value", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the UI object is visible.
     pub async fn visible(&self) -> crate::Result<bool> {
         let data = self.client.invoke("UI", "InputField_get_Visible", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `visible`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn visible_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("UI", "InputField_get_Visible", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the input field has been changed.
@@ -549,10 +655,22 @@ impl Panel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `rect_transform`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn rect_transform_stream(&self) -> crate::Result<crate::Stream<RectTransform>> {
+        self.client.stream("UI", "Panel_get_RectTransform", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the UI object is visible.
     pub async fn visible(&self) -> crate::Result<bool> {
         let data = self.client.invoke("UI", "Panel_get_Visible", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `visible`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn visible_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("UI", "Panel_get_Visible", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the UI object is visible.
@@ -575,6 +693,16 @@ impl Panel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `add_panel`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn add_panel_stream(&self, visible: Option<bool>) -> crate::Result<crate::Stream<Panel>> {
+        let mut args = vec![codec::arg(0, &self.id)];
+        if let Some(v) = &visible {
+            args.push(codec::arg(1, v));
+        }
+        self.client.stream("UI", "Panel_AddPanel", &args).await
+    }
+
     /// Add text to the panel.
     ///
     /// # Arguments
@@ -588,6 +716,16 @@ impl Panel {
         }
         let data = self.client.invoke("UI", "Panel_AddText", &args).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `add_text`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn add_text_stream(&self, content: &str, visible: Option<bool>) -> crate::Result<crate::Stream<Text>> {
+        let mut args = vec![codec::arg(0, &self.id), codec::arg(1, &content)];
+        if let Some(v) = &visible {
+            args.push(codec::arg(2, v));
+        }
+        self.client.stream("UI", "Panel_AddText", &args).await
     }
 
     /// Add an input field to the panel.
@@ -604,6 +742,16 @@ impl Panel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `add_input_field`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn add_input_field_stream(&self, visible: Option<bool>) -> crate::Result<crate::Stream<InputField>> {
+        let mut args = vec![codec::arg(0, &self.id)];
+        if let Some(v) = &visible {
+            args.push(codec::arg(1, v));
+        }
+        self.client.stream("UI", "Panel_AddInputField", &args).await
+    }
+
     /// Add a button to the panel.
     ///
     /// # Arguments
@@ -617,6 +765,16 @@ impl Panel {
         }
         let data = self.client.invoke("UI", "Panel_AddButton", &args).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `add_button`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn add_button_stream(&self, content: &str, visible: Option<bool>) -> crate::Result<crate::Stream<Button>> {
+        let mut args = vec![codec::arg(0, &self.id), codec::arg(1, &content)];
+        if let Some(v) = &visible {
+            args.push(codec::arg(2, v));
+        }
+        self.client.stream("UI", "Panel_AddButton", &args).await
     }
 
     /// Remove the UI object.
@@ -685,10 +843,22 @@ impl RectTransform {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `anchor_max`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn anchor_max_stream(&self) -> crate::Result<crate::Stream<(f64, f64)>> {
+        self.client.stream("UI", "RectTransform_get_AnchorMax", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The anchor point for the upper right corner of the rectangle defined as a fraction of the size of the parent rectangle.
     pub async fn anchor_min(&self) -> crate::Result<(f64, f64)> {
         let data = self.client.invoke("UI", "RectTransform_get_AnchorMin", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `anchor_min`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn anchor_min_stream(&self) -> crate::Result<crate::Stream<(f64, f64)>> {
+        self.client.stream("UI", "RectTransform_get_AnchorMin", &[codec::arg(0, &self.id)]).await
     }
 
     /// Position of the rectangles pivot point relative to the anchors.
@@ -697,10 +867,22 @@ impl RectTransform {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `local_position`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn local_position_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("UI", "RectTransform_get_LocalPosition", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Position of the rectangles lower left corner relative to the anchors.
     pub async fn lower_left(&self) -> crate::Result<(f64, f64)> {
         let data = self.client.invoke("UI", "RectTransform_get_LowerLeft", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `lower_left`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn lower_left_stream(&self) -> crate::Result<crate::Stream<(f64, f64)>> {
+        self.client.stream("UI", "RectTransform_get_LowerLeft", &[codec::arg(0, &self.id)]).await
     }
 
     /// Location of the pivot point around which the rectangle rotates, defined as a fraction of the size of the rectangle itself.
@@ -709,10 +891,22 @@ impl RectTransform {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `pivot`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn pivot_stream(&self) -> crate::Result<crate::Stream<(f64, f64)>> {
+        self.client.stream("UI", "RectTransform_get_Pivot", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Position of the rectangles pivot point relative to the anchors.
     pub async fn position(&self) -> crate::Result<(f64, f64)> {
         let data = self.client.invoke("UI", "RectTransform_get_Position", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `position`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn position_stream(&self) -> crate::Result<crate::Stream<(f64, f64)>> {
+        self.client.stream("UI", "RectTransform_get_Position", &[codec::arg(0, &self.id)]).await
     }
 
     /// Rotation, as a quaternion, of the object around its pivot point.
@@ -721,10 +915,22 @@ impl RectTransform {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `rotation`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn rotation_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64, f64)>> {
+        self.client.stream("UI", "RectTransform_get_Rotation", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Scale factor applied to the object in the x, y and z dimensions.
     pub async fn scale(&self) -> crate::Result<(f64, f64, f64)> {
         let data = self.client.invoke("UI", "RectTransform_get_Scale", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `scale`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn scale_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("UI", "RectTransform_get_Scale", &[codec::arg(0, &self.id)]).await
     }
 
     /// Width and height of the rectangle.
@@ -733,10 +939,22 @@ impl RectTransform {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `size`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn size_stream(&self) -> crate::Result<crate::Stream<(f64, f64)>> {
+        self.client.stream("UI", "RectTransform_get_Size", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Position of the rectangles upper right corner relative to the anchors.
     pub async fn upper_right(&self) -> crate::Result<(f64, f64)> {
         let data = self.client.invoke("UI", "RectTransform_get_UpperRight", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `upper_right`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn upper_right_stream(&self) -> crate::Result<crate::Stream<(f64, f64)>> {
+        self.client.stream("UI", "RectTransform_get_UpperRight", &[codec::arg(0, &self.id)]).await
     }
 
     /// Set the minimum and maximum anchor points as a fraction of the size of the parent rectangle.
@@ -865,10 +1083,22 @@ impl Text {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `alignment`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn alignment_stream(&self) -> crate::Result<crate::Stream<TextAnchor>> {
+        self.client.stream("UI", "Text_get_Alignment", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A list of all available fonts.
     pub async fn available_fonts(&self) -> crate::Result<Vec<String>> {
         let data = self.client.invoke("UI", "Text_get_AvailableFonts", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `available_fonts`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn available_fonts_stream(&self) -> crate::Result<crate::Stream<Vec<String>>> {
+        self.client.stream("UI", "Text_get_AvailableFonts", &[codec::arg(0, &self.id)]).await
     }
 
     /// Set the color
@@ -877,10 +1107,22 @@ impl Text {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `color`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn color_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("UI", "Text_get_Color", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The text string
     pub async fn content(&self) -> crate::Result<String> {
         let data = self.client.invoke("UI", "Text_get_Content", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `content`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn content_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("UI", "Text_get_Content", &[codec::arg(0, &self.id)]).await
     }
 
     /// Name of the font
@@ -889,10 +1131,22 @@ impl Text {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `font`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn font_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("UI", "Text_get_Font", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Line spacing.
     pub async fn line_spacing(&self) -> crate::Result<f32> {
         let data = self.client.invoke("UI", "Text_get_LineSpacing", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `line_spacing`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn line_spacing_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("UI", "Text_get_LineSpacing", &[codec::arg(0, &self.id)]).await
     }
 
     /// The rect transform for the text.
@@ -901,10 +1155,22 @@ impl Text {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `rect_transform`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn rect_transform_stream(&self) -> crate::Result<crate::Stream<RectTransform>> {
+        self.client.stream("UI", "Text_get_RectTransform", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Font size.
     pub async fn size(&self) -> crate::Result<i32> {
         let data = self.client.invoke("UI", "Text_get_Size", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `size`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn size_stream(&self) -> crate::Result<crate::Stream<i32>> {
+        self.client.stream("UI", "Text_get_Size", &[codec::arg(0, &self.id)]).await
     }
 
     /// Font style.
@@ -913,10 +1179,22 @@ impl Text {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `style`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn style_stream(&self) -> crate::Result<crate::Stream<FontStyle>> {
+        self.client.stream("UI", "Text_get_Style", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the UI object is visible.
     pub async fn visible(&self) -> crate::Result<bool> {
         let data = self.client.invoke("UI", "Text_get_Visible", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `visible`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn visible_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("UI", "Text_get_Visible", &[codec::arg(0, &self.id)]).await
     }
 
     /// Alignment.
@@ -1026,12 +1304,24 @@ impl UI {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `stock_canvas`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn stock_canvas_stream(&self) -> crate::Result<crate::Stream<Canvas>> {
+        self.client.stream("UI", "get_StockCanvas", &[]).await
+    }
+
     /// Add a new canvas.
     ///
     /// If you want to add UI elements to KSPs stock UI canvas, use `UI.StockCanvas`.
     pub async fn add_canvas(&self) -> crate::Result<Canvas> {
         let data = self.client.invoke("UI", "AddCanvas", &[]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `add_canvas`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn add_canvas_stream(&self) -> crate::Result<crate::Stream<Canvas>> {
+        self.client.stream("UI", "AddCanvas", &[]).await
     }
 
     /// Display a message on the screen.

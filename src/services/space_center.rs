@@ -1212,10 +1212,22 @@ impl Alarm {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `description`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn description_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "Alarm_get_Description", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Seconds betwen the alarm going off and the event it references
     pub async fn event_offset(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Alarm_get_EventOffset", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `event_offset`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn event_offset_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Alarm_get_EventOffset", &[codec::arg(0, &self.id)]).await
     }
 
     /// Unique ID of alarm KSP destroys an old alarm and creates a new one each time an alarm is edited. This ID will remain constant between the old and new alarms though, so this is the value you want to store and each time you want to access an alarm, get the current alarm with the correct ID value.
@@ -1224,10 +1236,22 @@ impl Alarm {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `id`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn id_stream(&self) -> crate::Result<crate::Stream<i32>> {
+        self.client.stream("SpaceCenter", "Alarm_get_ID", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Time until the alarm triggers
     pub async fn time_till(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Alarm_get_TimeTill", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `time_till`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn time_till_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Alarm_get_TimeTill", &[codec::arg(0, &self.id)]).await
     }
 
     /// Title of the Alarm
@@ -1236,10 +1260,22 @@ impl Alarm {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `title`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn title_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "Alarm_get_Title", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Type of Alarm
     pub async fn r#type(&self) -> crate::Result<String> {
         let data = self.client.invoke("SpaceCenter", "Alarm_get_Type", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `r#type`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn r#type_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "Alarm_get_Type", &[codec::arg(0, &self.id)]).await
     }
 
     /// Time the Alarm will trigger
@@ -1248,10 +1284,22 @@ impl Alarm {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `ut`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn ut_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Alarm_get_UT", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Vessel the alarm references
     pub async fn vessel(&self) -> crate::Result<Option<Vessel>> {
         let data = self.client.invoke("SpaceCenter", "Alarm_get_Vessel", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `vessel`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn vessel_stream(&self) -> crate::Result<crate::Stream<Option<Vessel>>> {
+        self.client.stream("SpaceCenter", "Alarm_get_Vessel", &[codec::arg(0, &self.id)]).await
     }
 }
 
@@ -1321,6 +1369,19 @@ impl AlarmClock {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `make_raw_alarm`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn make_raw_alarm_stream(&self, time: f64, title: Option<String>, description: Option<String>) -> crate::Result<crate::Stream<Alarm>> {
+        let mut args = vec![codec::arg(0, &self.id), codec::arg(1, &time)];
+        if let Some(v) = &title {
+            args.push(codec::arg(2, v));
+        }
+        if let Some(v) = &description {
+            args.push(codec::arg(3, v));
+        }
+        self.client.stream("SpaceCenter", "AlarmClock_MakeRawAlarm", &args).await
+    }
+
     /// Make a Simple Alarm linked to a Vessel Parameter 'time' is the number of seconds from now that the alarm should trigger.
     pub async fn make_raw_alarm_vessel(&self, time: f64, v: &Vessel, title: Option<String>, description: Option<String>) -> crate::Result<Alarm> {
         let mut args = vec![codec::arg(0, &self.id), codec::arg(1, &time), codec::arg(2, &v)];
@@ -1332,6 +1393,19 @@ impl AlarmClock {
         }
         let data = self.client.invoke("SpaceCenter", "AlarmClock_MakeRawAlarmVessel", &args).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `make_raw_alarm_vessel`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn make_raw_alarm_vessel_stream(&self, time: f64, v: &Vessel, title: Option<String>, description: Option<String>) -> crate::Result<crate::Stream<Alarm>> {
+        let mut args = vec![codec::arg(0, &self.id), codec::arg(1, &time), codec::arg(2, &v)];
+        if let Some(v) = &title {
+            args.push(codec::arg(3, v));
+        }
+        if let Some(v) = &description {
+            args.push(codec::arg(4, v));
+        }
+        self.client.stream("SpaceCenter", "AlarmClock_MakeRawAlarmVessel", &args).await
     }
 
     /// Create an alarm for the given vessel's next Apoapsis
@@ -1350,6 +1424,22 @@ impl AlarmClock {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `make_apa_alarm`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn make_apa_alarm_stream(&self, v: &Vessel, offset: Option<f64>, title: Option<String>, description: Option<String>) -> crate::Result<crate::Stream<Alarm>> {
+        let mut args = vec![codec::arg(0, &self.id), codec::arg(1, &v)];
+        if let Some(v) = &offset {
+            args.push(codec::arg(2, v));
+        }
+        if let Some(v) = &title {
+            args.push(codec::arg(3, v));
+        }
+        if let Some(v) = &description {
+            args.push(codec::arg(4, v));
+        }
+        self.client.stream("SpaceCenter", "AlarmClock_MakeApaAlarm", &args).await
+    }
+
     /// Create an alarm for the given vessel's next Periapsis
     pub async fn make_pea_alarm(&self, v: &Vessel, offset: Option<f64>, title: Option<String>, description: Option<String>) -> crate::Result<Alarm> {
         let mut args = vec![codec::arg(0, &self.id), codec::arg(1, &v)];
@@ -1364,6 +1454,22 @@ impl AlarmClock {
         }
         let data = self.client.invoke("SpaceCenter", "AlarmClock_MakePeaAlarm", &args).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `make_pea_alarm`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn make_pea_alarm_stream(&self, v: &Vessel, offset: Option<f64>, title: Option<String>, description: Option<String>) -> crate::Result<crate::Stream<Alarm>> {
+        let mut args = vec![codec::arg(0, &self.id), codec::arg(1, &v)];
+        if let Some(v) = &offset {
+            args.push(codec::arg(2, v));
+        }
+        if let Some(v) = &title {
+            args.push(codec::arg(3, v));
+        }
+        if let Some(v) = &description {
+            args.push(codec::arg(4, v));
+        }
+        self.client.stream("SpaceCenter", "AlarmClock_MakePeaAlarm", &args).await
     }
 
     /// Create an alarm for the given vessel and maneuver node
@@ -1385,6 +1491,25 @@ impl AlarmClock {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `make_maneuver_alarm`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn make_maneuver_alarm_stream(&self, v: &Vessel, man: &Node, offset: Option<f64>, add_burn_time: Option<bool>, title: Option<String>, description: Option<String>) -> crate::Result<crate::Stream<Alarm>> {
+        let mut args = vec![codec::arg(0, &self.id), codec::arg(1, &v), codec::arg(2, &man)];
+        if let Some(v) = &offset {
+            args.push(codec::arg(3, v));
+        }
+        if let Some(v) = &add_burn_time {
+            args.push(codec::arg(4, v));
+        }
+        if let Some(v) = &title {
+            args.push(codec::arg(5, v));
+        }
+        if let Some(v) = &description {
+            args.push(codec::arg(6, v));
+        }
+        self.client.stream("SpaceCenter", "AlarmClock_MakeManeuverAlarm", &args).await
+    }
+
     /// Create an alarm for the given vessel's next SOI change
     pub async fn make_soi_alarm(&self, v: &Vessel, offset: Option<f64>, title: Option<String>, description: Option<String>) -> crate::Result<Alarm> {
         let mut args = vec![codec::arg(0, &self.id), codec::arg(1, &v)];
@@ -1401,10 +1526,32 @@ impl AlarmClock {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `make_soi_alarm`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn make_soi_alarm_stream(&self, v: &Vessel, offset: Option<f64>, title: Option<String>, description: Option<String>) -> crate::Result<crate::Stream<Alarm>> {
+        let mut args = vec![codec::arg(0, &self.id), codec::arg(1, &v)];
+        if let Some(v) = &offset {
+            args.push(codec::arg(2, v));
+        }
+        if let Some(v) = &title {
+            args.push(codec::arg(3, v));
+        }
+        if let Some(v) = &description {
+            args.push(codec::arg(4, v));
+        }
+        self.client.stream("SpaceCenter", "AlarmClock_MakeSOIAlarm", &args).await
+    }
+
     /// Returns a list of all alarms
     pub async fn get_alarms(&self) -> crate::Result<Vec<Alarm>> {
         let data = self.client.invoke("SpaceCenter", "AlarmClock_GetAlarms", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `get_alarms`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn get_alarms_stream(&self) -> crate::Result<crate::Stream<Vec<Alarm>>> {
+        self.client.stream("SpaceCenter", "AlarmClock_GetAlarms", &[codec::arg(0, &self.id)]).await
     }
 }
 
@@ -1467,10 +1614,22 @@ impl Antenna {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `allow_partial`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn allow_partial_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Antenna_get_AllowPartial", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether data can be transmitted by this antenna.
     pub async fn can_transmit(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Antenna_get_CanTransmit", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `can_transmit`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn can_transmit_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Antenna_get_CanTransmit", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the antenna can be combined with other antennae on the vessel to boost the power.
@@ -1479,16 +1638,34 @@ impl Antenna {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `combinable`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn combinable_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Antenna_get_Combinable", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Exponent used to calculate the combined power of multiple antennae on a vessel.
     pub async fn combinable_exponent(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Antenna_get_CombinableExponent", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `combinable_exponent`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn combinable_exponent_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Antenna_get_CombinableExponent", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the antenna is deployable.
     pub async fn deployable(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Antenna_get_Deployable", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `deployable`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn deployable_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Antenna_get_Deployable", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the antenna is deployed.
@@ -1499,10 +1676,22 @@ impl Antenna {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `deployed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn deployed_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Antenna_get_Deployed", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Interval between sending packets in seconds.
     pub async fn packet_interval(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Antenna_get_PacketInterval", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `packet_interval`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn packet_interval_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Antenna_get_PacketInterval", &[codec::arg(0, &self.id)]).await
     }
 
     /// Units of electric charge consumed per packet sent.
@@ -1511,10 +1700,22 @@ impl Antenna {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `packet_resource_cost`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn packet_resource_cost_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Antenna_get_PacketResourceCost", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Amount of data sent per packet in Mits.
     pub async fn packet_size(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Antenna_get_PacketSize", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `packet_size`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn packet_size_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Antenna_get_PacketSize", &[codec::arg(0, &self.id)]).await
     }
 
     /// The part object for this antenna.
@@ -1523,16 +1724,34 @@ impl Antenna {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "Antenna_get_Part", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The power of the antenna.
     pub async fn power(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Antenna_get_Power", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `power`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn power_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Antenna_get_Power", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The current state of the antenna.
     pub async fn state(&self) -> crate::Result<AntennaState> {
         let data = self.client.invoke("SpaceCenter", "Antenna_get_State", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `state`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn state_stream(&self) -> crate::Result<crate::Stream<AntennaState>> {
+        self.client.stream("SpaceCenter", "Antenna_get_State", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether partial data transmission is permitted.
@@ -1623,10 +1842,22 @@ impl AutoPilot {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `attenuation_angle`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn attenuation_angle_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "AutoPilot_get_AttenuationAngle", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the rotation rate controllers PID parameters should be automatically tuned using the vessels moment of inertia and available torque. Defaults to `true`. See `SpaceCenter.AutoPilot.TimeToPeak` and `SpaceCenter.AutoPilot.Overshoot`.
     pub async fn auto_tune(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "AutoPilot_get_AutoTune", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `auto_tune`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn auto_tune_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "AutoPilot_get_AutoTune", &[codec::arg(0, &self.id)]).await
     }
 
     /// The time the vessel should take to come to a stop pointing in the target direction. This determines the angular acceleration used to decelerate the vessel. A vector of three times, in seconds, one for each of the pitch, roll and yaw axes. Defaults to 5 seconds for each axis.
@@ -1635,10 +1866,22 @@ impl AutoPilot {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `deceleration_time`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn deceleration_time_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "AutoPilot_get_DecelerationTime", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The error, in degrees, between the direction the ship has been asked to point in and the direction it is pointing in. Throws an exception if the auto-pilot has not been engaged and SAS is not enabled or is in stability assist mode.
     pub async fn error(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "AutoPilot_get_Error", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `error`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn error_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "AutoPilot_get_Error", &[codec::arg(0, &self.id)]).await
     }
 
     /// The error, in degrees, between the vessels current and target heading. Throws an exception if the auto-pilot has not been engaged.
@@ -1647,16 +1890,34 @@ impl AutoPilot {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `heading_error`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn heading_error_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "AutoPilot_get_HeadingError", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The target overshoot percentage used to autotune the PID controllers. A vector of three values, between 0 and 1, for each of the pitch, roll and yaw axes. Defaults to 0.01 for each axis.
     pub async fn overshoot(&self) -> crate::Result<(f64, f64, f64)> {
         let data = self.client.invoke("SpaceCenter", "AutoPilot_get_Overshoot", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `overshoot`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn overshoot_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "AutoPilot_get_Overshoot", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The error, in degrees, between the vessels current and target pitch. Throws an exception if the auto-pilot has not been engaged.
     pub async fn pitch_error(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "AutoPilot_get_PitchError", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `pitch_error`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn pitch_error_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "AutoPilot_get_PitchError", &[codec::arg(0, &self.id)]).await
     }
 
     /// Gains for the pitch PID controller.
@@ -1667,6 +1928,12 @@ impl AutoPilot {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `pitch_pid_gains`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn pitch_pid_gains_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "AutoPilot_get_PitchPIDGains", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The reference frame for the target direction (`SpaceCenter.AutoPilot.TargetDirection`).
     ///
     /// An error will be thrown if this property is set to a reference frame that rotates with the vessel being controlled, as it is impossible to rotate the vessel in such a reference frame.
@@ -1675,10 +1942,22 @@ impl AutoPilot {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `reference_frame`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn reference_frame_stream(&self) -> crate::Result<crate::Stream<ReferenceFrame>> {
+        self.client.stream("SpaceCenter", "AutoPilot_get_ReferenceFrame", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The error, in degrees, between the vessels current and target roll. Throws an exception if the auto-pilot has not been engaged or no target roll is set.
     pub async fn roll_error(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "AutoPilot_get_RollError", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `roll_error`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn roll_error_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "AutoPilot_get_RollError", &[codec::arg(0, &self.id)]).await
     }
 
     /// Gains for the roll PID controller.
@@ -1689,10 +1968,22 @@ impl AutoPilot {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `roll_pid_gains`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn roll_pid_gains_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "AutoPilot_get_RollPIDGains", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The threshold at which the autopilot will try to match the target roll angle, if any. Defaults to 5 degrees.
     pub async fn roll_threshold(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "AutoPilot_get_RollThreshold", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `roll_threshold`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn roll_threshold_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "AutoPilot_get_RollThreshold", &[codec::arg(0, &self.id)]).await
     }
 
     /// The state of SAS.
@@ -1703,6 +1994,12 @@ impl AutoPilot {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `sas`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn sas_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "AutoPilot_get_SAS", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The current `SpaceCenter.SASMode`. These modes are equivalent to the mode buttons to the left of the navball that appear when SAS is enabled.
     ///
     /// Equivalent to `SpaceCenter.Control.SASMode`
@@ -1711,10 +2008,22 @@ impl AutoPilot {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `sas_mode`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn sas_mode_stream(&self) -> crate::Result<crate::Stream<SASMode>> {
+        self.client.stream("SpaceCenter", "AutoPilot_get_SASMode", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The maximum amount of time that the vessel should need to come to a complete stop. This determines the maximum angular velocity of the vessel. A vector of three stopping times, in seconds, one for each of the pitch, roll and yaw axes. Defaults to 0.5 seconds for each axis.
     pub async fn stopping_time(&self) -> crate::Result<(f64, f64, f64)> {
         let data = self.client.invoke("SpaceCenter", "AutoPilot_get_StoppingTime", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `stopping_time`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn stopping_time_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "AutoPilot_get_StoppingTime", &[codec::arg(0, &self.id)]).await
     }
 
     /// Direction vector corresponding to the target pitch and heading. This is in the reference frame specified by `SpaceCenter.ReferenceFrame`.
@@ -1723,10 +2032,22 @@ impl AutoPilot {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `target_direction`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn target_direction_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "AutoPilot_get_TargetDirection", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The target heading, in degrees, between 0° and 360°.
     pub async fn target_heading(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "AutoPilot_get_TargetHeading", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `target_heading`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn target_heading_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "AutoPilot_get_TargetHeading", &[codec::arg(0, &self.id)]).await
     }
 
     /// The target pitch, in degrees, between -90° and +90°.
@@ -1735,10 +2056,22 @@ impl AutoPilot {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `target_pitch`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn target_pitch_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "AutoPilot_get_TargetPitch", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The target roll, in degrees. `NaN` if no target roll is set.
     pub async fn target_roll(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "AutoPilot_get_TargetRoll", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `target_roll`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn target_roll_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "AutoPilot_get_TargetRoll", &[codec::arg(0, &self.id)]).await
     }
 
     /// The target time to peak used to autotune the PID controllers. A vector of three times, in seconds, for each of the pitch, roll and yaw axes. Defaults to 3 seconds for each axis.
@@ -1747,12 +2080,24 @@ impl AutoPilot {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `time_to_peak`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn time_to_peak_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "AutoPilot_get_TimeToPeak", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Gains for the yaw PID controller.
     ///
     /// When `SpaceCenter.AutoPilot.AutoTune` is true, these values are updated automatically, which will overwrite any manual changes.
     pub async fn yaw_pid_gains(&self) -> crate::Result<(f64, f64, f64)> {
         let data = self.client.invoke("SpaceCenter", "AutoPilot_get_YawPIDGains", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `yaw_pid_gains`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn yaw_pid_gains_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "AutoPilot_get_YawPIDGains", &[codec::arg(0, &self.id)]).await
     }
 
     /// The angle at which the autopilot considers the vessel to be pointing close to the target. This determines the midpoint of the target velocity attenuation function. A vector of three angles, in degrees, one for each of the pitch, roll and yaw axes. Defaults to 1° for each axis.
@@ -1958,10 +2303,22 @@ impl Camera {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `default_distance`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn default_distance_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Camera_get_DefaultDistance", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The distance from the camera to the subject, in meters. A value between `SpaceCenter.Camera.MinDistance` and `SpaceCenter.Camera.MaxDistance`.
     pub async fn distance(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Camera_get_Distance", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `distance`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn distance_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Camera_get_Distance", &[codec::arg(0, &self.id)]).await
     }
 
     /// In map mode, the celestial body that the camera is focussed on. Returns `None` if the camera is not focussed on a celestial body. Returns an error is the camera is not in map mode.
@@ -1970,10 +2327,22 @@ impl Camera {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `focussed_body`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn focussed_body_stream(&self) -> crate::Result<crate::Stream<Option<CelestialBody>>> {
+        self.client.stream("SpaceCenter", "Camera_get_FocussedBody", &[codec::arg(0, &self.id)]).await
+    }
+
     /// In map mode, the maneuver node that the camera is focussed on. Returns `None` if the camera is not focussed on a maneuver node. Returns an error is the camera is not in map mode.
     pub async fn focussed_node(&self) -> crate::Result<Option<Node>> {
         let data = self.client.invoke("SpaceCenter", "Camera_get_FocussedNode", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `focussed_node`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn focussed_node_stream(&self) -> crate::Result<crate::Stream<Option<Node>>> {
+        self.client.stream("SpaceCenter", "Camera_get_FocussedNode", &[codec::arg(0, &self.id)]).await
     }
 
     /// In map mode, the vessel that the camera is focussed on. Returns `None` if the camera is not focussed on a vessel. Returns an error is the camera is not in map mode.
@@ -1982,10 +2351,22 @@ impl Camera {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `focussed_vessel`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn focussed_vessel_stream(&self) -> crate::Result<crate::Stream<Option<Vessel>>> {
+        self.client.stream("SpaceCenter", "Camera_get_FocussedVessel", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The heading of the camera, in degrees.
     pub async fn heading(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Camera_get_Heading", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `heading`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn heading_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Camera_get_Heading", &[codec::arg(0, &self.id)]).await
     }
 
     /// Maximum distance from the camera to the subject, in meters.
@@ -1994,10 +2375,22 @@ impl Camera {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `max_distance`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn max_distance_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Camera_get_MaxDistance", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The maximum pitch of the camera.
     pub async fn max_pitch(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Camera_get_MaxPitch", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `max_pitch`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn max_pitch_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Camera_get_MaxPitch", &[codec::arg(0, &self.id)]).await
     }
 
     /// Minimum distance from the camera to the subject, in meters.
@@ -2006,10 +2399,22 @@ impl Camera {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `min_distance`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn min_distance_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Camera_get_MinDistance", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The minimum pitch of the camera.
     pub async fn min_pitch(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Camera_get_MinPitch", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `min_pitch`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn min_pitch_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Camera_get_MinPitch", &[codec::arg(0, &self.id)]).await
     }
 
     /// The current mode of the camera.
@@ -2018,10 +2423,22 @@ impl Camera {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `mode`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn mode_stream(&self) -> crate::Result<crate::Stream<CameraMode>> {
+        self.client.stream("SpaceCenter", "Camera_get_Mode", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The pitch of the camera, in degrees. A value between `SpaceCenter.Camera.MinPitch` and `SpaceCenter.Camera.MaxPitch`
     pub async fn pitch(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Camera_get_Pitch", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `pitch`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn pitch_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Camera_get_Pitch", &[codec::arg(0, &self.id)]).await
     }
 
     /// The distance from the camera to the subject, in meters. A value between `SpaceCenter.Camera.MinDistance` and `SpaceCenter.Camera.MaxDistance`.
@@ -2126,16 +2543,34 @@ impl CargoBay {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `open`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn open_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "CargoBay_get_Open", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The part object for this cargo bay.
     pub async fn part(&self) -> crate::Result<Part> {
         let data = self.client.invoke("SpaceCenter", "CargoBay_get_Part", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "CargoBay_get_Part", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The state of the cargo bay.
     pub async fn state(&self) -> crate::Result<CargoBayState> {
         let data = self.client.invoke("SpaceCenter", "CargoBay_get_State", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `state`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn state_stream(&self) -> crate::Result<crate::Stream<CargoBayState>> {
+        self.client.stream("SpaceCenter", "CargoBay_get_State", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the cargo bay is open.
@@ -2204,10 +2639,22 @@ impl CelestialBody {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `atmosphere_depth`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn atmosphere_depth_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "CelestialBody_get_AtmosphereDepth", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The biomes present on this body.
     pub async fn biomes(&self) -> crate::Result<std::collections::HashSet<String>> {
         let data = self.client.invoke("SpaceCenter", "CelestialBody_get_Biomes", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `biomes`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn biomes_stream(&self) -> crate::Result<crate::Stream<std::collections::HashSet<String>>> {
+        self.client.stream("SpaceCenter", "CelestialBody_get_Biomes", &[codec::arg(0, &self.id)]).await
     }
 
     /// The equatorial radius of the body, in meters.
@@ -2216,10 +2663,22 @@ impl CelestialBody {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `equatorial_radius`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn equatorial_radius_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "CelestialBody_get_EquatorialRadius", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The altitude, in meters, above which a vessel is considered to be flying "high" when doing science.
     pub async fn flying_high_altitude_threshold(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "CelestialBody_get_FlyingHighAltitudeThreshold", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `flying_high_altitude_threshold`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn flying_high_altitude_threshold_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "CelestialBody_get_FlyingHighAltitudeThreshold", &[codec::arg(0, &self.id)]).await
     }
 
     /// The [standard gravitational parameter](https://en.wikipedia.org/wiki/Standard_gravitational_parameter) of the body in `m^3s^{-2}`.
@@ -2228,10 +2687,22 @@ impl CelestialBody {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `gravitational_parameter`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn gravitational_parameter_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "CelestialBody_get_GravitationalParameter", &[codec::arg(0, &self.id)]).await
+    }
+
     /// `true` if the body has an atmosphere.
     pub async fn has_atmosphere(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "CelestialBody_get_HasAtmosphere", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `has_atmosphere`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn has_atmosphere_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "CelestialBody_get_HasAtmosphere", &[codec::arg(0, &self.id)]).await
     }
 
     /// `true` if there is oxygen in the atmosphere, required for air-breathing engines.
@@ -2240,10 +2711,22 @@ impl CelestialBody {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `has_atmospheric_oxygen`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn has_atmospheric_oxygen_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "CelestialBody_get_HasAtmosphericOxygen", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The initial rotation angle of the body (at UT 0), in radians. A value between 0 and `2\pi`
     pub async fn initial_rotation(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "CelestialBody_get_InitialRotation", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `initial_rotation`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn initial_rotation_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "CelestialBody_get_InitialRotation", &[codec::arg(0, &self.id)]).await
     }
 
     /// The mass of the body, in kilograms.
@@ -2252,10 +2735,22 @@ impl CelestialBody {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `mass`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn mass_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "CelestialBody_get_Mass", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The name of the body.
     pub async fn name(&self) -> crate::Result<String> {
         let data = self.client.invoke("SpaceCenter", "CelestialBody_get_Name", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `name`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn name_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "CelestialBody_get_Name", &[codec::arg(0, &self.id)]).await
     }
 
     /// The reference frame that is fixed relative to this celestial body, and orientated in a fixed direction (it does not rotate with the body).
@@ -2269,10 +2764,22 @@ impl CelestialBody {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `non_rotating_reference_frame`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn non_rotating_reference_frame_stream(&self) -> crate::Result<crate::Stream<ReferenceFrame>> {
+        self.client.stream("SpaceCenter", "CelestialBody_get_NonRotatingReferenceFrame", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The orbit of the body.
     pub async fn orbit(&self) -> crate::Result<Option<Orbit>> {
         let data = self.client.invoke("SpaceCenter", "CelestialBody_get_Orbit", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `orbit`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn orbit_stream(&self) -> crate::Result<crate::Stream<Option<Orbit>>> {
+        self.client.stream("SpaceCenter", "CelestialBody_get_Orbit", &[codec::arg(0, &self.id)]).await
     }
 
     /// The reference frame that is fixed relative to this celestial body, but orientated with the body's orbital prograde/normal/radial directions.
@@ -2286,6 +2793,12 @@ impl CelestialBody {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `orbital_reference_frame`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn orbital_reference_frame_stream(&self) -> crate::Result<crate::Stream<ReferenceFrame>> {
+        self.client.stream("SpaceCenter", "CelestialBody_get_OrbitalReferenceFrame", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The reference frame that is fixed relative to the celestial body.
     /// - The origin is at the center of the body.
     /// - The axes rotate with the body.
@@ -2297,10 +2810,22 @@ impl CelestialBody {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `reference_frame`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn reference_frame_stream(&self) -> crate::Result<crate::Stream<ReferenceFrame>> {
+        self.client.stream("SpaceCenter", "CelestialBody_get_ReferenceFrame", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The current rotation angle of the body, in radians. A value between 0 and `2\pi`
     pub async fn rotation_angle(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "CelestialBody_get_RotationAngle", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `rotation_angle`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn rotation_angle_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "CelestialBody_get_RotationAngle", &[codec::arg(0, &self.id)]).await
     }
 
     /// The sidereal rotational period of the body, in seconds.
@@ -2309,10 +2834,22 @@ impl CelestialBody {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `rotational_period`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn rotational_period_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "CelestialBody_get_RotationalPeriod", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The rotational speed of the body, in radians per second.
     pub async fn rotational_speed(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "CelestialBody_get_RotationalSpeed", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `rotational_speed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn rotational_speed_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "CelestialBody_get_RotationalSpeed", &[codec::arg(0, &self.id)]).await
     }
 
     /// A list of celestial bodies that are in orbit around this celestial body.
@@ -2321,10 +2858,22 @@ impl CelestialBody {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `satellites`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn satellites_stream(&self) -> crate::Result<crate::Stream<Vec<CelestialBody>>> {
+        self.client.stream("SpaceCenter", "CelestialBody_get_Satellites", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The altitude, in meters, above which a vessel is considered to be in "high" space when doing science.
     pub async fn space_high_altitude_threshold(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "CelestialBody_get_SpaceHighAltitudeThreshold", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `space_high_altitude_threshold`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn space_high_altitude_threshold_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "CelestialBody_get_SpaceHighAltitudeThreshold", &[codec::arg(0, &self.id)]).await
     }
 
     /// The radius of the sphere of influence of the body, in meters.
@@ -2333,10 +2882,22 @@ impl CelestialBody {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `sphere_of_influence`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn sphere_of_influence_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "CelestialBody_get_SphereOfInfluence", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The acceleration due to gravity at sea level (mean altitude) on the body, in `m/s^2`.
     pub async fn surface_gravity(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "CelestialBody_get_SurfaceGravity", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `surface_gravity`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn surface_gravity_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "CelestialBody_get_SurfaceGravity", &[codec::arg(0, &self.id)]).await
     }
 
     /// The height of the surface relative to mean sea level, in meters, at the given position. When over water this is equal to 0.
@@ -2350,6 +2911,12 @@ impl CelestialBody {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `surface_height`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn surface_height_stream(&self, latitude: f64, longitude: f64) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "CelestialBody_SurfaceHeight", &[codec::arg(0, &self.id), codec::arg(1, &latitude), codec::arg(2, &longitude)]).await
+    }
+
     /// The height of the surface relative to mean sea level, in meters, at the given position. When over water, this is the height of the sea-bed and is therefore negative value.
     ///
     /// # Arguments
@@ -2359,6 +2926,12 @@ impl CelestialBody {
     pub async fn bedrock_height(&self, latitude: f64, longitude: f64) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "CelestialBody_BedrockHeight", &[codec::arg(0, &self.id), codec::arg(1, &latitude), codec::arg(2, &longitude)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `bedrock_height`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn bedrock_height_stream(&self, latitude: f64, longitude: f64) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "CelestialBody_BedrockHeight", &[codec::arg(0, &self.id), codec::arg(1, &latitude), codec::arg(2, &longitude)]).await
     }
 
     /// The position at mean sea level at the given latitude and longitude, in the given reference frame.
@@ -2377,6 +2950,12 @@ impl CelestialBody {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `msl_position`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn msl_position_stream(&self, latitude: f64, longitude: f64, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "CelestialBody_MSLPosition", &[codec::arg(0, &self.id), codec::arg(1, &latitude), codec::arg(2, &longitude), codec::arg(3, &reference_frame)]).await
+    }
+
     /// The position of the surface at the given latitude and longitude, in the given reference frame. When over water, this is the position of the surface of the water.
     ///
     /// # Arguments
@@ -2393,6 +2972,12 @@ impl CelestialBody {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `surface_position`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn surface_position_stream(&self, latitude: f64, longitude: f64, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "CelestialBody_SurfacePosition", &[codec::arg(0, &self.id), codec::arg(1, &latitude), codec::arg(2, &longitude), codec::arg(3, &reference_frame)]).await
+    }
+
     /// The position of the surface at the given latitude and longitude, in the given reference frame. When over water, this is the position at the bottom of the sea-bed.
     ///
     /// # Arguments
@@ -2407,6 +2992,12 @@ impl CelestialBody {
     pub async fn bedrock_position(&self, latitude: f64, longitude: f64, reference_frame: &ReferenceFrame) -> crate::Result<(f64, f64, f64)> {
         let data = self.client.invoke("SpaceCenter", "CelestialBody_BedrockPosition", &[codec::arg(0, &self.id), codec::arg(1, &latitude), codec::arg(2, &longitude), codec::arg(3, &reference_frame)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `bedrock_position`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn bedrock_position_stream(&self, latitude: f64, longitude: f64, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "CelestialBody_BedrockPosition", &[codec::arg(0, &self.id), codec::arg(1, &latitude), codec::arg(2, &longitude), codec::arg(3, &reference_frame)]).await
     }
 
     /// The position at the given latitude, longitude and altitude, in the given reference frame.
@@ -2426,6 +3017,12 @@ impl CelestialBody {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `position_at_altitude`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn position_at_altitude_stream(&self, latitude: f64, longitude: f64, altitude: f64, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "CelestialBody_PositionAtAltitude", &[codec::arg(0, &self.id), codec::arg(1, &latitude), codec::arg(2, &longitude), codec::arg(3, &altitude), codec::arg(4, &reference_frame)]).await
+    }
+
     /// The latitude of the given position, in the given reference frame.
     ///
     /// # Arguments
@@ -2435,6 +3032,12 @@ impl CelestialBody {
     pub async fn latitude_at_position(&self, position: (f64, f64, f64), reference_frame: &ReferenceFrame) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "CelestialBody_LatitudeAtPosition", &[codec::arg(0, &self.id), codec::arg(1, &position), codec::arg(2, &reference_frame)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `latitude_at_position`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn latitude_at_position_stream(&self, position: (f64, f64, f64), reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "CelestialBody_LatitudeAtPosition", &[codec::arg(0, &self.id), codec::arg(1, &position), codec::arg(2, &reference_frame)]).await
     }
 
     /// The longitude of the given position, in the given reference frame.
@@ -2448,6 +3051,12 @@ impl CelestialBody {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `longitude_at_position`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn longitude_at_position_stream(&self, position: (f64, f64, f64), reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "CelestialBody_LongitudeAtPosition", &[codec::arg(0, &self.id), codec::arg(1, &position), codec::arg(2, &reference_frame)]).await
+    }
+
     /// The altitude, in meters, of the given position in the given reference frame.
     ///
     /// # Arguments
@@ -2459,6 +3068,12 @@ impl CelestialBody {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `altitude_at_position`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn altitude_at_position_stream(&self, position: (f64, f64, f64), reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "CelestialBody_AltitudeAtPosition", &[codec::arg(0, &self.id), codec::arg(1, &position), codec::arg(2, &reference_frame)]).await
+    }
+
     /// The atmospheric density at the given position, in `kg/m^3`, in the given reference frame.
     ///
     /// # Arguments
@@ -2468,6 +3083,12 @@ impl CelestialBody {
     pub async fn atmospheric_density_at_position(&self, position: (f64, f64, f64), reference_frame: &ReferenceFrame) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "CelestialBody_AtmosphericDensityAtPosition", &[codec::arg(0, &self.id), codec::arg(1, &position), codec::arg(2, &reference_frame)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `atmospheric_density_at_position`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn atmospheric_density_at_position_stream(&self, position: (f64, f64, f64), reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "CelestialBody_AtmosphericDensityAtPosition", &[codec::arg(0, &self.id), codec::arg(1, &position), codec::arg(2, &reference_frame)]).await
     }
 
     /// The temperature on the body at the given position, in the given reference frame.
@@ -2483,6 +3104,12 @@ impl CelestialBody {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `temperature_at`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn temperature_at_stream(&self, position: (f64, f64, f64), reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "CelestialBody_TemperatureAt", &[codec::arg(0, &self.id), codec::arg(1, &position), codec::arg(2, &reference_frame)]).await
+    }
+
     /// Gets the air density, in `kg/m^3`, for the specified altitude above sea level, in meters.
     ///
     /// This is an approximation, because actual calculations, taking sun exposure into account to compute air temperature, require us to know the exact point on the body where the density is to be computed (knowing the altitude is not enough). However, the difference is small for high altitudes, so it makes very little difference for trajectory prediction.
@@ -2491,16 +3118,34 @@ impl CelestialBody {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `density_at`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn density_at_stream(&self, altitude: f64) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "CelestialBody_DensityAt", &[codec::arg(0, &self.id), codec::arg(1, &altitude)]).await
+    }
+
     /// Gets the air pressure, in Pascals, for the specified altitude above sea level, in meters.
     pub async fn pressure_at(&self, altitude: f64) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "CelestialBody_PressureAt", &[codec::arg(0, &self.id), codec::arg(1, &altitude)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `pressure_at`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn pressure_at_stream(&self, altitude: f64) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "CelestialBody_PressureAt", &[codec::arg(0, &self.id), codec::arg(1, &altitude)]).await
+    }
+
     /// The biome at the given latitude and longitude, in degrees.
     pub async fn biome_at(&self, latitude: f64, longitude: f64) -> crate::Result<String> {
         let data = self.client.invoke("SpaceCenter", "CelestialBody_BiomeAt", &[codec::arg(0, &self.id), codec::arg(1, &latitude), codec::arg(2, &longitude)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `biome_at`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn biome_at_stream(&self, latitude: f64, longitude: f64) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "CelestialBody_BiomeAt", &[codec::arg(0, &self.id), codec::arg(1, &latitude), codec::arg(2, &longitude)]).await
     }
 
     /// The position of the center of the body, in the specified reference frame.
@@ -2517,6 +3162,12 @@ impl CelestialBody {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `position`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn position_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "CelestialBody_Position", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
+    }
+
     /// The linear velocity of the body, in the specified reference frame.
     ///
     /// # Arguments
@@ -2529,6 +3180,12 @@ impl CelestialBody {
     pub async fn velocity(&self, reference_frame: &ReferenceFrame) -> crate::Result<(f64, f64, f64)> {
         let data = self.client.invoke("SpaceCenter", "CelestialBody_Velocity", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `velocity`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn velocity_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "CelestialBody_Velocity", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
     }
 
     /// The rotation of the body, in the specified reference frame.
@@ -2545,6 +3202,12 @@ impl CelestialBody {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `rotation`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn rotation_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "CelestialBody_Rotation", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
+    }
+
     /// The direction in which the north pole of the celestial body is pointing, in the specified reference frame.
     ///
     /// # Arguments
@@ -2559,6 +3222,12 @@ impl CelestialBody {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `direction`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn direction_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "CelestialBody_Direction", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
+    }
+
     /// The angular velocity of the body in the specified reference frame.
     ///
     /// # Arguments
@@ -2571,6 +3240,12 @@ impl CelestialBody {
     pub async fn angular_velocity(&self, reference_frame: &ReferenceFrame) -> crate::Result<(f64, f64, f64)> {
         let data = self.client.invoke("SpaceCenter", "CelestialBody_AngularVelocity", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `angular_velocity`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn angular_velocity_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "CelestialBody_AngularVelocity", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
     }
 }
 
@@ -2633,10 +3308,22 @@ impl CommLink {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `end`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn end_stream(&self) -> crate::Result<crate::Stream<CommNode>> {
+        self.client.stream("SpaceCenter", "CommLink_get_End", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Signal strength of the link.
     pub async fn signal_strength(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "CommLink_get_SignalStrength", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `signal_strength`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn signal_strength_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "CommLink_get_SignalStrength", &[codec::arg(0, &self.id)]).await
     }
 
     /// Start point of the link.
@@ -2645,10 +3332,22 @@ impl CommLink {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `start`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn start_stream(&self) -> crate::Result<crate::Stream<CommNode>> {
+        self.client.stream("SpaceCenter", "CommLink_get_Start", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The type of link.
     pub async fn r#type(&self) -> crate::Result<CommLinkType> {
         let data = self.client.invoke("SpaceCenter", "CommLink_get_Type", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `r#type`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn r#type_stream(&self) -> crate::Result<crate::Stream<CommLinkType>> {
+        self.client.stream("SpaceCenter", "CommLink_get_Type", &[codec::arg(0, &self.id)]).await
     }
 }
 
@@ -2711,10 +3410,22 @@ impl CommNode {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `is_control_point`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn is_control_point_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "CommNode_get_IsControlPoint", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the communication node is on Kerbin.
     pub async fn is_home(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "CommNode_get_IsHome", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `is_home`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn is_home_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "CommNode_get_IsHome", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the communication node is a vessel.
@@ -2723,16 +3434,34 @@ impl CommNode {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `is_vessel`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn is_vessel_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "CommNode_get_IsVessel", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Name of the communication node.
     pub async fn name(&self) -> crate::Result<String> {
         let data = self.client.invoke("SpaceCenter", "CommNode_get_Name", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `name`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn name_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "CommNode_get_Name", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The vessel for this communication node.
     pub async fn vessel(&self) -> crate::Result<Vessel> {
         let data = self.client.invoke("SpaceCenter", "CommNode_get_Vessel", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `vessel`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn vessel_stream(&self) -> crate::Result<crate::Stream<Vessel>> {
+        self.client.stream("SpaceCenter", "CommNode_get_Vessel", &[codec::arg(0, &self.id)]).await
     }
 }
 
@@ -2795,10 +3524,22 @@ impl Comms {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `can_communicate`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn can_communicate_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Comms_get_CanCommunicate", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the vessel can transmit science data to KSC.
     pub async fn can_transmit_science(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Comms_get_CanTransmitScience", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `can_transmit_science`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn can_transmit_science_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Comms_get_CanTransmitScience", &[codec::arg(0, &self.id)]).await
     }
 
     /// The communication path used to control the vessel.
@@ -2807,10 +3548,22 @@ impl Comms {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `control_path`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn control_path_stream(&self) -> crate::Result<crate::Stream<Vec<CommLink>>> {
+        self.client.stream("SpaceCenter", "Comms_get_ControlPath", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The combined power of all active antennae on the vessel.
     pub async fn power(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Comms_get_Power", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `power`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn power_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Comms_get_Power", &[codec::arg(0, &self.id)]).await
     }
 
     /// Signal delay to KSC in seconds.
@@ -2819,10 +3572,22 @@ impl Comms {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `signal_delay`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn signal_delay_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Comms_get_SignalDelay", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Signal strength to KSC.
     pub async fn signal_strength(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Comms_get_SignalStrength", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `signal_strength`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn signal_strength_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Comms_get_SignalStrength", &[codec::arg(0, &self.id)]).await
     }
 }
 
@@ -2885,10 +3650,22 @@ impl Contract {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `active`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn active_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Contract_get_Active", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the contract can be canceled.
     pub async fn can_be_canceled(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Contract_get_CanBeCanceled", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `can_be_canceled`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn can_be_canceled_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Contract_get_CanBeCanceled", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the contract can be declined.
@@ -2897,10 +3674,22 @@ impl Contract {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `can_be_declined`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn can_be_declined_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Contract_get_CanBeDeclined", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the contract can be failed.
     pub async fn can_be_failed(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Contract_get_CanBeFailed", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `can_be_failed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn can_be_failed_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Contract_get_CanBeFailed", &[codec::arg(0, &self.id)]).await
     }
 
     /// Description of the contract.
@@ -2909,10 +3698,22 @@ impl Contract {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `description`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn description_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "Contract_get_Description", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the contract has been failed.
     pub async fn failed(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Contract_get_Failed", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `failed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn failed_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Contract_get_Failed", &[codec::arg(0, &self.id)]).await
     }
 
     /// Funds received when accepting the contract.
@@ -2921,10 +3722,22 @@ impl Contract {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `funds_advance`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn funds_advance_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Contract_get_FundsAdvance", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Funds received on completion of the contract.
     pub async fn funds_completion(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Contract_get_FundsCompletion", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `funds_completion`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn funds_completion_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Contract_get_FundsCompletion", &[codec::arg(0, &self.id)]).await
     }
 
     /// Funds lost if the contract is failed.
@@ -2933,10 +3746,22 @@ impl Contract {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `funds_failure`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn funds_failure_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Contract_get_FundsFailure", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Keywords for the contract.
     pub async fn keywords(&self) -> crate::Result<Vec<String>> {
         let data = self.client.invoke("SpaceCenter", "Contract_get_Keywords", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `keywords`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn keywords_stream(&self) -> crate::Result<crate::Stream<Vec<String>>> {
+        self.client.stream("SpaceCenter", "Contract_get_Keywords", &[codec::arg(0, &self.id)]).await
     }
 
     /// Notes for the contract.
@@ -2945,10 +3770,22 @@ impl Contract {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `notes`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn notes_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "Contract_get_Notes", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Parameters for the contract.
     pub async fn parameters(&self) -> crate::Result<Vec<ContractParameter>> {
         let data = self.client.invoke("SpaceCenter", "Contract_get_Parameters", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `parameters`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn parameters_stream(&self) -> crate::Result<crate::Stream<Vec<ContractParameter>>> {
+        self.client.stream("SpaceCenter", "Contract_get_Parameters", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the contract has been read.
@@ -2957,10 +3794,22 @@ impl Contract {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `read`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn read_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Contract_get_Read", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Reputation gained on completion of the contract.
     pub async fn reputation_completion(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Contract_get_ReputationCompletion", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `reputation_completion`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn reputation_completion_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Contract_get_ReputationCompletion", &[codec::arg(0, &self.id)]).await
     }
 
     /// Reputation lost if the contract is failed.
@@ -2969,10 +3818,22 @@ impl Contract {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `reputation_failure`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn reputation_failure_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Contract_get_ReputationFailure", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Science gained on completion of the contract.
     pub async fn science_completion(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Contract_get_ScienceCompletion", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `science_completion`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn science_completion_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Contract_get_ScienceCompletion", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the contract has been seen.
@@ -2981,10 +3842,22 @@ impl Contract {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `seen`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn seen_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Contract_get_Seen", &[codec::arg(0, &self.id)]).await
+    }
+
     /// State of the contract.
     pub async fn state(&self) -> crate::Result<ContractState> {
         let data = self.client.invoke("SpaceCenter", "Contract_get_State", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `state`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn state_stream(&self) -> crate::Result<crate::Stream<ContractState>> {
+        self.client.stream("SpaceCenter", "Contract_get_State", &[codec::arg(0, &self.id)]).await
     }
 
     /// Synopsis for the contract.
@@ -2993,16 +3866,34 @@ impl Contract {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `synopsis`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn synopsis_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "Contract_get_Synopsis", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Title of the contract.
     pub async fn title(&self) -> crate::Result<String> {
         let data = self.client.invoke("SpaceCenter", "Contract_get_Title", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `title`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn title_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "Contract_get_Title", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Type of the contract.
     pub async fn r#type(&self) -> crate::Result<String> {
         let data = self.client.invoke("SpaceCenter", "Contract_get_Type", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `r#type`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn r#type_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "Contract_get_Type", &[codec::arg(0, &self.id)]).await
     }
 
     /// Cancel an active contract.
@@ -3083,10 +3974,22 @@ impl ContractManager {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `active_contracts`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn active_contracts_stream(&self) -> crate::Result<crate::Stream<Vec<Contract>>> {
+        self.client.stream("SpaceCenter", "ContractManager_get_ActiveContracts", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A list of all contracts.
     pub async fn all_contracts(&self) -> crate::Result<Vec<Contract>> {
         let data = self.client.invoke("SpaceCenter", "ContractManager_get_AllContracts", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `all_contracts`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn all_contracts_stream(&self) -> crate::Result<crate::Stream<Vec<Contract>>> {
+        self.client.stream("SpaceCenter", "ContractManager_get_AllContracts", &[codec::arg(0, &self.id)]).await
     }
 
     /// A list of all completed contracts.
@@ -3095,10 +3998,22 @@ impl ContractManager {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `completed_contracts`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn completed_contracts_stream(&self) -> crate::Result<crate::Stream<Vec<Contract>>> {
+        self.client.stream("SpaceCenter", "ContractManager_get_CompletedContracts", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A list of all failed contracts.
     pub async fn failed_contracts(&self) -> crate::Result<Vec<Contract>> {
         let data = self.client.invoke("SpaceCenter", "ContractManager_get_FailedContracts", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `failed_contracts`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn failed_contracts_stream(&self) -> crate::Result<crate::Stream<Vec<Contract>>> {
+        self.client.stream("SpaceCenter", "ContractManager_get_FailedContracts", &[codec::arg(0, &self.id)]).await
     }
 
     /// A list of all offered, but unaccepted, contracts.
@@ -3107,10 +4022,22 @@ impl ContractManager {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `offered_contracts`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn offered_contracts_stream(&self) -> crate::Result<crate::Stream<Vec<Contract>>> {
+        self.client.stream("SpaceCenter", "ContractManager_get_OfferedContracts", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A list of all contract types.
     pub async fn types(&self) -> crate::Result<std::collections::HashSet<String>> {
         let data = self.client.invoke("SpaceCenter", "ContractManager_get_Types", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `types`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn types_stream(&self) -> crate::Result<crate::Stream<std::collections::HashSet<String>>> {
+        self.client.stream("SpaceCenter", "ContractManager_get_Types", &[codec::arg(0, &self.id)]).await
     }
 }
 
@@ -3173,10 +4100,22 @@ impl ContractParameter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `children`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn children_stream(&self) -> crate::Result<crate::Stream<Vec<ContractParameter>>> {
+        self.client.stream("SpaceCenter", "ContractParameter_get_Children", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the parameter has been completed.
     pub async fn completed(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "ContractParameter_get_Completed", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `completed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn completed_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "ContractParameter_get_Completed", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the parameter has been failed.
@@ -3185,10 +4124,22 @@ impl ContractParameter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `failed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn failed_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "ContractParameter_get_Failed", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Funds received on completion of the contract parameter.
     pub async fn funds_completion(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "ContractParameter_get_FundsCompletion", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `funds_completion`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn funds_completion_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "ContractParameter_get_FundsCompletion", &[codec::arg(0, &self.id)]).await
     }
 
     /// Funds lost if the contract parameter is failed.
@@ -3197,10 +4148,22 @@ impl ContractParameter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `funds_failure`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn funds_failure_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "ContractParameter_get_FundsFailure", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Notes for the parameter.
     pub async fn notes(&self) -> crate::Result<String> {
         let data = self.client.invoke("SpaceCenter", "ContractParameter_get_Notes", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `notes`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn notes_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "ContractParameter_get_Notes", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the contract parameter is optional.
@@ -3209,10 +4172,22 @@ impl ContractParameter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `optional`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn optional_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "ContractParameter_get_Optional", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Reputation gained on completion of the contract parameter.
     pub async fn reputation_completion(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "ContractParameter_get_ReputationCompletion", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `reputation_completion`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn reputation_completion_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "ContractParameter_get_ReputationCompletion", &[codec::arg(0, &self.id)]).await
     }
 
     /// Reputation lost if the contract parameter is failed.
@@ -3221,16 +4196,34 @@ impl ContractParameter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `reputation_failure`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn reputation_failure_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "ContractParameter_get_ReputationFailure", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Science gained on completion of the contract parameter.
     pub async fn science_completion(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "ContractParameter_get_ScienceCompletion", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `science_completion`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn science_completion_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "ContractParameter_get_ScienceCompletion", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Title of the parameter.
     pub async fn title(&self) -> crate::Result<String> {
         let data = self.client.invoke("SpaceCenter", "ContractParameter_get_Title", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `title`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn title_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "ContractParameter_get_Title", &[codec::arg(0, &self.id)]).await
     }
 }
 
@@ -3295,10 +4288,22 @@ impl Control {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `abort`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn abort_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Control_get_Abort", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Returns whether all antennas on the vessel are deployed, and sets the deployment state of all antennas. See `SpaceCenter.Antenna.Deployed`.
     pub async fn antennas(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Control_get_Antennas", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `antennas`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn antennas_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Control_get_Antennas", &[codec::arg(0, &self.id)]).await
     }
 
     /// The state of the wheel brakes.
@@ -3307,10 +4312,22 @@ impl Control {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `brakes`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn brakes_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Control_get_Brakes", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Returns whether any of the cargo bays on the vessel are open, and sets the open state of all cargo bays. See `SpaceCenter.CargoBay.Open`.
     pub async fn cargo_bays(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Control_get_CargoBays", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `cargo_bays`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn cargo_bays_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Control_get_CargoBays", &[codec::arg(0, &self.id)]).await
     }
 
     /// The current stage of the vessel. Corresponds to the stage number in the in-game UI.
@@ -3319,10 +4336,22 @@ impl Control {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `current_stage`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn current_stage_stream(&self) -> crate::Result<crate::Stream<i32>> {
+        self.client.stream("SpaceCenter", "Control_get_CurrentStage", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The state of the forward translational control. A value between -1 and 1. Equivalent to the h and n keys.
     pub async fn forward(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Control_get_Forward", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `forward`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn forward_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Control_get_Forward", &[codec::arg(0, &self.id)]).await
     }
 
     /// The state of the landing gear/legs.
@@ -3331,10 +4360,22 @@ impl Control {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `gear`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn gear_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Control_get_Gear", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Sets the behavior of the pitch, yaw, roll and translation control inputs. When set to additive, these inputs are added to the vessels current inputs. This mode is the default. When set to override, these inputs (if non-zero) override the vessels inputs. This mode prevents keyboard control, or SAS, from interfering with the controls when they are set.
     pub async fn input_mode(&self) -> crate::Result<ControlInputMode> {
         let data = self.client.invoke("SpaceCenter", "Control_get_InputMode", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `input_mode`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn input_mode_stream(&self) -> crate::Result<crate::Stream<ControlInputMode>> {
+        self.client.stream("SpaceCenter", "Control_get_InputMode", &[codec::arg(0, &self.id)]).await
     }
 
     /// Returns whether all of the air intakes on the vessel are open, and sets the open state of all air intakes. See `SpaceCenter.Intake.Open`.
@@ -3343,10 +4384,22 @@ impl Control {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `intakes`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn intakes_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Control_get_Intakes", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Returns whether all landing legs on the vessel are deployed, and sets the deployment state of all landing legs. Does not include wheels (for example landing gear). See `SpaceCenter.Leg.Deployed`.
     pub async fn legs(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Control_get_Legs", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `legs`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn legs_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Control_get_Legs", &[codec::arg(0, &self.id)]).await
     }
 
     /// The state of the lights.
@@ -3355,10 +4408,22 @@ impl Control {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `lights`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn lights_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Control_get_Lights", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Returns a list of all existing maneuver nodes, ordered by time from first to last.
     pub async fn nodes(&self) -> crate::Result<Vec<Node>> {
         let data = self.client.invoke("SpaceCenter", "Control_get_Nodes", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `nodes`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn nodes_stream(&self) -> crate::Result<crate::Stream<Vec<Node>>> {
+        self.client.stream("SpaceCenter", "Control_get_Nodes", &[codec::arg(0, &self.id)]).await
     }
 
     /// Returns whether all parachutes on the vessel are deployed, and sets the deployment state of all parachutes. Cannot be set to `false`. See `SpaceCenter.Parachute.Deployed`.
@@ -3367,10 +4432,22 @@ impl Control {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `parachutes`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn parachutes_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Control_get_Parachutes", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The state of the pitch control. A value between -1 and 1. Equivalent to the w and s keys.
     pub async fn pitch(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Control_get_Pitch", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `pitch`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn pitch_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Control_get_Pitch", &[codec::arg(0, &self.id)]).await
     }
 
     /// The state of RCS.
@@ -3379,10 +4456,22 @@ impl Control {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `rcs`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn rcs_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Control_get_RCS", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Returns whether all radiators on the vessel are deployed, and sets the deployment state of all radiators. See `SpaceCenter.Radiator.Deployed`.
     pub async fn radiators(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Control_get_Radiators", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `radiators`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn radiators_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Control_get_Radiators", &[codec::arg(0, &self.id)]).await
     }
 
     /// Returns whether all reactive wheels on the vessel are active, and sets the active state of all reaction wheels. See `SpaceCenter.ReactionWheel.Active`.
@@ -3391,10 +4480,22 @@ impl Control {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `reaction_wheels`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn reaction_wheels_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Control_get_ReactionWheels", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Returns whether all of the resource harvesters on the vessel are deployed, and sets the deployment state of all resource harvesters. See `SpaceCenter.ResourceHarvester.Deployed`.
     pub async fn resource_harvesters(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Control_get_ResourceHarvesters", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `resource_harvesters`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn resource_harvesters_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Control_get_ResourceHarvesters", &[codec::arg(0, &self.id)]).await
     }
 
     /// Returns whether any of the resource harvesters on the vessel are active, and sets the active state of all resource harvesters. See `SpaceCenter.ResourceHarvester.Active`.
@@ -3403,16 +4504,34 @@ impl Control {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `resource_harvesters_active`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn resource_harvesters_active_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Control_get_ResourceHarvestersActive", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The state of the right translational control. A value between -1 and 1. Equivalent to the j and l keys.
     pub async fn right(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Control_get_Right", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `right`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn right_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Control_get_Right", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The state of the roll control. A value between -1 and 1. Equivalent to the q and e keys.
     pub async fn roll(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Control_get_Roll", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `roll`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn roll_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Control_get_Roll", &[codec::arg(0, &self.id)]).await
     }
 
     /// The state of SAS.
@@ -3423,6 +4542,12 @@ impl Control {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `sas`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn sas_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Control_get_SAS", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The current `SpaceCenter.SASMode`. These modes are equivalent to the mode buttons to the left of the navball that appear when SAS is enabled.
     ///
     /// Equivalent to `SpaceCenter.AutoPilot.SASMode`
@@ -3431,10 +4556,22 @@ impl Control {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `sas_mode`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn sas_mode_stream(&self) -> crate::Result<crate::Stream<SASMode>> {
+        self.client.stream("SpaceCenter", "Control_get_SASMode", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Returns whether all solar panels on the vessel are deployed, and sets the deployment state of all solar panels. See `SpaceCenter.SolarPanel.Deployed`.
     pub async fn solar_panels(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Control_get_SolarPanels", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `solar_panels`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn solar_panels_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Control_get_SolarPanels", &[codec::arg(0, &self.id)]).await
     }
 
     /// The source of the vessels control, for example by a kerbal or a probe core.
@@ -3443,10 +4580,22 @@ impl Control {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `source`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn source_stream(&self) -> crate::Result<crate::Stream<ControlSource>> {
+        self.client.stream("SpaceCenter", "Control_get_Source", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The current `SpaceCenter.SpeedMode` of the navball. This is the mode displayed next to the speed at the top of the navball.
     pub async fn speed_mode(&self) -> crate::Result<SpeedMode> {
         let data = self.client.invoke("SpaceCenter", "Control_get_SpeedMode", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `speed_mode`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn speed_mode_stream(&self) -> crate::Result<crate::Stream<SpeedMode>> {
+        self.client.stream("SpaceCenter", "Control_get_SpeedMode", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether staging is locked on the vessel.
@@ -3457,10 +4606,22 @@ impl Control {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `stage_lock`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn stage_lock_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Control_get_StageLock", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The control state of the vessel.
     pub async fn state(&self) -> crate::Result<ControlState> {
         let data = self.client.invoke("SpaceCenter", "Control_get_State", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `state`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn state_stream(&self) -> crate::Result<crate::Stream<ControlState>> {
+        self.client.stream("SpaceCenter", "Control_get_State", &[codec::arg(0, &self.id)]).await
     }
 
     /// The state of the throttle. A value between 0 and 1.
@@ -3469,10 +4630,22 @@ impl Control {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `throttle`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn throttle_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Control_get_Throttle", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The state of the up translational control. A value between -1 and 1. Equivalent to the i and k keys.
     pub async fn up(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Control_get_Up", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `up`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn up_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Control_get_Up", &[codec::arg(0, &self.id)]).await
     }
 
     /// The state of the wheel steering. A value between -1 and 1. A value of 1 steers to the left, and a value of -1 steers to the right.
@@ -3481,10 +4654,22 @@ impl Control {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `wheel_steering`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn wheel_steering_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Control_get_WheelSteering", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The state of the wheel throttle. A value between -1 and 1. A value of 1 rotates the wheels forwards, a value of -1 rotates the wheels backwards.
     pub async fn wheel_throttle(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Control_get_WheelThrottle", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `wheel_throttle`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn wheel_throttle_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Control_get_WheelThrottle", &[codec::arg(0, &self.id)]).await
     }
 
     /// Returns whether all wheels on the vessel are deployed, and sets the deployment state of all wheels. Does not include landing legs. See `SpaceCenter.Wheel.Deployed`.
@@ -3493,10 +4678,22 @@ impl Control {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `wheels`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn wheels_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Control_get_Wheels", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The state of the yaw control. A value between -1 and 1. Equivalent to the a and d keys.
     pub async fn yaw(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Control_get_Yaw", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `yaw`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn yaw_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Control_get_Yaw", &[codec::arg(0, &self.id)]).await
     }
 
     /// The state of the abort action group.
@@ -3697,6 +4894,12 @@ impl Control {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `activate_next_stage`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn activate_next_stage_stream(&self) -> crate::Result<crate::Stream<Vec<Vessel>>> {
+        self.client.stream("SpaceCenter", "Control_ActivateNextStage", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Returns `true` if the given action group is enabled.
     ///
     /// # Arguments
@@ -3705,6 +4908,12 @@ impl Control {
     pub async fn get_action_group(&self, group: u32) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Control_GetActionGroup", &[codec::arg(0, &self.id), codec::arg(1, &group)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `get_action_group`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn get_action_group_stream(&self, group: u32) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Control_GetActionGroup", &[codec::arg(0, &self.id), codec::arg(1, &group)]).await
     }
 
     /// Sets the state of the given action group.
@@ -3748,6 +4957,22 @@ impl Control {
         }
         let data = self.client.invoke("SpaceCenter", "Control_AddNode", &args).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `add_node`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn add_node_stream(&self, ut: f64, prograde: Option<f32>, normal: Option<f32>, radial: Option<f32>) -> crate::Result<crate::Stream<Node>> {
+        let mut args = vec![codec::arg(0, &self.id), codec::arg(1, &ut)];
+        if let Some(v) = &prograde {
+            args.push(codec::arg(2, v));
+        }
+        if let Some(v) = &normal {
+            args.push(codec::arg(3, v));
+        }
+        if let Some(v) = &radial {
+            args.push(codec::arg(4, v));
+        }
+        self.client.stream("SpaceCenter", "Control_AddNode", &args).await
     }
 
     /// Remove all maneuver nodes.
@@ -3816,10 +5041,22 @@ impl ControlSurface {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `authority_limiter`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn authority_limiter_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "ControlSurface_get_AuthorityLimiter", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The available torque, in Newton meters, that can be produced by this control surface, in the positive and negative pitch, roll and yaw axes of the vessel. These axes correspond to the coordinate axes of the `SpaceCenter.Vessel.ReferenceFrame`.
     pub async fn available_torque(&self) -> crate::Result<((f64, f64, f64), (f64, f64, f64))> {
         let data = self.client.invoke("SpaceCenter", "ControlSurface_get_AvailableTorque", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `available_torque`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn available_torque_stream(&self) -> crate::Result<crate::Stream<((f64, f64, f64), (f64, f64, f64))>> {
+        self.client.stream("SpaceCenter", "ControlSurface_get_AvailableTorque", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the control surface has been fully deployed.
@@ -3828,10 +5065,22 @@ impl ControlSurface {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `deployed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn deployed_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "ControlSurface_get_Deployed", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the control surface movement is inverted.
     pub async fn inverted(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "ControlSurface_get_Inverted", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `inverted`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn inverted_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "ControlSurface_get_Inverted", &[codec::arg(0, &self.id)]).await
     }
 
     /// The part object for this control surface.
@@ -3840,10 +5089,22 @@ impl ControlSurface {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "ControlSurface_get_Part", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the control surface has pitch control enabled.
     pub async fn pitch_enabled(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "ControlSurface_get_PitchEnabled", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `pitch_enabled`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn pitch_enabled_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "ControlSurface_get_PitchEnabled", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the control surface has roll control enabled.
@@ -3852,16 +5113,34 @@ impl ControlSurface {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `roll_enabled`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn roll_enabled_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "ControlSurface_get_RollEnabled", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Surface area of the control surface in `m^2`.
     pub async fn surface_area(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "ControlSurface_get_SurfaceArea", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `surface_area`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn surface_area_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "ControlSurface_get_SurfaceArea", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the control surface has yaw control enabled.
     pub async fn yaw_enabled(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "ControlSurface_get_YawEnabled", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `yaw_enabled`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn yaw_enabled_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "ControlSurface_get_YawEnabled", &[codec::arg(0, &self.id)]).await
     }
 
     /// The authority limiter for the control surface, which controls how far the control surface will move.
@@ -3960,10 +5239,22 @@ impl CrewMember {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `badass`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn badass_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "CrewMember_get_Badass", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The crew members courage.
     pub async fn courage(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "CrewMember_get_Courage", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `courage`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn courage_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "CrewMember_get_Courage", &[codec::arg(0, &self.id)]).await
     }
 
     /// The crew members experience.
@@ -3972,10 +5263,22 @@ impl CrewMember {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `experience`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn experience_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "CrewMember_get_Experience", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The crew members name.
     pub async fn name(&self) -> crate::Result<String> {
         let data = self.client.invoke("SpaceCenter", "CrewMember_get_Name", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `name`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn name_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "CrewMember_get_Name", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the crew member is on a mission.
@@ -3984,10 +5287,22 @@ impl CrewMember {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `on_mission`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn on_mission_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "CrewMember_get_OnMission", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The crew members stupidity.
     pub async fn stupidity(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "CrewMember_get_Stupidity", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `stupidity`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn stupidity_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "CrewMember_get_Stupidity", &[codec::arg(0, &self.id)]).await
     }
 
     /// The type of crew member.
@@ -3996,10 +5311,22 @@ impl CrewMember {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `r#type`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn r#type_stream(&self) -> crate::Result<crate::Stream<CrewMemberType>> {
+        self.client.stream("SpaceCenter", "CrewMember_get_Type", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the crew member is a veteran.
     pub async fn veteran(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "CrewMember_get_Veteran", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `veteran`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn veteran_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "CrewMember_get_Veteran", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the crew member is a badass.
@@ -4098,10 +5425,22 @@ impl Decoupler {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `decoupled`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn decoupled_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Decoupler_get_Decoupled", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The impulse that the decoupler imparts when it is fired, in Newton seconds.
     pub async fn impulse(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Decoupler_get_Impulse", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `impulse`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn impulse_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Decoupler_get_Impulse", &[codec::arg(0, &self.id)]).await
     }
 
     /// The part object for this decoupler.
@@ -4110,10 +5449,22 @@ impl Decoupler {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "Decoupler_get_Part", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the decoupler is enabled in the staging sequence.
     pub async fn staged(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Decoupler_get_Staged", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `staged`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn staged_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Decoupler_get_Staged", &[codec::arg(0, &self.id)]).await
     }
 
     /// Fires the decoupler. Returns the new vessel created when the decoupler fires. Throws an exception if the decoupler has already fired.
@@ -4122,6 +5473,12 @@ impl Decoupler {
     pub async fn decouple(&self) -> crate::Result<Vessel> {
         let data = self.client.invoke("SpaceCenter", "Decoupler_Decouple", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `decouple`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn decouple_stream(&self) -> crate::Result<crate::Stream<Vessel>> {
+        self.client.stream("SpaceCenter", "Decoupler_Decouple", &[codec::arg(0, &self.id)]).await
     }
 }
 
@@ -4184,10 +5541,22 @@ impl DockingPort {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `docked_part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn docked_part_stream(&self) -> crate::Result<crate::Stream<Option<Part>>> {
+        self.client.stream("SpaceCenter", "DockingPort_get_DockedPart", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the docking port has a shield.
     pub async fn has_shield(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "DockingPort_get_HasShield", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `has_shield`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn has_shield_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "DockingPort_get_HasShield", &[codec::arg(0, &self.id)]).await
     }
 
     /// The part object for this docking port.
@@ -4196,10 +5565,22 @@ impl DockingPort {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "DockingPort_get_Part", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The distance a docking port must move away when it undocks before it becomes ready to dock with another port, in meters.
     pub async fn reengage_distance(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "DockingPort_get_ReengageDistance", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `reengage_distance`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn reengage_distance_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "DockingPort_get_ReengageDistance", &[codec::arg(0, &self.id)]).await
     }
 
     /// The reference frame that is fixed relative to this docking port, and oriented with the port.
@@ -4215,16 +5596,34 @@ impl DockingPort {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `reference_frame`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn reference_frame_stream(&self) -> crate::Result<crate::Stream<ReferenceFrame>> {
+        self.client.stream("SpaceCenter", "DockingPort_get_ReferenceFrame", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The state of the docking ports shield, if it has one. Returns `true` if the docking port has a shield, and the shield is closed. Otherwise returns `false`. When set to `true`, the shield is closed, and when set to `false` the shield is opened. If the docking port does not have a shield, setting this attribute has no effect.
     pub async fn shielded(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "DockingPort_get_Shielded", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `shielded`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn shielded_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "DockingPort_get_Shielded", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The current state of the docking port.
     pub async fn state(&self) -> crate::Result<DockingPortState> {
         let data = self.client.invoke("SpaceCenter", "DockingPort_get_State", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `state`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn state_stream(&self) -> crate::Result<crate::Stream<DockingPortState>> {
+        self.client.stream("SpaceCenter", "DockingPort_get_State", &[codec::arg(0, &self.id)]).await
     }
 
     /// The state of the docking ports shield, if it has one. Returns `true` if the docking port has a shield, and the shield is closed. Otherwise returns `false`. When set to `true`, the shield is closed, and when set to `false` the shield is opened. If the docking port does not have a shield, setting this attribute has no effect.
@@ -4241,6 +5640,12 @@ impl DockingPort {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `undock`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn undock_stream(&self) -> crate::Result<crate::Stream<Vessel>> {
+        self.client.stream("SpaceCenter", "DockingPort_Undock", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The position of the docking port, in the given reference frame.
     ///
     /// # Arguments
@@ -4253,6 +5658,12 @@ impl DockingPort {
     pub async fn position(&self, reference_frame: &ReferenceFrame) -> crate::Result<(f64, f64, f64)> {
         let data = self.client.invoke("SpaceCenter", "DockingPort_Position", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `position`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn position_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "DockingPort_Position", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
     }
 
     /// The direction that docking port points in, in the given reference frame.
@@ -4269,6 +5680,12 @@ impl DockingPort {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `direction`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn direction_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "DockingPort_Direction", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
+    }
+
     /// The rotation of the docking port, in the given reference frame.
     ///
     /// # Arguments
@@ -4281,6 +5698,12 @@ impl DockingPort {
     pub async fn rotation(&self, reference_frame: &ReferenceFrame) -> crate::Result<(f64, f64, f64, f64)> {
         let data = self.client.invoke("SpaceCenter", "DockingPort_Rotation", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `rotation`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn rotation_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "DockingPort_Rotation", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
     }
 }
 
@@ -4345,10 +5768,22 @@ impl Engine {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `active`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn active_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Engine_get_Active", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the engine will automatically switch modes.
     pub async fn auto_mode_switch(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Engine_get_AutoModeSwitch", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `auto_mode_switch`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn auto_mode_switch_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Engine_get_AutoModeSwitch", &[codec::arg(0, &self.id)]).await
     }
 
     /// The amount of thrust, in Newtons, that would be produced by the engine when activated and with its throttle set to 100%. Returns zero if the engine does not have any fuel. Takes the engine's current `SpaceCenter.Engine.ThrustLimit` and atmospheric conditions into account.
@@ -4357,10 +5792,22 @@ impl Engine {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `available_thrust`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn available_thrust_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Engine_get_AvailableThrust", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The available torque, in Newton meters, that can be produced by this engine, in the positive and negative pitch, roll and yaw axes of the vessel. These axes correspond to the coordinate axes of the `SpaceCenter.Vessel.ReferenceFrame`. Returns zero if the engine is inactive, or not gimballed.
     pub async fn available_torque(&self) -> crate::Result<((f64, f64, f64), (f64, f64, f64))> {
         let data = self.client.invoke("SpaceCenter", "Engine_get_AvailableTorque", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `available_torque`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn available_torque_stream(&self) -> crate::Result<crate::Stream<((f64, f64, f64), (f64, f64, f64))>> {
+        self.client.stream("SpaceCenter", "Engine_get_AvailableTorque", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the engine can be restarted once shutdown. If the engine cannot be shutdown, returns `false`. For example, this is `true` for liquid fueled rockets and `false` for solid rocket boosters.
@@ -4369,10 +5816,22 @@ impl Engine {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `can_restart`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn can_restart_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Engine_get_CanRestart", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the engine can be shutdown once activated. For example, this is `true` for liquid fueled rockets and `false` for solid rocket boosters.
     pub async fn can_shutdown(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Engine_get_CanShutdown", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `can_shutdown`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn can_shutdown_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Engine_get_CanShutdown", &[codec::arg(0, &self.id)]).await
     }
 
     /// The gimbal limiter of the engine. A value between 0 and 1. Returns 0 if the gimbal is locked.
@@ -4381,10 +5840,22 @@ impl Engine {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `gimbal_limit`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn gimbal_limit_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Engine_get_GimbalLimit", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the engines gimbal is locked in place. Setting this attribute has no effect if the engine is not gimballed.
     pub async fn gimbal_locked(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Engine_get_GimbalLocked", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `gimbal_locked`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn gimbal_locked_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Engine_get_GimbalLocked", &[codec::arg(0, &self.id)]).await
     }
 
     /// The range over which the gimbal can move, in degrees. Returns 0 if the engine is not gimballed.
@@ -4393,10 +5864,22 @@ impl Engine {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `gimbal_range`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn gimbal_range_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Engine_get_GimbalRange", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the engine is gimballed.
     pub async fn gimballed(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Engine_get_Gimballed", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `gimballed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn gimballed_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Engine_get_Gimballed", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the engine has any fuel available.
@@ -4405,10 +5888,22 @@ impl Engine {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `has_fuel`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn has_fuel_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Engine_get_HasFuel", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the engine has multiple modes of operation.
     pub async fn has_modes(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Engine_get_HasModes", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `has_modes`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn has_modes_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Engine_get_HasModes", &[codec::arg(0, &self.id)]).await
     }
 
     /// The specific impulse of the engine at sea level on Kerbin, in seconds.
@@ -4417,10 +5912,22 @@ impl Engine {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `kerbin_sea_level_specific_impulse`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn kerbin_sea_level_specific_impulse_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Engine_get_KerbinSeaLevelSpecificImpulse", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The amount of thrust, in Newtons, that would be produced by the engine when activated and fueled, with its throttle and throttle limiter set to 100%.
     pub async fn max_thrust(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Engine_get_MaxThrust", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `max_thrust`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn max_thrust_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Engine_get_MaxThrust", &[codec::arg(0, &self.id)]).await
     }
 
     /// The maximum amount of thrust that can be produced by the engine in a vacuum, in Newtons. This is the amount of thrust produced by the engine when activated, `SpaceCenter.Engine.ThrustLimit` is set to 100%, the main vessel's throttle is set to 100% and the engine is in a vacuum.
@@ -4429,10 +5936,22 @@ impl Engine {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `max_vacuum_thrust`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn max_vacuum_thrust_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Engine_get_MaxVacuumThrust", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The name of the current engine mode.
     pub async fn mode(&self) -> crate::Result<String> {
         let data = self.client.invoke("SpaceCenter", "Engine_get_Mode", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `mode`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn mode_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "Engine_get_Mode", &[codec::arg(0, &self.id)]).await
     }
 
     /// The available modes for the engine. A dictionary mapping mode names to `SpaceCenter.Engine` objects.
@@ -4441,16 +5960,34 @@ impl Engine {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `modes`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn modes_stream(&self) -> crate::Result<crate::Stream<std::collections::HashMap<String, Engine>>> {
+        self.client.stream("SpaceCenter", "Engine_get_Modes", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The part object for this engine.
     pub async fn part(&self) -> crate::Result<Part> {
         let data = self.client.invoke("SpaceCenter", "Engine_get_Part", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "Engine_get_Part", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The names of the propellants that the engine consumes.
     pub async fn propellant_names(&self) -> crate::Result<Vec<String>> {
         let data = self.client.invoke("SpaceCenter", "Engine_get_PropellantNames", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `propellant_names`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn propellant_names_stream(&self) -> crate::Result<crate::Stream<Vec<String>>> {
+        self.client.stream("SpaceCenter", "Engine_get_PropellantNames", &[codec::arg(0, &self.id)]).await
     }
 
     /// The ratio of resources that the engine consumes. A dictionary mapping resource names to the ratio at which they are consumed by the engine.
@@ -4461,10 +5998,22 @@ impl Engine {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `propellant_ratios`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn propellant_ratios_stream(&self) -> crate::Result<crate::Stream<std::collections::HashMap<String, f32>>> {
+        self.client.stream("SpaceCenter", "Engine_get_PropellantRatios", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The propellants that the engine consumes.
     pub async fn propellants(&self) -> crate::Result<Vec<Propellant>> {
         let data = self.client.invoke("SpaceCenter", "Engine_get_Propellants", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `propellants`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn propellants_stream(&self) -> crate::Result<crate::Stream<Vec<Propellant>>> {
+        self.client.stream("SpaceCenter", "Engine_get_Propellants", &[codec::arg(0, &self.id)]).await
     }
 
     /// The current specific impulse of the engine, in seconds. Returns zero if the engine is not active.
@@ -4473,10 +6022,22 @@ impl Engine {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `specific_impulse`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn specific_impulse_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Engine_get_SpecificImpulse", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The current throttle setting for the engine. A value between 0 and 1. This is not necessarily the same as the vessel's main throttle setting, as some engines take time to adjust their throttle (such as jet engines).
     pub async fn throttle(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Engine_get_Throttle", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `throttle`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn throttle_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Engine_get_Throttle", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the `SpaceCenter.Control.Throttle` affects the engine. For example, this is `true` for liquid fueled rockets, and `false` for solid rocket boosters.
@@ -4485,16 +6046,34 @@ impl Engine {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `throttle_locked`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn throttle_locked_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Engine_get_ThrottleLocked", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The current amount of thrust being produced by the engine, in Newtons.
     pub async fn thrust(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Engine_get_Thrust", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `thrust`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn thrust_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Engine_get_Thrust", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The thrust limiter of the engine. A value between 0 and 1. Setting this attribute may have no effect, for example the thrust limit for a solid rocket booster cannot be changed in flight.
     pub async fn thrust_limit(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Engine_get_ThrustLimit", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `thrust_limit`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn thrust_limit_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Engine_get_ThrustLimit", &[codec::arg(0, &self.id)]).await
     }
 
     /// The components of the engine that generate thrust.
@@ -4505,10 +6084,22 @@ impl Engine {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `thrusters`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn thrusters_stream(&self) -> crate::Result<crate::Stream<Vec<Thruster>>> {
+        self.client.stream("SpaceCenter", "Engine_get_Thrusters", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The vacuum specific impulse of the engine, in seconds.
     pub async fn vacuum_specific_impulse(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Engine_get_VacuumSpecificImpulse", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `vacuum_specific_impulse`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn vacuum_specific_impulse_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Engine_get_VacuumSpecificImpulse", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the engine is active. Setting this attribute may have no effect, depending on `SpaceCenter.Engine.CanShutdown` and `SpaceCenter.Engine.CanRestart`.
@@ -4613,10 +6204,22 @@ impl Experiment {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `available`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn available_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Experiment_get_Available", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The name of the biome the experiment is currently in.
     pub async fn biome(&self) -> crate::Result<String> {
         let data = self.client.invoke("SpaceCenter", "Experiment_get_Biome", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `biome`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn biome_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "Experiment_get_Biome", &[codec::arg(0, &self.id)]).await
     }
 
     /// The data contained in this experiment.
@@ -4625,10 +6228,22 @@ impl Experiment {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `data`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn data_stream(&self) -> crate::Result<crate::Stream<Vec<ScienceData>>> {
+        self.client.stream("SpaceCenter", "Experiment_get_Data", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the experiment has been deployed.
     pub async fn deployed(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Experiment_get_Deployed", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `deployed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn deployed_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Experiment_get_Deployed", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the experiment contains data.
@@ -4637,10 +6252,22 @@ impl Experiment {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `has_data`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn has_data_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Experiment_get_HasData", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the experiment is inoperable.
     pub async fn inoperable(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Experiment_get_Inoperable", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `inoperable`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn inoperable_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Experiment_get_Inoperable", &[codec::arg(0, &self.id)]).await
     }
 
     /// Internal name of the experiment, as used in [part cfg files](https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation).
@@ -4649,10 +6276,22 @@ impl Experiment {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `name`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn name_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "Experiment_get_Name", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The part object for this experiment.
     pub async fn part(&self) -> crate::Result<Part> {
         let data = self.client.invoke("SpaceCenter", "Experiment_get_Part", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "Experiment_get_Part", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the experiment can be re-run.
@@ -4661,16 +6300,34 @@ impl Experiment {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `rerunnable`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn rerunnable_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Experiment_get_Rerunnable", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Containing information on the corresponding specific science result for the current conditions. Returns `None` if the experiment is unavailable.
     pub async fn science_subject(&self) -> crate::Result<ScienceSubject> {
         let data = self.client.invoke("SpaceCenter", "Experiment_get_ScienceSubject", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `science_subject`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn science_subject_stream(&self) -> crate::Result<crate::Stream<ScienceSubject>> {
+        self.client.stream("SpaceCenter", "Experiment_get_ScienceSubject", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Title of the experiment, as shown on the in-game UI.
     pub async fn title(&self) -> crate::Result<String> {
         let data = self.client.invoke("SpaceCenter", "Experiment_get_Title", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `title`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn title_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "Experiment_get_Title", &[codec::arg(0, &self.id)]).await
     }
 
     /// Run the experiment.
@@ -4757,10 +6414,22 @@ impl Fairing {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `jettisoned`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn jettisoned_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Fairing_get_Jettisoned", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The part object for this fairing.
     pub async fn part(&self) -> crate::Result<Part> {
         let data = self.client.invoke("SpaceCenter", "Fairing_get_Part", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "Fairing_get_Part", &[codec::arg(0, &self.id)]).await
     }
 
     /// Jettison the fairing. Has no effect if it has already been jettisoned.
@@ -4835,10 +6504,22 @@ impl Flight {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `aerodynamic_force`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn aerodynamic_force_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Flight_get_AerodynamicForce", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The pitch angle between the orientation of the vessel and its velocity vector, in degrees.
     pub async fn angle_of_attack(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Flight_get_AngleOfAttack", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `angle_of_attack`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn angle_of_attack_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Flight_get_AngleOfAttack", &[codec::arg(0, &self.id)]).await
     }
 
     /// The direction opposite to the normal of the vessels orbit, in the reference frame `SpaceCenter.ReferenceFrame`.
@@ -4851,6 +6532,12 @@ impl Flight {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `anti_normal`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn anti_normal_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Flight_get_AntiNormal", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The direction opposite to the radial direction of the vessels orbit, in the reference frame `SpaceCenter.ReferenceFrame`.
     ///
     /// # Returns
@@ -4861,10 +6548,22 @@ impl Flight {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `anti_radial`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn anti_radial_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Flight_get_AntiRadial", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The current density of the atmosphere around the vessel, in `kg/m^3`.
     pub async fn atmosphere_density(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Flight_get_AtmosphereDensity", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `atmosphere_density`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn atmosphere_density_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Flight_get_AtmosphereDensity", &[codec::arg(0, &self.id)]).await
     }
 
     /// The [ballistic coefficient](https://en.wikipedia.org/wiki/Ballistic_coefficient).
@@ -4875,10 +6574,22 @@ impl Flight {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `ballistic_coefficient`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn ballistic_coefficient_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Flight_get_BallisticCoefficient", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The altitude above the surface of the body, in meters. When over water, this is the altitude above the sea floor. Measured from the center of mass of the vessel.
     pub async fn bedrock_altitude(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Flight_get_BedrockAltitude", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `bedrock_altitude`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn bedrock_altitude_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Flight_get_BedrockAltitude", &[codec::arg(0, &self.id)]).await
     }
 
     /// The position of the center of mass of the vessel, in the reference frame `SpaceCenter.ReferenceFrame`
@@ -4891,6 +6602,12 @@ impl Flight {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `center_of_mass`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn center_of_mass_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Flight_get_CenterOfMass", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The direction that the vessel is pointing in, in the reference frame `SpaceCenter.ReferenceFrame`.
     ///
     /// # Returns
@@ -4899,6 +6616,12 @@ impl Flight {
     pub async fn direction(&self) -> crate::Result<(f64, f64, f64)> {
         let data = self.client.invoke("SpaceCenter", "Flight_get_Direction", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `direction`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn direction_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Flight_get_Direction", &[codec::arg(0, &self.id)]).await
     }
 
     /// The [aerodynamic drag](https://en.wikipedia.org/wiki/Aerodynamic_force) currently acting on the vessel.
@@ -4911,6 +6634,12 @@ impl Flight {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `drag`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn drag_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Flight_get_Drag", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The coefficient of drag. This is the amount of drag produced by the vessel. It depends on air speed, air density and wing area.
     ///
     /// Requires [Ferram Aerospace Research](https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/).
@@ -4919,10 +6648,22 @@ impl Flight {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `drag_coefficient`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn drag_coefficient_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Flight_get_DragCoefficient", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The dynamic pressure acting on the vessel, in Pascals. This is a measure of the strength of the aerodynamic forces. It is equal to `\frac{1}{2} . \mbox{air density} . \mbox{velocity}^2`. It is commonly denoted `Q`.
     pub async fn dynamic_pressure(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Flight_get_DynamicPressure", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `dynamic_pressure`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn dynamic_pressure_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Flight_get_DynamicPressure", &[codec::arg(0, &self.id)]).await
     }
 
     /// The elevation of the terrain under the vessel, in meters. This is the height of the terrain above sea level, and is negative when the vessel is over the sea.
@@ -4931,10 +6672,22 @@ impl Flight {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `elevation`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn elevation_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Flight_get_Elevation", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The [equivalent air speed](https://en.wikipedia.org/wiki/Equivalent_airspeed) of the vessel, in meters per second.
     pub async fn equivalent_air_speed(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Flight_get_EquivalentAirSpeed", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `equivalent_air_speed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn equivalent_air_speed_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Flight_get_EquivalentAirSpeed", &[codec::arg(0, &self.id)]).await
     }
 
     /// The current G force acting on the vessel in `g`.
@@ -4943,10 +6696,22 @@ impl Flight {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `g_force`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn g_force_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Flight_get_GForce", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The heading of the vessel (its angle relative to north), in degrees. A value between 0° and 360°.
     pub async fn heading(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Flight_get_Heading", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `heading`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn heading_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Flight_get_Heading", &[codec::arg(0, &self.id)]).await
     }
 
     /// The horizontal speed of the vessel in meters per second, in the reference frame `SpaceCenter.ReferenceFrame`.
@@ -4955,10 +6720,22 @@ impl Flight {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `horizontal_speed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn horizontal_speed_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Flight_get_HorizontalSpeed", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The [latitude](https://en.wikipedia.org/wiki/Latitude) of the vessel for the body being orbited, in degrees.
     pub async fn latitude(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Flight_get_Latitude", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `latitude`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn latitude_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Flight_get_Latitude", &[codec::arg(0, &self.id)]).await
     }
 
     /// The [aerodynamic lift](https://en.wikipedia.org/wiki/Aerodynamic_force) currently acting on the vessel.
@@ -4971,6 +6748,12 @@ impl Flight {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `lift`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn lift_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Flight_get_Lift", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The coefficient of lift. This is the amount of lift produced by the vessel, and depends on air speed, air density and wing area.
     ///
     /// Requires [Ferram Aerospace Research](https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/).
@@ -4979,10 +6762,22 @@ impl Flight {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `lift_coefficient`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn lift_coefficient_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Flight_get_LiftCoefficient", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The [longitude](https://en.wikipedia.org/wiki/Longitude) of the vessel for the body being orbited, in degrees.
     pub async fn longitude(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Flight_get_Longitude", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `longitude`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn longitude_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Flight_get_Longitude", &[codec::arg(0, &self.id)]).await
     }
 
     /// The speed of the vessel, in multiples of the speed of sound.
@@ -4991,10 +6786,22 @@ impl Flight {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `mach`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn mach_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Flight_get_Mach", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The altitude above sea level, in meters. Measured from the center of mass of the vessel.
     pub async fn mean_altitude(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Flight_get_MeanAltitude", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `mean_altitude`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn mean_altitude_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Flight_get_MeanAltitude", &[codec::arg(0, &self.id)]).await
     }
 
     /// The direction normal to the vessels orbit, in the reference frame `SpaceCenter.ReferenceFrame`.
@@ -5007,10 +6814,22 @@ impl Flight {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `normal`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn normal_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Flight_get_Normal", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The pitch of the vessel relative to the horizon, in degrees. A value between -90° and +90°.
     pub async fn pitch(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Flight_get_Pitch", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `pitch`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn pitch_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Flight_get_Pitch", &[codec::arg(0, &self.id)]).await
     }
 
     /// The prograde direction of the vessels orbit, in the reference frame `SpaceCenter.ReferenceFrame`.
@@ -5023,6 +6842,12 @@ impl Flight {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `prograde`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn prograde_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Flight_get_Prograde", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The radial direction of the vessels orbit, in the reference frame `SpaceCenter.ReferenceFrame`.
     ///
     /// # Returns
@@ -5031,6 +6856,12 @@ impl Flight {
     pub async fn radial(&self) -> crate::Result<(f64, f64, f64)> {
         let data = self.client.invoke("SpaceCenter", "Flight_get_Radial", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `radial`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn radial_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Flight_get_Radial", &[codec::arg(0, &self.id)]).await
     }
 
     /// The retrograde direction of the vessels orbit, in the reference frame `SpaceCenter.ReferenceFrame`.
@@ -5043,6 +6874,12 @@ impl Flight {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `retrograde`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn retrograde_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Flight_get_Retrograde", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The vessels Reynolds number.
     ///
     /// Requires [Ferram Aerospace Research](https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/).
@@ -5051,10 +6888,22 @@ impl Flight {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `reynolds_number`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn reynolds_number_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Flight_get_ReynoldsNumber", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The roll of the vessel relative to the horizon, in degrees. A value between -180° and +180°.
     pub async fn roll(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Flight_get_Roll", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `roll`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn roll_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Flight_get_Roll", &[codec::arg(0, &self.id)]).await
     }
 
     /// The rotation of the vessel, in the reference frame `SpaceCenter.ReferenceFrame`
@@ -5067,10 +6916,22 @@ impl Flight {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `rotation`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn rotation_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Flight_get_Rotation", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The yaw angle between the orientation of the vessel and its velocity vector, in degrees.
     pub async fn sideslip_angle(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Flight_get_SideslipAngle", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `sideslip_angle`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn sideslip_angle_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Flight_get_SideslipAngle", &[codec::arg(0, &self.id)]).await
     }
 
     /// The speed of the vessel in meters per second, in the reference frame `SpaceCenter.ReferenceFrame`.
@@ -5079,10 +6940,22 @@ impl Flight {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `speed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn speed_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Flight_get_Speed", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The speed of sound, in the atmosphere around the vessel, in `m/s`.
     pub async fn speed_of_sound(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Flight_get_SpeedOfSound", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `speed_of_sound`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn speed_of_sound_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Flight_get_SpeedOfSound", &[codec::arg(0, &self.id)]).await
     }
 
     /// The current amount of stall, between 0 and 1. A value greater than 0.005 indicates a minor stall and a value greater than 0.5 indicates a large-scale stall.
@@ -5093,10 +6966,22 @@ impl Flight {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `stall_fraction`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn stall_fraction_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Flight_get_StallFraction", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The [static (ambient) temperature](https://en.wikipedia.org/wiki/Total_air_temperature) of the atmosphere around the vessel, in Kelvin.
     pub async fn static_air_temperature(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Flight_get_StaticAirTemperature", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `static_air_temperature`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn static_air_temperature_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Flight_get_StaticAirTemperature", &[codec::arg(0, &self.id)]).await
     }
 
     /// The static atmospheric pressure acting on the vessel, in Pascals.
@@ -5105,10 +6990,22 @@ impl Flight {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `static_pressure`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn static_pressure_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Flight_get_StaticPressure", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The static atmospheric pressure at mean sea level, in Pascals.
     pub async fn static_pressure_at_msl(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Flight_get_StaticPressureAtMSL", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `static_pressure_at_msl`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn static_pressure_at_msl_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Flight_get_StaticPressureAtMSL", &[codec::arg(0, &self.id)]).await
     }
 
     /// The altitude above the surface of the body or sea level, whichever is closer, in meters. Measured from the center of mass of the vessel.
@@ -5117,10 +7014,22 @@ impl Flight {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `surface_altitude`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn surface_altitude_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Flight_get_SurfaceAltitude", &[codec::arg(0, &self.id)]).await
+    }
+
     /// An estimate of the current terminal velocity of the vessel, in meters per second. This is the speed at which the drag forces cancel out the force of gravity.
     pub async fn terminal_velocity(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Flight_get_TerminalVelocity", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `terminal_velocity`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn terminal_velocity_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Flight_get_TerminalVelocity", &[codec::arg(0, &self.id)]).await
     }
 
     /// The thrust specific fuel consumption for the jet engines on the vessel. This is a measure of the efficiency of the engines, with a lower value indicating a more efficient vessel. This value is the number of Newtons of fuel that are burned, per hour, to produce one newton of thrust.
@@ -5131,16 +7040,34 @@ impl Flight {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `thrust_specific_fuel_consumption`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn thrust_specific_fuel_consumption_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Flight_get_ThrustSpecificFuelConsumption", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The [total air temperature](https://en.wikipedia.org/wiki/Total_air_temperature) of the atmosphere around the vessel, in Kelvin. This includes the `SpaceCenter.Flight.StaticAirTemperature` and the vessel's kinetic energy.
     pub async fn total_air_temperature(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Flight_get_TotalAirTemperature", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `total_air_temperature`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn total_air_temperature_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Flight_get_TotalAirTemperature", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The [true air speed](https://en.wikipedia.org/wiki/True_airspeed) of the vessel, in meters per second.
     pub async fn true_air_speed(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Flight_get_TrueAirSpeed", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `true_air_speed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn true_air_speed_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Flight_get_TrueAirSpeed", &[codec::arg(0, &self.id)]).await
     }
 
     /// The velocity of the vessel, in the reference frame `SpaceCenter.ReferenceFrame`.
@@ -5153,10 +7080,22 @@ impl Flight {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `velocity`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn velocity_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Flight_get_Velocity", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The vertical speed of the vessel in meters per second, in the reference frame `SpaceCenter.ReferenceFrame`.
     pub async fn vertical_speed(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Flight_get_VerticalSpeed", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `vertical_speed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn vertical_speed_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Flight_get_VerticalSpeed", &[codec::arg(0, &self.id)]).await
     }
 
     /// Simulate and return the total aerodynamic forces acting on the vessel, if it where to be traveling with the given velocity at the given position in the atmosphere of the given celestial body.
@@ -5167,6 +7106,12 @@ impl Flight {
     pub async fn simulate_aerodynamic_force_at(&self, body: &CelestialBody, position: (f64, f64, f64), velocity: (f64, f64, f64)) -> crate::Result<(f64, f64, f64)> {
         let data = self.client.invoke("SpaceCenter", "Flight_SimulateAerodynamicForceAt", &[codec::arg(0, &self.id), codec::arg(1, &body), codec::arg(2, &position), codec::arg(3, &velocity)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `simulate_aerodynamic_force_at`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn simulate_aerodynamic_force_at_stream(&self, body: &CelestialBody, position: (f64, f64, f64), velocity: (f64, f64, f64)) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Flight_SimulateAerodynamicForceAt", &[codec::arg(0, &self.id), codec::arg(1, &body), codec::arg(2, &position), codec::arg(3, &velocity)]).await
     }
 }
 
@@ -5233,10 +7178,22 @@ impl Force {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `force_vector`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn force_vector_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Force_get_ForceVector", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The part that this force is applied to.
     pub async fn part(&self) -> crate::Result<Part> {
         let data = self.client.invoke("SpaceCenter", "Force_get_Part", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "Force_get_Part", &[codec::arg(0, &self.id)]).await
     }
 
     /// The position at which the force acts, in reference frame `SpaceCenter.ReferenceFrame`.
@@ -5249,10 +7206,22 @@ impl Force {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `position`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn position_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Force_get_Position", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The reference frame of the force vector and position.
     pub async fn reference_frame(&self) -> crate::Result<ReferenceFrame> {
         let data = self.client.invoke("SpaceCenter", "Force_get_ReferenceFrame", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `reference_frame`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn reference_frame_stream(&self) -> crate::Result<crate::Stream<ReferenceFrame>> {
+        self.client.stream("SpaceCenter", "Force_get_ReferenceFrame", &[codec::arg(0, &self.id)]).await
     }
 
     /// The force vector, in Newtons.
@@ -5347,10 +7316,22 @@ impl Intake {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `area`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn area_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Intake_get_Area", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The rate of flow into the intake, in units of resource per second.
     pub async fn flow(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Intake_get_Flow", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `flow`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn flow_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Intake_get_Flow", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the intake is open.
@@ -5359,16 +7340,34 @@ impl Intake {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `open`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn open_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Intake_get_Open", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The part object for this intake.
     pub async fn part(&self) -> crate::Result<Part> {
         let data = self.client.invoke("SpaceCenter", "Intake_get_Part", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "Intake_get_Part", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Speed of the flow into the intake, in `m/s`.
     pub async fn speed(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Intake_get_Speed", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `speed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn speed_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Intake_get_Speed", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the intake is open.
@@ -5437,6 +7436,12 @@ impl LaunchClamp {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "LaunchClamp_get_Part", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Releases the docking clamp. Has no effect if the clamp has already been released.
     pub async fn release(&self) -> crate::Result<()> {
         self.client.invoke("SpaceCenter", "LaunchClamp_Release", &[codec::arg(0, &self.id)]).await?;
@@ -5503,6 +7508,12 @@ impl Leg {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `deployable`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn deployable_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Leg_get_Deployable", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the landing leg is deployed.
     ///
     /// Fixed landing legs are always deployed. Returns an error if you try to deploy fixed landing gear.
@@ -5511,10 +7522,22 @@ impl Leg {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `deployed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn deployed_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Leg_get_Deployed", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Returns whether the leg is touching the ground.
     pub async fn is_grounded(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Leg_get_IsGrounded", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `is_grounded`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn is_grounded_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Leg_get_IsGrounded", &[codec::arg(0, &self.id)]).await
     }
 
     /// The part object for this landing leg.
@@ -5523,10 +7546,22 @@ impl Leg {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "Leg_get_Part", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The current state of the landing leg.
     pub async fn state(&self) -> crate::Result<LegState> {
         let data = self.client.invoke("SpaceCenter", "Leg_get_State", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `state`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn state_stream(&self) -> crate::Result<crate::Stream<LegState>> {
+        self.client.stream("SpaceCenter", "Leg_get_State", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the landing leg is deployed.
@@ -5597,10 +7632,22 @@ impl Light {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `active`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn active_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Light_get_Active", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The color of the light, as an RGB triple.
     pub async fn color(&self) -> crate::Result<(f32, f32, f32)> {
         let data = self.client.invoke("SpaceCenter", "Light_get_Color", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `color`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn color_stream(&self) -> crate::Result<crate::Stream<(f32, f32, f32)>> {
+        self.client.stream("SpaceCenter", "Light_get_Color", &[codec::arg(0, &self.id)]).await
     }
 
     /// The part object for this light.
@@ -5609,10 +7656,22 @@ impl Light {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "Light_get_Part", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The current power usage, in units of charge per second.
     pub async fn power_usage(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Light_get_PowerUsage", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `power_usage`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn power_usage_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Light_get_PowerUsage", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the light is switched on.
@@ -5687,10 +7746,22 @@ impl Module {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `actions`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn actions_stream(&self) -> crate::Result<crate::Stream<Vec<String>>> {
+        self.client.stream("SpaceCenter", "Module_get_Actions", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A list of the names of all of the modules events. Events are the clickable buttons visible in the right-click menu of the part.
     pub async fn events(&self) -> crate::Result<Vec<String>> {
         let data = self.client.invoke("SpaceCenter", "Module_get_Events", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `events`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn events_stream(&self) -> crate::Result<crate::Stream<Vec<String>>> {
+        self.client.stream("SpaceCenter", "Module_get_Events", &[codec::arg(0, &self.id)]).await
     }
 
     /// The modules field names and their associated values, as a dictionary. These are the values visible in the right-click menu of the part.
@@ -5699,16 +7770,34 @@ impl Module {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `fields`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn fields_stream(&self) -> crate::Result<crate::Stream<std::collections::HashMap<String, String>>> {
+        self.client.stream("SpaceCenter", "Module_get_Fields", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Name of the PartModule. For example, "ModuleEngines".
     pub async fn name(&self) -> crate::Result<String> {
         let data = self.client.invoke("SpaceCenter", "Module_get_Name", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `name`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn name_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "Module_get_Name", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The part that contains this module.
     pub async fn part(&self) -> crate::Result<Part> {
         let data = self.client.invoke("SpaceCenter", "Module_get_Part", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "Module_get_Part", &[codec::arg(0, &self.id)]).await
     }
 
     /// Returns `true` if the module has a field with the given name.
@@ -5721,6 +7810,12 @@ impl Module {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `has_field`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn has_field_stream(&self, name: &str) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Module_HasField", &[codec::arg(0, &self.id), codec::arg(1, &name)]).await
+    }
+
     /// Returns the value of a field.
     ///
     /// # Arguments
@@ -5729,6 +7824,12 @@ impl Module {
     pub async fn get_field(&self, name: &str) -> crate::Result<String> {
         let data = self.client.invoke("SpaceCenter", "Module_GetField", &[codec::arg(0, &self.id), codec::arg(1, &name)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `get_field`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn get_field_stream(&self, name: &str) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "Module_GetField", &[codec::arg(0, &self.id), codec::arg(1, &name)]).await
     }
 
     /// Set the value of a field to the given integer number.
@@ -5780,6 +7881,12 @@ impl Module {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `has_event`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn has_event_stream(&self, name: &str) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Module_HasEvent", &[codec::arg(0, &self.id), codec::arg(1, &name)]).await
+    }
+
     /// Trigger the named event. Equivalent to clicking the button in the right-click menu of the part.
     pub async fn trigger_event(&self, name: &str) -> crate::Result<()> {
         self.client.invoke("SpaceCenter", "Module_TriggerEvent", &[codec::arg(0, &self.id), codec::arg(1, &name)]).await?;
@@ -5790,6 +7897,12 @@ impl Module {
     pub async fn has_action(&self, name: &str) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Module_HasAction", &[codec::arg(0, &self.id), codec::arg(1, &name)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `has_action`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn has_action_stream(&self, name: &str) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Module_HasAction", &[codec::arg(0, &self.id), codec::arg(1, &name)]).await
     }
 
     /// Set the value of an action with the given name.
@@ -5864,16 +7977,34 @@ impl Node {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `delta_v`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn delta_v_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Node_get_DeltaV", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The magnitude of the maneuver nodes delta-v in the normal direction, in meters per second.
     pub async fn normal(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Node_get_Normal", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `normal`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn normal_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Node_get_Normal", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The orbit that results from executing the maneuver node.
     pub async fn orbit(&self) -> crate::Result<Orbit> {
         let data = self.client.invoke("SpaceCenter", "Node_get_Orbit", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `orbit`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn orbit_stream(&self) -> crate::Result<crate::Stream<Orbit>> {
+        self.client.stream("SpaceCenter", "Node_get_Orbit", &[codec::arg(0, &self.id)]).await
     }
 
     /// The reference frame that is fixed relative to the maneuver node, and orientated with the orbital prograde/normal/radial directions of the original orbit at the maneuver node's position.
@@ -5886,16 +8017,34 @@ impl Node {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `orbital_reference_frame`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn orbital_reference_frame_stream(&self) -> crate::Result<crate::Stream<ReferenceFrame>> {
+        self.client.stream("SpaceCenter", "Node_get_OrbitalReferenceFrame", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The magnitude of the maneuver nodes delta-v in the prograde direction, in meters per second.
     pub async fn prograde(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Node_get_Prograde", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `prograde`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn prograde_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Node_get_Prograde", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The magnitude of the maneuver nodes delta-v in the radial direction, in meters per second.
     pub async fn radial(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Node_get_Radial", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `radial`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn radial_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Node_get_Radial", &[codec::arg(0, &self.id)]).await
     }
 
     /// The reference frame that is fixed relative to the maneuver node's burn.
@@ -5907,10 +8056,22 @@ impl Node {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `reference_frame`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn reference_frame_stream(&self) -> crate::Result<crate::Stream<ReferenceFrame>> {
+        self.client.stream("SpaceCenter", "Node_get_ReferenceFrame", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Gets the remaining delta-v of the maneuver node, in meters per second. Changes as the node is executed. This is equivalent to the delta-v reported in-game.
     pub async fn remaining_delta_v(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Node_get_RemainingDeltaV", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `remaining_delta_v`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn remaining_delta_v_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Node_get_RemainingDeltaV", &[codec::arg(0, &self.id)]).await
     }
 
     /// The time until the maneuver node will be encountered, in seconds.
@@ -5919,10 +8080,22 @@ impl Node {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `time_to`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn time_to_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Node_get_TimeTo", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The universal time at which the maneuver will occur, in seconds.
     pub async fn ut(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Node_get_UT", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `ut`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn ut_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Node_get_UT", &[codec::arg(0, &self.id)]).await
     }
 
     /// The delta-v of the maneuver node, in meters per second.
@@ -5977,6 +8150,16 @@ impl Node {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `burn_vector`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn burn_vector_stream(&self, reference_frame: Option<ReferenceFrame>) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        let mut args = vec![codec::arg(0, &self.id)];
+        if let Some(v) = &reference_frame {
+            args.push(codec::arg(1, v));
+        }
+        self.client.stream("SpaceCenter", "Node_BurnVector", &args).await
+    }
+
     /// Returns the remaining burn vector for the maneuver node.
     ///
     /// Changes as the maneuver node is executed. See `SpaceCenter.Node.BurnVector`.
@@ -5995,6 +8178,16 @@ impl Node {
         }
         let data = self.client.invoke("SpaceCenter", "Node_RemainingBurnVector", &args).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `remaining_burn_vector`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn remaining_burn_vector_stream(&self, reference_frame: Option<ReferenceFrame>) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        let mut args = vec![codec::arg(0, &self.id)];
+        if let Some(v) = &reference_frame {
+            args.push(codec::arg(1, v));
+        }
+        self.client.stream("SpaceCenter", "Node_RemainingBurnVector", &args).await
     }
 
     /// Removes the maneuver node.
@@ -6017,6 +8210,12 @@ impl Node {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `position`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn position_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Node_Position", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
+    }
+
     /// The direction of the maneuver nodes burn.
     ///
     /// # Arguments
@@ -6029,6 +8228,12 @@ impl Node {
     pub async fn direction(&self, reference_frame: &ReferenceFrame) -> crate::Result<(f64, f64, f64)> {
         let data = self.client.invoke("SpaceCenter", "Node_Direction", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `direction`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn direction_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Node_Direction", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
     }
 }
 
@@ -6093,6 +8298,12 @@ impl Orbit {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `apoapsis`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn apoapsis_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_get_Apoapsis", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The apoapsis of the orbit, in meters, above the sea level of the body being orbited.
     ///
     /// This is equal to `SpaceCenter.Orbit.Apoapsis` minus the equatorial radius of the body.
@@ -6101,10 +8312,22 @@ impl Orbit {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `apoapsis_altitude`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn apoapsis_altitude_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_get_ApoapsisAltitude", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The [argument of periapsis](https://en.wikipedia.org/wiki/Argument_of_periapsis), in radians.
     pub async fn argument_of_periapsis(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Orbit_get_ArgumentOfPeriapsis", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `argument_of_periapsis`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn argument_of_periapsis_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_get_ArgumentOfPeriapsis", &[codec::arg(0, &self.id)]).await
     }
 
     /// The celestial body (e.g. planet or moon) around which the object is orbiting.
@@ -6113,10 +8336,22 @@ impl Orbit {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `body`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn body_stream(&self) -> crate::Result<crate::Stream<CelestialBody>> {
+        self.client.stream("SpaceCenter", "Orbit_get_Body", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The [eccentric anomaly](https://en.wikipedia.org/wiki/Eccentric_anomaly).
     pub async fn eccentric_anomaly(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Orbit_get_EccentricAnomaly", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `eccentric_anomaly`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn eccentric_anomaly_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_get_EccentricAnomaly", &[codec::arg(0, &self.id)]).await
     }
 
     /// The [eccentricity](https://en.wikipedia.org/wiki/Orbital_eccentricity) of the orbit.
@@ -6125,10 +8360,22 @@ impl Orbit {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `eccentricity`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn eccentricity_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_get_Eccentricity", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The time since the epoch (the point at which the [mean anomaly at epoch](https://en.wikipedia.org/wiki/Mean_anomaly) was measured, in seconds.
     pub async fn epoch(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Orbit_get_Epoch", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `epoch`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn epoch_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_get_Epoch", &[codec::arg(0, &self.id)]).await
     }
 
     /// The [inclination](https://en.wikipedia.org/wiki/Orbital_inclination) of the orbit, in radians.
@@ -6137,10 +8384,22 @@ impl Orbit {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `inclination`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn inclination_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_get_Inclination", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The [longitude of the ascending node](https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node), in radians.
     pub async fn longitude_of_ascending_node(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Orbit_get_LongitudeOfAscendingNode", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `longitude_of_ascending_node`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn longitude_of_ascending_node_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_get_LongitudeOfAscendingNode", &[codec::arg(0, &self.id)]).await
     }
 
     /// The [mean anomaly](https://en.wikipedia.org/wiki/Mean_anomaly).
@@ -6149,10 +8408,22 @@ impl Orbit {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `mean_anomaly`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn mean_anomaly_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_get_MeanAnomaly", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The [mean anomaly at epoch](https://en.wikipedia.org/wiki/Mean_anomaly).
     pub async fn mean_anomaly_at_epoch(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Orbit_get_MeanAnomalyAtEpoch", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `mean_anomaly_at_epoch`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn mean_anomaly_at_epoch_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_get_MeanAnomalyAtEpoch", &[codec::arg(0, &self.id)]).await
     }
 
     /// If the object is going to change sphere of influence in the future, returns the new orbit after the change. Otherwise returns `None`.
@@ -6161,10 +8432,22 @@ impl Orbit {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `next_orbit`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn next_orbit_stream(&self) -> crate::Result<crate::Stream<Option<Orbit>>> {
+        self.client.stream("SpaceCenter", "Orbit_get_NextOrbit", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The current orbital speed in meters per second.
     pub async fn orbital_speed(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Orbit_get_OrbitalSpeed", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `orbital_speed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn orbital_speed_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_get_OrbitalSpeed", &[codec::arg(0, &self.id)]).await
     }
 
     /// The periapsis of the orbit, in meters, from the center of mass of the body being orbited.
@@ -6175,6 +8458,12 @@ impl Orbit {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `periapsis`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn periapsis_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_get_Periapsis", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The periapsis of the orbit, in meters, above the sea level of the body being orbited.
     ///
     /// This is equal to `SpaceCenter.Orbit.Periapsis` minus the equatorial radius of the body.
@@ -6183,10 +8472,22 @@ impl Orbit {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `periapsis_altitude`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn periapsis_altitude_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_get_PeriapsisAltitude", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The orbital period, in seconds.
     pub async fn period(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Orbit_get_Period", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `period`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn period_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_get_Period", &[codec::arg(0, &self.id)]).await
     }
 
     /// The current radius of the orbit, in meters. This is the distance between the center of mass of the object in orbit, and the center of mass of the body around which it is orbiting.
@@ -6197,16 +8498,34 @@ impl Orbit {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `radius`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn radius_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_get_Radius", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The semi-major axis of the orbit, in meters.
     pub async fn semi_major_axis(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Orbit_get_SemiMajorAxis", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `semi_major_axis`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn semi_major_axis_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_get_SemiMajorAxis", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The semi-minor axis of the orbit, in meters.
     pub async fn semi_minor_axis(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Orbit_get_SemiMinorAxis", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `semi_minor_axis`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn semi_minor_axis_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_get_SemiMinorAxis", &[codec::arg(0, &self.id)]).await
     }
 
     /// The current orbital speed of the object in meters per second.
@@ -6217,10 +8536,22 @@ impl Orbit {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `speed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn speed_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_get_Speed", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The time until the object reaches apoapsis, in seconds.
     pub async fn time_to_apoapsis(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Orbit_get_TimeToApoapsis", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `time_to_apoapsis`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn time_to_apoapsis_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_get_TimeToApoapsis", &[codec::arg(0, &self.id)]).await
     }
 
     /// The time until the object reaches periapsis, in seconds.
@@ -6229,16 +8560,34 @@ impl Orbit {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `time_to_periapsis`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn time_to_periapsis_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_get_TimeToPeriapsis", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The time until the object changes sphere of influence, in seconds. Returns `NaN` if the object is not going to change sphere of influence.
     pub async fn time_to_soi_change(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Orbit_get_TimeToSOIChange", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `time_to_soi_change`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn time_to_soi_change_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_get_TimeToSOIChange", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The [true anomaly](https://en.wikipedia.org/wiki/True_anomaly).
     pub async fn true_anomaly(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Orbit_get_TrueAnomaly", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `true_anomaly`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn true_anomaly_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_get_TrueAnomaly", &[codec::arg(0, &self.id)]).await
     }
 
     /// The mean anomaly at the given time.
@@ -6251,6 +8600,12 @@ impl Orbit {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `mean_anomaly_at_ut`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn mean_anomaly_at_ut_stream(&self, ut: f64) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_MeanAnomalyAtUT", &[codec::arg(0, &self.id), codec::arg(1, &ut)]).await
+    }
+
     /// The orbital radius at the point in the orbit given by the true anomaly.
     ///
     /// # Arguments
@@ -6259,6 +8614,12 @@ impl Orbit {
     pub async fn radius_at_true_anomaly(&self, true_anomaly: f64) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Orbit_RadiusAtTrueAnomaly", &[codec::arg(0, &self.id), codec::arg(1, &true_anomaly)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `radius_at_true_anomaly`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn radius_at_true_anomaly_stream(&self, true_anomaly: f64) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_RadiusAtTrueAnomaly", &[codec::arg(0, &self.id), codec::arg(1, &true_anomaly)]).await
     }
 
     /// The true anomaly at the given orbital radius.
@@ -6271,6 +8632,12 @@ impl Orbit {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `true_anomaly_at_radius`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn true_anomaly_at_radius_stream(&self, radius: f64) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_TrueAnomalyAtRadius", &[codec::arg(0, &self.id), codec::arg(1, &radius)]).await
+    }
+
     /// The true anomaly at the given time.
     ///
     /// # Arguments
@@ -6279,6 +8646,12 @@ impl Orbit {
     pub async fn true_anomaly_at_ut(&self, ut: f64) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Orbit_TrueAnomalyAtUT", &[codec::arg(0, &self.id), codec::arg(1, &ut)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `true_anomaly_at_ut`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn true_anomaly_at_ut_stream(&self, ut: f64) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_TrueAnomalyAtUT", &[codec::arg(0, &self.id), codec::arg(1, &ut)]).await
     }
 
     /// The universal time, in seconds, corresponding to the given true anomaly.
@@ -6291,6 +8664,12 @@ impl Orbit {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `ut_at_true_anomaly`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn ut_at_true_anomaly_stream(&self, true_anomaly: f64) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_UTAtTrueAnomaly", &[codec::arg(0, &self.id), codec::arg(1, &true_anomaly)]).await
+    }
+
     /// The eccentric anomaly at the given universal time.
     ///
     /// # Arguments
@@ -6299,6 +8678,12 @@ impl Orbit {
     pub async fn eccentric_anomaly_at_ut(&self, ut: f64) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Orbit_EccentricAnomalyAtUT", &[codec::arg(0, &self.id), codec::arg(1, &ut)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `eccentric_anomaly_at_ut`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn eccentric_anomaly_at_ut_stream(&self, ut: f64) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_EccentricAnomalyAtUT", &[codec::arg(0, &self.id), codec::arg(1, &ut)]).await
     }
 
     /// The orbital speed at the given time, in meters per second.
@@ -6311,6 +8696,12 @@ impl Orbit {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `orbital_speed_at`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn orbital_speed_at_stream(&self, time: f64) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_OrbitalSpeedAt", &[codec::arg(0, &self.id), codec::arg(1, &time)]).await
+    }
+
     /// The orbital radius at the given time, in meters.
     ///
     /// # Arguments
@@ -6319,6 +8710,12 @@ impl Orbit {
     pub async fn radius_at(&self, ut: f64) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Orbit_RadiusAt", &[codec::arg(0, &self.id), codec::arg(1, &ut)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `radius_at`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn radius_at_stream(&self, ut: f64) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_RadiusAt", &[codec::arg(0, &self.id), codec::arg(1, &ut)]).await
     }
 
     /// The position at a given time, in the specified reference frame.
@@ -6336,6 +8733,12 @@ impl Orbit {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `position_at`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn position_at_stream(&self, ut: f64, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Orbit_PositionAt", &[codec::arg(0, &self.id), codec::arg(1, &ut), codec::arg(2, &reference_frame)]).await
+    }
+
     /// Estimates and returns the time at closest approach to a target orbit.
     ///
     /// # Arguments
@@ -6350,6 +8753,12 @@ impl Orbit {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `time_of_closest_approach`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn time_of_closest_approach_stream(&self, target: &Orbit) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_TimeOfClosestApproach", &[codec::arg(0, &self.id), codec::arg(1, &target)]).await
+    }
+
     /// Estimates and returns the distance at closest approach to a target orbit, in meters.
     ///
     /// # Arguments
@@ -6358,6 +8767,12 @@ impl Orbit {
     pub async fn distance_at_closest_approach(&self, target: &Orbit) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Orbit_DistanceAtClosestApproach", &[codec::arg(0, &self.id), codec::arg(1, &target)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `distance_at_closest_approach`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn distance_at_closest_approach_stream(&self, target: &Orbit) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_DistanceAtClosestApproach", &[codec::arg(0, &self.id), codec::arg(1, &target)]).await
     }
 
     /// Returns the times at closest approach and corresponding distances, to a target orbit.
@@ -6375,6 +8790,12 @@ impl Orbit {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `list_closest_approaches`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn list_closest_approaches_stream(&self, target: &Orbit, orbits: i32) -> crate::Result<crate::Stream<Vec<Vec<f64>>>> {
+        self.client.stream("SpaceCenter", "Orbit_ListClosestApproaches", &[codec::arg(0, &self.id), codec::arg(1, &target), codec::arg(2, &orbits)]).await
+    }
+
     /// The true anomaly of the ascending node with the given target orbit.
     ///
     /// # Arguments
@@ -6383,6 +8804,12 @@ impl Orbit {
     pub async fn true_anomaly_at_an(&self, target: &Orbit) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Orbit_TrueAnomalyAtAN", &[codec::arg(0, &self.id), codec::arg(1, &target)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `true_anomaly_at_an`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn true_anomaly_at_an_stream(&self, target: &Orbit) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_TrueAnomalyAtAN", &[codec::arg(0, &self.id), codec::arg(1, &target)]).await
     }
 
     /// The true anomaly of the descending node with the given target orbit.
@@ -6395,6 +8822,12 @@ impl Orbit {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `true_anomaly_at_dn`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn true_anomaly_at_dn_stream(&self, target: &Orbit) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_TrueAnomalyAtDN", &[codec::arg(0, &self.id), codec::arg(1, &target)]).await
+    }
+
     /// Relative inclination of this orbit and the target orbit, in radians.
     ///
     /// # Arguments
@@ -6403,6 +8836,12 @@ impl Orbit {
     pub async fn relative_inclination(&self, target: &Orbit) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Orbit_RelativeInclination", &[codec::arg(0, &self.id), codec::arg(1, &target)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `relative_inclination`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn relative_inclination_stream(&self, target: &Orbit) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Orbit_RelativeInclination", &[codec::arg(0, &self.id), codec::arg(1, &target)]).await
     }
 
     /// The direction that is normal to the orbits reference plane, in the given reference frame. The reference plane is the plane from which the orbits inclination is measured.
@@ -6419,6 +8858,12 @@ impl Orbit {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `reference_plane_normal`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn reference_plane_normal_stream(client: &crate::ClientRef, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        client.stream("SpaceCenter", "Orbit_static_ReferencePlaneNormal", &[codec::arg(0, &reference_frame)]).await
+    }
+
     /// The direction from which the orbits longitude of ascending node is measured, in the given reference frame.
     ///
     /// # Arguments
@@ -6431,6 +8876,12 @@ impl Orbit {
     pub async fn reference_plane_direction(client: &crate::ClientRef, reference_frame: &ReferenceFrame) -> crate::Result<(f64, f64, f64)> {
         let data = client.invoke("SpaceCenter", "Orbit_static_ReferencePlaneDirection", &[codec::arg(0, &reference_frame)]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `reference_plane_direction`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn reference_plane_direction_stream(client: &crate::ClientRef, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        client.stream("SpaceCenter", "Orbit_static_ReferencePlaneDirection", &[codec::arg(0, &reference_frame)]).await
     }
 }
 
@@ -6493,10 +8944,22 @@ impl Parachute {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `armed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn armed_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Parachute_get_Armed", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The altitude at which the parachute will full deploy, in meters. Only applicable to stock parachutes.
     pub async fn deploy_altitude(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Parachute_get_DeployAltitude", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `deploy_altitude`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn deploy_altitude_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Parachute_get_DeployAltitude", &[codec::arg(0, &self.id)]).await
     }
 
     /// The minimum pressure at which the parachute will semi-deploy, in atmospheres. Only applicable to stock parachutes.
@@ -6505,10 +8968,22 @@ impl Parachute {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `deploy_min_pressure`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn deploy_min_pressure_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Parachute_get_DeployMinPressure", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the parachute has been deployed.
     pub async fn deployed(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Parachute_get_Deployed", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `deployed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn deployed_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Parachute_get_Deployed", &[codec::arg(0, &self.id)]).await
     }
 
     /// The part object for this parachute.
@@ -6517,10 +8992,22 @@ impl Parachute {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "Parachute_get_Part", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The current state of the parachute.
     pub async fn state(&self) -> crate::Result<ParachuteState> {
         let data = self.client.invoke("SpaceCenter", "Parachute_get_State", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `state`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn state_stream(&self) -> crate::Result<crate::Stream<ParachuteState>> {
+        self.client.stream("SpaceCenter", "Parachute_get_State", &[codec::arg(0, &self.id)]).await
     }
 
     /// The altitude at which the parachute will full deploy, in meters. Only applicable to stock parachutes.
@@ -6607,16 +9094,34 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `antenna`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn antenna_stream(&self) -> crate::Result<crate::Stream<Option<Antenna>>> {
+        self.client.stream("SpaceCenter", "Part_get_Antenna", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the part is axially attached to its parent, i.e. on the top or bottom of its parent. If the part has no parent, returns `false`.
     pub async fn axially_attached(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Part_get_AxiallyAttached", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `axially_attached`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn axially_attached_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Part_get_AxiallyAttached", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A `SpaceCenter.CargoBay` if the part is a cargo bay, otherwise `None`.
     pub async fn cargo_bay(&self) -> crate::Result<Option<CargoBay>> {
         let data = self.client.invoke("SpaceCenter", "Part_get_CargoBay", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `cargo_bay`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn cargo_bay_stream(&self) -> crate::Result<crate::Stream<Option<CargoBay>>> {
+        self.client.stream("SpaceCenter", "Part_get_CargoBay", &[codec::arg(0, &self.id)]).await
     }
 
     /// The reference frame that is fixed relative to this part, and centered on its center of mass.
@@ -6630,10 +9135,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `center_of_mass_reference_frame`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn center_of_mass_reference_frame_stream(&self) -> crate::Result<crate::Stream<ReferenceFrame>> {
+        self.client.stream("SpaceCenter", "Part_get_CenterOfMassReferenceFrame", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The parts children. Returns an empty list if the part has no children. This, in combination with `SpaceCenter.Part.Parent`, can be used to traverse the vessels parts tree.
     pub async fn children(&self) -> crate::Result<Vec<Part>> {
         let data = self.client.invoke("SpaceCenter", "Part_get_Children", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `children`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn children_stream(&self) -> crate::Result<crate::Stream<Vec<Part>>> {
+        self.client.stream("SpaceCenter", "Part_get_Children", &[codec::arg(0, &self.id)]).await
     }
 
     /// A `SpaceCenter.ControlSurface` if the part is an aerodynamic control surface, otherwise `None`.
@@ -6642,10 +9159,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `control_surface`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn control_surface_stream(&self) -> crate::Result<crate::Stream<Option<ControlSurface>>> {
+        self.client.stream("SpaceCenter", "Part_get_ControlSurface", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The cost of the part, in units of funds.
     pub async fn cost(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Part_get_Cost", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `cost`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn cost_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Part_get_Cost", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether this part is crossfeed capable.
@@ -6654,10 +9183,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `crossfeed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn crossfeed_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Part_get_Crossfeed", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The stage in which this part will be decoupled. Returns -1 if the part is never decoupled from the vessel.
     pub async fn decouple_stage(&self) -> crate::Result<i32> {
         let data = self.client.invoke("SpaceCenter", "Part_get_DecoupleStage", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `decouple_stage`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn decouple_stage_stream(&self) -> crate::Result<crate::Stream<i32>> {
+        self.client.stream("SpaceCenter", "Part_get_DecoupleStage", &[codec::arg(0, &self.id)]).await
     }
 
     /// A `SpaceCenter.Decoupler` if the part is a decoupler, otherwise `None`.
@@ -6666,10 +9207,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `decoupler`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn decoupler_stream(&self) -> crate::Result<crate::Stream<Option<Decoupler>>> {
+        self.client.stream("SpaceCenter", "Part_get_Decoupler", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A `SpaceCenter.DockingPort` if the part is a docking port, otherwise `None`.
     pub async fn docking_port(&self) -> crate::Result<Option<DockingPort>> {
         let data = self.client.invoke("SpaceCenter", "Part_get_DockingPort", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `docking_port`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn docking_port_stream(&self) -> crate::Result<crate::Stream<Option<DockingPort>>> {
+        self.client.stream("SpaceCenter", "Part_get_DockingPort", &[codec::arg(0, &self.id)]).await
     }
 
     /// The mass of the part, not including any resources it contains, in kilograms. Returns zero if the part is massless.
@@ -6678,16 +9231,34 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `dry_mass`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn dry_mass_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Part_get_DryMass", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The dynamic pressure acting on the part, in Pascals.
     pub async fn dynamic_pressure(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Part_get_DynamicPressure", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `dynamic_pressure`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn dynamic_pressure_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Part_get_DynamicPressure", &[codec::arg(0, &self.id)]).await
+    }
+
     /// An `SpaceCenter.Engine` if the part is an engine, otherwise `None`.
     pub async fn engine(&self) -> crate::Result<Option<Engine>> {
         let data = self.client.invoke("SpaceCenter", "Part_get_Engine", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `engine`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn engine_stream(&self) -> crate::Result<crate::Stream<Option<Engine>>> {
+        self.client.stream("SpaceCenter", "Part_get_Engine", &[codec::arg(0, &self.id)]).await
     }
 
     /// An `SpaceCenter.Experiment` if the part contains a single science experiment, otherwise `None`.
@@ -6698,10 +9269,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `experiment`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn experiment_stream(&self) -> crate::Result<crate::Stream<Option<Experiment>>> {
+        self.client.stream("SpaceCenter", "Part_get_Experiment", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A list of `SpaceCenter.Experiment` objects that the part contains.
     pub async fn experiments(&self) -> crate::Result<Vec<Experiment>> {
         let data = self.client.invoke("SpaceCenter", "Part_get_Experiments", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `experiments`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn experiments_stream(&self) -> crate::Result<crate::Stream<Vec<Experiment>>> {
+        self.client.stream("SpaceCenter", "Part_get_Experiments", &[codec::arg(0, &self.id)]).await
     }
 
     /// A `SpaceCenter.Fairing` if the part is a fairing, otherwise `None`.
@@ -6710,10 +9293,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `fairing`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn fairing_stream(&self) -> crate::Result<crate::Stream<Option<Fairing>>> {
+        self.client.stream("SpaceCenter", "Part_get_Fairing", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The parts that are connected to this part via fuel lines, where the direction of the fuel line is into this part.
     pub async fn fuel_lines_from(&self) -> crate::Result<Vec<Part>> {
         let data = self.client.invoke("SpaceCenter", "Part_get_FuelLinesFrom", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `fuel_lines_from`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn fuel_lines_from_stream(&self) -> crate::Result<crate::Stream<Vec<Part>>> {
+        self.client.stream("SpaceCenter", "Part_get_FuelLinesFrom", &[codec::arg(0, &self.id)]).await
     }
 
     /// The parts that are connected to this part via fuel lines, where the direction of the fuel line is out of this part.
@@ -6722,10 +9317,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `fuel_lines_to`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn fuel_lines_to_stream(&self) -> crate::Result<crate::Stream<Vec<Part>>> {
+        self.client.stream("SpaceCenter", "Part_get_FuelLinesTo", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The color used to highlight the part, as an RGB triple.
     pub async fn highlight_color(&self) -> crate::Result<(f64, f64, f64)> {
         let data = self.client.invoke("SpaceCenter", "Part_get_HighlightColor", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `highlight_color`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn highlight_color_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Part_get_HighlightColor", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the part is highlighted.
@@ -6734,16 +9341,34 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `highlighted`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn highlighted_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Part_get_Highlighted", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The impact tolerance of the part, in meters per second.
     pub async fn impact_tolerance(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Part_get_ImpactTolerance", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `impact_tolerance`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn impact_tolerance_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Part_get_ImpactTolerance", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The inertia tensor of the part in the parts reference frame (`SpaceCenter.ReferenceFrame`). Returns the 3x3 matrix as a list of elements, in row-major order.
     pub async fn inertia_tensor(&self) -> crate::Result<Vec<f64>> {
         let data = self.client.invoke("SpaceCenter", "Part_get_InertiaTensor", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `inertia_tensor`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn inertia_tensor_stream(&self) -> crate::Result<crate::Stream<Vec<f64>>> {
+        self.client.stream("SpaceCenter", "Part_get_InertiaTensor", &[codec::arg(0, &self.id)]).await
     }
 
     /// An `SpaceCenter.Intake` if the part is an intake, otherwise `None`.
@@ -6754,10 +9379,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `intake`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn intake_stream(&self) -> crate::Result<crate::Stream<Option<Intake>>> {
+        self.client.stream("SpaceCenter", "Part_get_Intake", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether this part is a fuel line.
     pub async fn is_fuel_line(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Part_get_IsFuelLine", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `is_fuel_line`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn is_fuel_line_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Part_get_IsFuelLine", &[codec::arg(0, &self.id)]).await
     }
 
     /// A `SpaceCenter.LaunchClamp` if the part is a launch clamp, otherwise `None`.
@@ -6766,10 +9403,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `launch_clamp`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn launch_clamp_stream(&self) -> crate::Result<crate::Stream<Option<LaunchClamp>>> {
+        self.client.stream("SpaceCenter", "Part_get_LaunchClamp", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A `SpaceCenter.Leg` if the part is a landing leg, otherwise `None`.
     pub async fn leg(&self) -> crate::Result<Option<Leg>> {
         let data = self.client.invoke("SpaceCenter", "Part_get_Leg", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `leg`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn leg_stream(&self) -> crate::Result<crate::Stream<Option<Leg>>> {
+        self.client.stream("SpaceCenter", "Part_get_Leg", &[codec::arg(0, &self.id)]).await
     }
 
     /// A `SpaceCenter.Light` if the part is a light, otherwise `None`.
@@ -6778,10 +9427,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `light`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn light_stream(&self) -> crate::Result<crate::Stream<Option<Light>>> {
+        self.client.stream("SpaceCenter", "Part_get_Light", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The current mass of the part, including resources it contains, in kilograms. Returns zero if the part is massless.
     pub async fn mass(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Part_get_Mass", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `mass`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn mass_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Part_get_Mass", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the part is [massless](https://wiki.kerbalspaceprogram.com/wiki/Massless_part).
@@ -6790,10 +9451,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `massless`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn massless_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Part_get_Massless", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Maximum temperature that the skin of the part can survive, in Kelvin.
     pub async fn max_skin_temperature(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Part_get_MaxSkinTemperature", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `max_skin_temperature`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn max_skin_temperature_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Part_get_MaxSkinTemperature", &[codec::arg(0, &self.id)]).await
     }
 
     /// Maximum temperature that the part can survive, in Kelvin.
@@ -6802,10 +9475,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `max_temperature`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn max_temperature_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Part_get_MaxTemperature", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The modules for this part.
     pub async fn modules(&self) -> crate::Result<Vec<Module>> {
         let data = self.client.invoke("SpaceCenter", "Part_get_Modules", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `modules`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn modules_stream(&self) -> crate::Result<crate::Stream<Vec<Module>>> {
+        self.client.stream("SpaceCenter", "Part_get_Modules", &[codec::arg(0, &self.id)]).await
     }
 
     /// The moment of inertia of the part in `kg.m^2` around its center of mass in the parts reference frame (`SpaceCenter.ReferenceFrame`).
@@ -6814,10 +9499,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `moment_of_inertia`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn moment_of_inertia_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Part_get_MomentOfInertia", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Internal name of the part, as used in [part cfg files](https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation). For example "Mark1-2Pod".
     pub async fn name(&self) -> crate::Result<String> {
         let data = self.client.invoke("SpaceCenter", "Part_get_Name", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `name`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn name_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "Part_get_Name", &[codec::arg(0, &self.id)]).await
     }
 
     /// A `SpaceCenter.Parachute` if the part is a parachute, otherwise `None`.
@@ -6826,10 +9523,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `parachute`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn parachute_stream(&self) -> crate::Result<crate::Stream<Option<Parachute>>> {
+        self.client.stream("SpaceCenter", "Part_get_Parachute", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The parts parent. Returns `None` if the part does not have a parent. This, in combination with `SpaceCenter.Part.Children`, can be used to traverse the vessels parts tree.
     pub async fn parent(&self) -> crate::Result<Option<Part>> {
         let data = self.client.invoke("SpaceCenter", "Part_get_Parent", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `parent`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn parent_stream(&self) -> crate::Result<crate::Stream<Option<Part>>> {
+        self.client.stream("SpaceCenter", "Part_get_Parent", &[codec::arg(0, &self.id)]).await
     }
 
     /// A `SpaceCenter.RCS` if the part is an RCS block/thruster, otherwise `None`.
@@ -6838,10 +9547,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `rcs`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn rcs_stream(&self) -> crate::Result<crate::Stream<Option<RCS>>> {
+        self.client.stream("SpaceCenter", "Part_get_RCS", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the part is radially attached to its parent, i.e. on the side of its parent. If the part has no parent, returns `false`.
     pub async fn radially_attached(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Part_get_RadiallyAttached", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `radially_attached`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn radially_attached_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Part_get_RadiallyAttached", &[codec::arg(0, &self.id)]).await
     }
 
     /// A `SpaceCenter.Radiator` if the part is a radiator, otherwise `None`.
@@ -6850,10 +9571,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `radiator`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn radiator_stream(&self) -> crate::Result<crate::Stream<Option<Radiator>>> {
+        self.client.stream("SpaceCenter", "Part_get_Radiator", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A `SpaceCenter.ReactionWheel` if the part is a reaction wheel, otherwise `None`.
     pub async fn reaction_wheel(&self) -> crate::Result<Option<ReactionWheel>> {
         let data = self.client.invoke("SpaceCenter", "Part_get_ReactionWheel", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `reaction_wheel`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn reaction_wheel_stream(&self) -> crate::Result<crate::Stream<Option<ReactionWheel>>> {
+        self.client.stream("SpaceCenter", "Part_get_ReactionWheel", &[codec::arg(0, &self.id)]).await
     }
 
     /// The reference frame that is fixed relative to this part, and centered on a fixed position within the part, defined by the parts model.
@@ -6867,10 +9600,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `reference_frame`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn reference_frame_stream(&self) -> crate::Result<crate::Stream<ReferenceFrame>> {
+        self.client.stream("SpaceCenter", "Part_get_ReferenceFrame", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A `SpaceCenter.ResourceConverter` if the part is a resource converter, otherwise `None`.
     pub async fn resource_converter(&self) -> crate::Result<Option<ResourceConverter>> {
         let data = self.client.invoke("SpaceCenter", "Part_get_ResourceConverter", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `resource_converter`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn resource_converter_stream(&self) -> crate::Result<crate::Stream<Option<ResourceConverter>>> {
+        self.client.stream("SpaceCenter", "Part_get_ResourceConverter", &[codec::arg(0, &self.id)]).await
     }
 
     /// /// A `SpaceCenter.ResourceDrain` if the part is a resource drain, otherwise `None`.
@@ -6879,10 +9624,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `resource_drain`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn resource_drain_stream(&self) -> crate::Result<crate::Stream<Option<ResourceDrain>>> {
+        self.client.stream("SpaceCenter", "Part_get_ResourceDrain", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A `SpaceCenter.ResourceHarvester` if the part is a resource harvester, otherwise `None`.
     pub async fn resource_harvester(&self) -> crate::Result<Option<ResourceHarvester>> {
         let data = self.client.invoke("SpaceCenter", "Part_get_ResourceHarvester", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `resource_harvester`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn resource_harvester_stream(&self) -> crate::Result<crate::Stream<Option<ResourceHarvester>>> {
+        self.client.stream("SpaceCenter", "Part_get_ResourceHarvester", &[codec::arg(0, &self.id)]).await
     }
 
     /// A `SpaceCenter.Resources` object for the part.
@@ -6891,10 +9648,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `resources`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn resources_stream(&self) -> crate::Result<crate::Stream<Resources>> {
+        self.client.stream("SpaceCenter", "Part_get_Resources", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A `SpaceCenter.RoboticController` if the part is a robotic controller, otherwise `None`.
     pub async fn robotic_controller(&self) -> crate::Result<Option<RoboticController>> {
         let data = self.client.invoke("SpaceCenter", "Part_get_RoboticController", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `robotic_controller`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn robotic_controller_stream(&self) -> crate::Result<crate::Stream<Option<RoboticController>>> {
+        self.client.stream("SpaceCenter", "Part_get_RoboticController", &[codec::arg(0, &self.id)]).await
     }
 
     /// A `SpaceCenter.RoboticHinge` if the part is a robotic hinge, otherwise `None`.
@@ -6903,10 +9672,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `robotic_hinge`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn robotic_hinge_stream(&self) -> crate::Result<crate::Stream<Option<RoboticHinge>>> {
+        self.client.stream("SpaceCenter", "Part_get_RoboticHinge", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A `SpaceCenter.RoboticPiston` if the part is a robotic hinge, otherwise `None`.
     pub async fn robotic_piston(&self) -> crate::Result<Option<RoboticPiston>> {
         let data = self.client.invoke("SpaceCenter", "Part_get_RoboticPiston", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `robotic_piston`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn robotic_piston_stream(&self) -> crate::Result<crate::Stream<Option<RoboticPiston>>> {
+        self.client.stream("SpaceCenter", "Part_get_RoboticPiston", &[codec::arg(0, &self.id)]).await
     }
 
     /// A `SpaceCenter.RoboticRotation` if the part is a robotic rotation servo, otherwise `None`.
@@ -6915,10 +9696,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `robotic_rotation`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn robotic_rotation_stream(&self) -> crate::Result<crate::Stream<Option<RoboticRotation>>> {
+        self.client.stream("SpaceCenter", "Part_get_RoboticRotation", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A `SpaceCenter.RoboticRotor` if the part is a robotic rotation servo, otherwise `None`.
     pub async fn robotic_rotor(&self) -> crate::Result<Option<RoboticRotor>> {
         let data = self.client.invoke("SpaceCenter", "Part_get_RoboticRotor", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `robotic_rotor`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn robotic_rotor_stream(&self) -> crate::Result<crate::Stream<Option<RoboticRotor>>> {
+        self.client.stream("SpaceCenter", "Part_get_RoboticRotor", &[codec::arg(0, &self.id)]).await
     }
 
     /// A `SpaceCenter.Sensor` if the part is a sensor, otherwise `None`.
@@ -6927,10 +9720,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `sensor`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn sensor_stream(&self) -> crate::Result<crate::Stream<Option<Sensor>>> {
+        self.client.stream("SpaceCenter", "Part_get_Sensor", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the part is shielded from the exterior of the vessel, for example by a fairing.
     pub async fn shielded(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Part_get_Shielded", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `shielded`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn shielded_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Part_get_Shielded", &[codec::arg(0, &self.id)]).await
     }
 
     /// Temperature of the skin of the part, in Kelvin.
@@ -6939,16 +9744,34 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `skin_temperature`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn skin_temperature_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Part_get_SkinTemperature", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A `SpaceCenter.SolarPanel` if the part is a solar panel, otherwise `None`.
     pub async fn solar_panel(&self) -> crate::Result<Option<SolarPanel>> {
         let data = self.client.invoke("SpaceCenter", "Part_get_SolarPanel", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `solar_panel`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn solar_panel_stream(&self) -> crate::Result<crate::Stream<Option<SolarPanel>>> {
+        self.client.stream("SpaceCenter", "Part_get_SolarPanel", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The stage in which this part will be activated. Returns -1 if the part is not activated by staging.
     pub async fn stage(&self) -> crate::Result<i32> {
         let data = self.client.invoke("SpaceCenter", "Part_get_Stage", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `stage`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn stage_stream(&self) -> crate::Result<crate::Stream<i32>> {
+        self.client.stream("SpaceCenter", "Part_get_Stage", &[codec::arg(0, &self.id)]).await
     }
 
     /// The name tag for the part. Can be set to a custom string using the in-game user interface.
@@ -6959,10 +9782,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `tag`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn tag_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "Part_get_Tag", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Temperature of the part, in Kelvin.
     pub async fn temperature(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Part_get_Temperature", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `temperature`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn temperature_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Part_get_Temperature", &[codec::arg(0, &self.id)]).await
     }
 
     /// The rate at which heat energy is conducting into or out of the part via contact with other parts. Measured in energy per unit time, or power, in Watts. A positive value means the part is gaining heat energy, and negative means it is losing heat energy.
@@ -6971,10 +9806,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `thermal_conduction_flux`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn thermal_conduction_flux_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Part_get_ThermalConductionFlux", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The rate at which heat energy is convecting into or out of the part from the surrounding atmosphere. Measured in energy per unit time, or power, in Watts. A positive value means the part is gaining heat energy, and negative means it is losing heat energy.
     pub async fn thermal_convection_flux(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Part_get_ThermalConvectionFlux", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `thermal_convection_flux`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn thermal_convection_flux_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Part_get_ThermalConvectionFlux", &[codec::arg(0, &self.id)]).await
     }
 
     /// The rate at which heat energy is begin generated by the part. For example, some engines generate heat by combusting fuel. Measured in energy per unit time, or power, in Watts. A positive value means the part is gaining heat energy, and negative means it is losing heat energy.
@@ -6983,10 +9830,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `thermal_internal_flux`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn thermal_internal_flux_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Part_get_ThermalInternalFlux", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A measure of how much energy it takes to increase the internal temperature of the part, in Joules per Kelvin.
     pub async fn thermal_mass(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Part_get_ThermalMass", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `thermal_mass`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn thermal_mass_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Part_get_ThermalMass", &[codec::arg(0, &self.id)]).await
     }
 
     /// The rate at which heat energy is radiating into or out of the part from the surrounding environment. Measured in energy per unit time, or power, in Watts. A positive value means the part is gaining heat energy, and negative means it is losing heat energy.
@@ -6995,10 +9854,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `thermal_radiation_flux`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn thermal_radiation_flux_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Part_get_ThermalRadiationFlux", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A measure of how much energy it takes to increase the temperature of the resources contained in the part, in Joules per Kelvin.
     pub async fn thermal_resource_mass(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Part_get_ThermalResourceMass", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `thermal_resource_mass`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn thermal_resource_mass_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Part_get_ThermalResourceMass", &[codec::arg(0, &self.id)]).await
     }
 
     /// A measure of how much energy it takes to increase the skin temperature of the part, in Joules per Kelvin.
@@ -7007,10 +9878,22 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `thermal_skin_mass`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn thermal_skin_mass_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Part_get_ThermalSkinMass", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The rate at which heat energy is transferring between the part's skin and its internals. Measured in energy per unit time, or power, in Watts. A positive value means the part's internals are gaining heat energy, and negative means its skin is gaining heat energy.
     pub async fn thermal_skin_to_internal_flux(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Part_get_ThermalSkinToInternalFlux", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `thermal_skin_to_internal_flux`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn thermal_skin_to_internal_flux_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Part_get_ThermalSkinToInternalFlux", &[codec::arg(0, &self.id)]).await
     }
 
     /// Title of the part, as shown when the part is right clicked in-game. For example "Mk1-2 Command Pod".
@@ -7019,16 +9902,34 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `title`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn title_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "Part_get_Title", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The vessel that contains this part.
     pub async fn vessel(&self) -> crate::Result<Vessel> {
         let data = self.client.invoke("SpaceCenter", "Part_get_Vessel", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `vessel`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn vessel_stream(&self) -> crate::Result<crate::Stream<Vessel>> {
+        self.client.stream("SpaceCenter", "Part_get_Vessel", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A `SpaceCenter.Wheel` if the part is a wheel, otherwise `None`.
     pub async fn wheel(&self) -> crate::Result<Option<Wheel>> {
         let data = self.client.invoke("SpaceCenter", "Part_get_Wheel", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `wheel`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn wheel_stream(&self) -> crate::Result<crate::Stream<Option<Wheel>>> {
+        self.client.stream("SpaceCenter", "Part_get_Wheel", &[codec::arg(0, &self.id)]).await
     }
 
     /// Glow
@@ -7073,6 +9974,12 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `position`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn position_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Part_Position", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
+    }
+
     /// The position of the parts center of mass in the given reference frame. If the part is physicsless, this is equivalent to `SpaceCenter.Part.Position`.
     ///
     /// # Arguments
@@ -7085,6 +9992,12 @@ impl Part {
     pub async fn center_of_mass(&self, reference_frame: &ReferenceFrame) -> crate::Result<(f64, f64, f64)> {
         let data = self.client.invoke("SpaceCenter", "Part_CenterOfMass", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `center_of_mass`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn center_of_mass_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Part_CenterOfMass", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
     }
 
     /// The axis-aligned bounding box of the part in the given reference frame.
@@ -7103,6 +10016,12 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `bounding_box`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn bounding_box_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<((f64, f64, f64), (f64, f64, f64))>> {
+        self.client.stream("SpaceCenter", "Part_BoundingBox", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
+    }
+
     /// The direction the part points in, in the given reference frame.
     ///
     /// # Arguments
@@ -7115,6 +10034,12 @@ impl Part {
     pub async fn direction(&self, reference_frame: &ReferenceFrame) -> crate::Result<(f64, f64, f64)> {
         let data = self.client.invoke("SpaceCenter", "Part_Direction", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `direction`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn direction_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Part_Direction", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
     }
 
     /// The linear velocity of the part in the given reference frame.
@@ -7131,6 +10056,12 @@ impl Part {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `velocity`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn velocity_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Part_Velocity", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
+    }
+
     /// The rotation of the part, in the given reference frame.
     ///
     /// # Arguments
@@ -7143,6 +10074,12 @@ impl Part {
     pub async fn rotation(&self, reference_frame: &ReferenceFrame) -> crate::Result<(f64, f64, f64, f64)> {
         let data = self.client.invoke("SpaceCenter", "Part_Rotation", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `rotation`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn rotation_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Part_Rotation", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
     }
 
     /// Exert a constant force on the part, acting at the given position.
@@ -7159,6 +10096,12 @@ impl Part {
     pub async fn add_force(&self, force: (f64, f64, f64), position: (f64, f64, f64), reference_frame: &ReferenceFrame) -> crate::Result<Force> {
         let data = self.client.invoke("SpaceCenter", "Part_AddForce", &[codec::arg(0, &self.id), codec::arg(1, &force), codec::arg(2, &position), codec::arg(3, &reference_frame)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `add_force`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn add_force_stream(&self, force: (f64, f64, f64), position: (f64, f64, f64), reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<Force>> {
+        self.client.stream("SpaceCenter", "Part_AddForce", &[codec::arg(0, &self.id), codec::arg(1, &force), codec::arg(2, &position), codec::arg(3, &reference_frame)]).await
     }
 
     /// Exert an instantaneous force on the part, acting at the given position.
@@ -7235,10 +10178,22 @@ impl Parts {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `all`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn all_stream(&self) -> crate::Result<crate::Stream<Vec<Part>>> {
+        self.client.stream("SpaceCenter", "Parts_get_All", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A list of all antennas in the vessel.
     pub async fn antennas(&self) -> crate::Result<Vec<Antenna>> {
         let data = self.client.invoke("SpaceCenter", "Parts_get_Antennas", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `antennas`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn antennas_stream(&self) -> crate::Result<crate::Stream<Vec<Antenna>>> {
+        self.client.stream("SpaceCenter", "Parts_get_Antennas", &[codec::arg(0, &self.id)]).await
     }
 
     /// A list of all cargo bays in the vessel.
@@ -7247,10 +10202,22 @@ impl Parts {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `cargo_bays`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn cargo_bays_stream(&self) -> crate::Result<crate::Stream<Vec<CargoBay>>> {
+        self.client.stream("SpaceCenter", "Parts_get_CargoBays", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A list of all control surfaces in the vessel.
     pub async fn control_surfaces(&self) -> crate::Result<Vec<ControlSurface>> {
         let data = self.client.invoke("SpaceCenter", "Parts_get_ControlSurfaces", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `control_surfaces`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn control_surfaces_stream(&self) -> crate::Result<crate::Stream<Vec<ControlSurface>>> {
+        self.client.stream("SpaceCenter", "Parts_get_ControlSurfaces", &[codec::arg(0, &self.id)]).await
     }
 
     /// The part from which the vessel is controlled.
@@ -7259,16 +10226,34 @@ impl Parts {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `controlling`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn controlling_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "Parts_get_Controlling", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A list of all decouplers in the vessel.
     pub async fn decouplers(&self) -> crate::Result<Vec<Decoupler>> {
         let data = self.client.invoke("SpaceCenter", "Parts_get_Decouplers", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `decouplers`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn decouplers_stream(&self) -> crate::Result<crate::Stream<Vec<Decoupler>>> {
+        self.client.stream("SpaceCenter", "Parts_get_Decouplers", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A list of all docking ports in the vessel.
     pub async fn docking_ports(&self) -> crate::Result<Vec<DockingPort>> {
         let data = self.client.invoke("SpaceCenter", "Parts_get_DockingPorts", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `docking_ports`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn docking_ports_stream(&self) -> crate::Result<crate::Stream<Vec<DockingPort>>> {
+        self.client.stream("SpaceCenter", "Parts_get_DockingPorts", &[codec::arg(0, &self.id)]).await
     }
 
     /// A list of all engines in the vessel.
@@ -7279,10 +10264,22 @@ impl Parts {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `engines`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn engines_stream(&self) -> crate::Result<crate::Stream<Vec<Engine>>> {
+        self.client.stream("SpaceCenter", "Parts_get_Engines", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A list of all science experiments in the vessel.
     pub async fn experiments(&self) -> crate::Result<Vec<Experiment>> {
         let data = self.client.invoke("SpaceCenter", "Parts_get_Experiments", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `experiments`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn experiments_stream(&self) -> crate::Result<crate::Stream<Vec<Experiment>>> {
+        self.client.stream("SpaceCenter", "Parts_get_Experiments", &[codec::arg(0, &self.id)]).await
     }
 
     /// A list of all fairings in the vessel.
@@ -7291,10 +10288,22 @@ impl Parts {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `fairings`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn fairings_stream(&self) -> crate::Result<crate::Stream<Vec<Fairing>>> {
+        self.client.stream("SpaceCenter", "Parts_get_Fairings", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A list of all intakes in the vessel.
     pub async fn intakes(&self) -> crate::Result<Vec<Intake>> {
         let data = self.client.invoke("SpaceCenter", "Parts_get_Intakes", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `intakes`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn intakes_stream(&self) -> crate::Result<crate::Stream<Vec<Intake>>> {
+        self.client.stream("SpaceCenter", "Parts_get_Intakes", &[codec::arg(0, &self.id)]).await
     }
 
     /// A list of all launch clamps attached to the vessel.
@@ -7303,10 +10312,22 @@ impl Parts {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `launch_clamps`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn launch_clamps_stream(&self) -> crate::Result<crate::Stream<Vec<LaunchClamp>>> {
+        self.client.stream("SpaceCenter", "Parts_get_LaunchClamps", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A list of all landing legs attached to the vessel.
     pub async fn legs(&self) -> crate::Result<Vec<Leg>> {
         let data = self.client.invoke("SpaceCenter", "Parts_get_Legs", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `legs`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn legs_stream(&self) -> crate::Result<crate::Stream<Vec<Leg>>> {
+        self.client.stream("SpaceCenter", "Parts_get_Legs", &[codec::arg(0, &self.id)]).await
     }
 
     /// A list of all lights in the vessel.
@@ -7315,10 +10336,22 @@ impl Parts {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `lights`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn lights_stream(&self) -> crate::Result<crate::Stream<Vec<Light>>> {
+        self.client.stream("SpaceCenter", "Parts_get_Lights", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A list of all parachutes in the vessel.
     pub async fn parachutes(&self) -> crate::Result<Vec<Parachute>> {
         let data = self.client.invoke("SpaceCenter", "Parts_get_Parachutes", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `parachutes`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn parachutes_stream(&self) -> crate::Result<crate::Stream<Vec<Parachute>>> {
+        self.client.stream("SpaceCenter", "Parts_get_Parachutes", &[codec::arg(0, &self.id)]).await
     }
 
     /// A list of all RCS blocks/thrusters in the vessel.
@@ -7327,10 +10360,22 @@ impl Parts {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `rcs`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn rcs_stream(&self) -> crate::Result<crate::Stream<Vec<RCS>>> {
+        self.client.stream("SpaceCenter", "Parts_get_RCS", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A list of all radiators in the vessel.
     pub async fn radiators(&self) -> crate::Result<Vec<Radiator>> {
         let data = self.client.invoke("SpaceCenter", "Parts_get_Radiators", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `radiators`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn radiators_stream(&self) -> crate::Result<crate::Stream<Vec<Radiator>>> {
+        self.client.stream("SpaceCenter", "Parts_get_Radiators", &[codec::arg(0, &self.id)]).await
     }
 
     /// A list of all reaction wheels in the vessel.
@@ -7339,10 +10384,22 @@ impl Parts {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `reaction_wheels`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn reaction_wheels_stream(&self) -> crate::Result<crate::Stream<Vec<ReactionWheel>>> {
+        self.client.stream("SpaceCenter", "Parts_get_ReactionWheels", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A list of all resource converters in the vessel.
     pub async fn resource_converters(&self) -> crate::Result<Vec<ResourceConverter>> {
         let data = self.client.invoke("SpaceCenter", "Parts_get_ResourceConverters", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `resource_converters`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn resource_converters_stream(&self) -> crate::Result<crate::Stream<Vec<ResourceConverter>>> {
+        self.client.stream("SpaceCenter", "Parts_get_ResourceConverters", &[codec::arg(0, &self.id)]).await
     }
 
     /// A list of all resource drains in the vessel.
@@ -7351,10 +10408,22 @@ impl Parts {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `resource_drains`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn resource_drains_stream(&self) -> crate::Result<crate::Stream<Vec<ResourceDrain>>> {
+        self.client.stream("SpaceCenter", "Parts_get_ResourceDrains", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A list of all resource harvesters in the vessel.
     pub async fn resource_harvesters(&self) -> crate::Result<Vec<ResourceHarvester>> {
         let data = self.client.invoke("SpaceCenter", "Parts_get_ResourceHarvesters", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `resource_harvesters`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn resource_harvesters_stream(&self) -> crate::Result<crate::Stream<Vec<ResourceHarvester>>> {
+        self.client.stream("SpaceCenter", "Parts_get_ResourceHarvesters", &[codec::arg(0, &self.id)]).await
     }
 
     /// A list of all robotic hinges in the vessel.
@@ -7363,10 +10432,22 @@ impl Parts {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `robotic_hinges`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn robotic_hinges_stream(&self) -> crate::Result<crate::Stream<Vec<RoboticHinge>>> {
+        self.client.stream("SpaceCenter", "Parts_get_RoboticHinges", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A list of all robotic pistons in the vessel.
     pub async fn robotic_pistons(&self) -> crate::Result<Vec<RoboticPiston>> {
         let data = self.client.invoke("SpaceCenter", "Parts_get_RoboticPistons", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `robotic_pistons`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn robotic_pistons_stream(&self) -> crate::Result<crate::Stream<Vec<RoboticPiston>>> {
+        self.client.stream("SpaceCenter", "Parts_get_RoboticPistons", &[codec::arg(0, &self.id)]).await
     }
 
     /// A list of all robotic pistons in the vessel.
@@ -7375,10 +10456,22 @@ impl Parts {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `robotic_rotations`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn robotic_rotations_stream(&self) -> crate::Result<crate::Stream<Vec<RoboticRotation>>> {
+        self.client.stream("SpaceCenter", "Parts_get_RoboticRotations", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A list of all robotic rotors in the vessel.
     pub async fn robotic_rotors(&self) -> crate::Result<Vec<RoboticRotor>> {
         let data = self.client.invoke("SpaceCenter", "Parts_get_RoboticRotors", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `robotic_rotors`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn robotic_rotors_stream(&self) -> crate::Result<crate::Stream<Vec<RoboticRotor>>> {
+        self.client.stream("SpaceCenter", "Parts_get_RoboticRotors", &[codec::arg(0, &self.id)]).await
     }
 
     /// The vessels root part.
@@ -7387,10 +10480,22 @@ impl Parts {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `root`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn root_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "Parts_get_Root", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A list of all sensors in the vessel.
     pub async fn sensors(&self) -> crate::Result<Vec<Sensor>> {
         let data = self.client.invoke("SpaceCenter", "Parts_get_Sensors", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `sensors`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn sensors_stream(&self) -> crate::Result<crate::Stream<Vec<Sensor>>> {
+        self.client.stream("SpaceCenter", "Parts_get_Sensors", &[codec::arg(0, &self.id)]).await
     }
 
     /// A list of all solar panels in the vessel.
@@ -7399,10 +10504,22 @@ impl Parts {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `solar_panels`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn solar_panels_stream(&self) -> crate::Result<crate::Stream<Vec<SolarPanel>>> {
+        self.client.stream("SpaceCenter", "Parts_get_SolarPanels", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A list of all wheels in the vessel.
     pub async fn wheels(&self) -> crate::Result<Vec<Wheel>> {
         let data = self.client.invoke("SpaceCenter", "Parts_get_Wheels", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `wheels`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn wheels_stream(&self) -> crate::Result<crate::Stream<Vec<Wheel>>> {
+        self.client.stream("SpaceCenter", "Parts_get_Wheels", &[codec::arg(0, &self.id)]).await
     }
 
     /// The part from which the vessel is controlled.
@@ -7417,10 +10534,22 @@ impl Parts {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `with_name`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn with_name_stream(&self, name: &str) -> crate::Result<crate::Stream<Vec<Part>>> {
+        self.client.stream("SpaceCenter", "Parts_WithName", &[codec::arg(0, &self.id), codec::arg(1, &name)]).await
+    }
+
     /// A list of all parts whose `SpaceCenter.Part.Title` is `title`.
     pub async fn with_title(&self, title: &str) -> crate::Result<Vec<Part>> {
         let data = self.client.invoke("SpaceCenter", "Parts_WithTitle", &[codec::arg(0, &self.id), codec::arg(1, &title)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `with_title`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn with_title_stream(&self, title: &str) -> crate::Result<crate::Stream<Vec<Part>>> {
+        self.client.stream("SpaceCenter", "Parts_WithTitle", &[codec::arg(0, &self.id), codec::arg(1, &title)]).await
     }
 
     /// A list of all parts whose `SpaceCenter.Part.Tag` is `tag`.
@@ -7429,10 +10558,22 @@ impl Parts {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `with_tag`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn with_tag_stream(&self, tag: &str) -> crate::Result<crate::Stream<Vec<Part>>> {
+        self.client.stream("SpaceCenter", "Parts_WithTag", &[codec::arg(0, &self.id), codec::arg(1, &tag)]).await
+    }
+
     /// A list of all parts that contain a `SpaceCenter.Module` whose `SpaceCenter.Module.Name` is `module_name`.
     pub async fn with_module(&self, module_name: &str) -> crate::Result<Vec<Part>> {
         let data = self.client.invoke("SpaceCenter", "Parts_WithModule", &[codec::arg(0, &self.id), codec::arg(1, &module_name)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `with_module`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn with_module_stream(&self, module_name: &str) -> crate::Result<crate::Stream<Vec<Part>>> {
+        self.client.stream("SpaceCenter", "Parts_WithModule", &[codec::arg(0, &self.id), codec::arg(1, &module_name)]).await
     }
 
     /// A list of all parts that are activated in the given `stage`.
@@ -7441,16 +10582,34 @@ impl Parts {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `in_stage`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn in_stage_stream(&self, stage: i32) -> crate::Result<crate::Stream<Vec<Part>>> {
+        self.client.stream("SpaceCenter", "Parts_InStage", &[codec::arg(0, &self.id), codec::arg(1, &stage)]).await
+    }
+
     /// A list of all parts that are decoupled in the given `stage`.
     pub async fn in_decouple_stage(&self, stage: i32) -> crate::Result<Vec<Part>> {
         let data = self.client.invoke("SpaceCenter", "Parts_InDecoupleStage", &[codec::arg(0, &self.id), codec::arg(1, &stage)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `in_decouple_stage`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn in_decouple_stage_stream(&self, stage: i32) -> crate::Result<crate::Stream<Vec<Part>>> {
+        self.client.stream("SpaceCenter", "Parts_InDecoupleStage", &[codec::arg(0, &self.id), codec::arg(1, &stage)]).await
+    }
+
     /// A list of modules (combined across all parts in the vessel) whose `SpaceCenter.Module.Name` is `module_name`.
     pub async fn modules_with_name(&self, module_name: &str) -> crate::Result<Vec<Module>> {
         let data = self.client.invoke("SpaceCenter", "Parts_ModulesWithName", &[codec::arg(0, &self.id), codec::arg(1, &module_name)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `modules_with_name`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn modules_with_name_stream(&self, module_name: &str) -> crate::Result<crate::Stream<Vec<Module>>> {
+        self.client.stream("SpaceCenter", "Parts_ModulesWithName", &[codec::arg(0, &self.id), codec::arg(1, &module_name)]).await
     }
 }
 
@@ -7513,10 +10672,22 @@ impl Propellant {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `current_amount`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn current_amount_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Propellant_get_CurrentAmount", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The required amount of propellant.
     pub async fn current_requirement(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Propellant_get_CurrentRequirement", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `current_requirement`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn current_requirement_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Propellant_get_CurrentRequirement", &[codec::arg(0, &self.id)]).await
     }
 
     /// If this propellant has a stack gauge or not.
@@ -7525,10 +10696,22 @@ impl Propellant {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `draw_stack_gauge`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn draw_stack_gauge_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Propellant_get_DrawStackGauge", &[codec::arg(0, &self.id)]).await
+    }
+
     /// If this propellant should be ignored when calculating required mass flow given specific impulse.
     pub async fn ignore_for_isp(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Propellant_get_IgnoreForIsp", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `ignore_for_isp`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn ignore_for_isp_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Propellant_get_IgnoreForIsp", &[codec::arg(0, &self.id)]).await
     }
 
     /// If this propellant should be ignored for thrust curve calculations.
@@ -7537,10 +10720,22 @@ impl Propellant {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `ignore_for_thrust_curve`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn ignore_for_thrust_curve_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Propellant_get_IgnoreForThrustCurve", &[codec::arg(0, &self.id)]).await
+    }
+
     /// If this propellant is deprived.
     pub async fn is_deprived(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Propellant_get_IsDeprived", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `is_deprived`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn is_deprived_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Propellant_get_IsDeprived", &[codec::arg(0, &self.id)]).await
     }
 
     /// The name of the propellant.
@@ -7549,10 +10744,22 @@ impl Propellant {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `name`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn name_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "Propellant_get_Name", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The propellant ratio.
     pub async fn ratio(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Propellant_get_Ratio", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `ratio`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn ratio_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Propellant_get_Ratio", &[codec::arg(0, &self.id)]).await
     }
 
     /// The total amount of the underlying resource currently reachable given resource flow rules.
@@ -7561,10 +10768,22 @@ impl Propellant {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `total_resource_available`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn total_resource_available_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Propellant_get_TotalResourceAvailable", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The total vehicle capacity for the underlying propellant resource, restricted by resource flow rules.
     pub async fn total_resource_capacity(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Propellant_get_TotalResourceCapacity", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `total_resource_capacity`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn total_resource_capacity_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Propellant_get_TotalResourceCapacity", &[codec::arg(0, &self.id)]).await
     }
 }
 
@@ -7627,10 +10846,22 @@ impl RCS {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `active`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn active_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "RCS_get_Active", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The amount of thrust, in Newtons, that would be produced by the thruster when activated. Returns zero if the thruster does not have any fuel. Takes the thrusters current `SpaceCenter.RCS.ThrustLimit` and atmospheric conditions into account.
     pub async fn available_thrust(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "RCS_get_AvailableThrust", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `available_thrust`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn available_thrust_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "RCS_get_AvailableThrust", &[codec::arg(0, &self.id)]).await
     }
 
     /// The available torque, in Newton meters, that can be produced by this RCS, in the positive and negative pitch, roll and yaw axes of the vessel. These axes correspond to the coordinate axes of the `SpaceCenter.Vessel.ReferenceFrame`. Returns zero if RCS is disable.
@@ -7639,10 +10870,22 @@ impl RCS {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `available_torque`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn available_torque_stream(&self) -> crate::Result<crate::Stream<((f64, f64, f64), (f64, f64, f64))>> {
+        self.client.stream("SpaceCenter", "RCS_get_AvailableTorque", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the RCS thrusters are enabled.
     pub async fn enabled(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "RCS_get_Enabled", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `enabled`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn enabled_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "RCS_get_Enabled", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the RCS thruster will fire when pitch control input is given.
@@ -7651,10 +10894,22 @@ impl RCS {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `forward_enabled`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn forward_enabled_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "RCS_get_ForwardEnabled", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the RCS has fuel available.
     pub async fn has_fuel(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "RCS_get_HasFuel", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `has_fuel`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn has_fuel_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "RCS_get_HasFuel", &[codec::arg(0, &self.id)]).await
     }
 
     /// The specific impulse of the RCS at sea level on Kerbin, in seconds.
@@ -7663,10 +10918,22 @@ impl RCS {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `kerbin_sea_level_specific_impulse`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn kerbin_sea_level_specific_impulse_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "RCS_get_KerbinSeaLevelSpecificImpulse", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The maximum amount of thrust that can be produced by the RCS thrusters when active, in Newtons. Takes the thrusters current `SpaceCenter.RCS.ThrustLimit` and atmospheric conditions into account.
     pub async fn max_thrust(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "RCS_get_MaxThrust", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `max_thrust`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn max_thrust_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "RCS_get_MaxThrust", &[codec::arg(0, &self.id)]).await
     }
 
     /// The maximum amount of thrust that can be produced by the RCS thrusters when active in a vacuum, in Newtons.
@@ -7675,10 +10942,22 @@ impl RCS {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `max_vacuum_thrust`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn max_vacuum_thrust_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "RCS_get_MaxVacuumThrust", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The part object for this RCS.
     pub async fn part(&self) -> crate::Result<Part> {
         let data = self.client.invoke("SpaceCenter", "RCS_get_Part", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "RCS_get_Part", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the RCS thruster will fire when pitch control input is given.
@@ -7687,10 +10966,22 @@ impl RCS {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `pitch_enabled`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn pitch_enabled_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "RCS_get_PitchEnabled", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The ratios of resources that the RCS consumes. A dictionary mapping resource names to the ratios at which they are consumed by the RCS.
     pub async fn propellant_ratios(&self) -> crate::Result<std::collections::HashMap<String, f32>> {
         let data = self.client.invoke("SpaceCenter", "RCS_get_PropellantRatios", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `propellant_ratios`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn propellant_ratios_stream(&self) -> crate::Result<crate::Stream<std::collections::HashMap<String, f32>>> {
+        self.client.stream("SpaceCenter", "RCS_get_PropellantRatios", &[codec::arg(0, &self.id)]).await
     }
 
     /// The names of resources that the RCS consumes.
@@ -7699,10 +10990,22 @@ impl RCS {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `propellants`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn propellants_stream(&self) -> crate::Result<crate::Stream<Vec<String>>> {
+        self.client.stream("SpaceCenter", "RCS_get_Propellants", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the RCS thruster will fire when roll control input is given.
     pub async fn right_enabled(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "RCS_get_RightEnabled", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `right_enabled`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn right_enabled_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "RCS_get_RightEnabled", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the RCS thruster will fire when roll control input is given.
@@ -7711,10 +11014,22 @@ impl RCS {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `roll_enabled`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn roll_enabled_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "RCS_get_RollEnabled", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The current specific impulse of the RCS, in seconds. Returns zero if the RCS is not active.
     pub async fn specific_impulse(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "RCS_get_SpecificImpulse", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `specific_impulse`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn specific_impulse_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "RCS_get_SpecificImpulse", &[codec::arg(0, &self.id)]).await
     }
 
     /// The thrust limiter of the thruster. A value between 0 and 1.
@@ -7723,10 +11038,22 @@ impl RCS {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `thrust_limit`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn thrust_limit_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "RCS_get_ThrustLimit", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A list of thrusters, one of each nozzel in the RCS part.
     pub async fn thrusters(&self) -> crate::Result<Vec<Thruster>> {
         let data = self.client.invoke("SpaceCenter", "RCS_get_Thrusters", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `thrusters`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn thrusters_stream(&self) -> crate::Result<crate::Stream<Vec<Thruster>>> {
+        self.client.stream("SpaceCenter", "RCS_get_Thrusters", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the RCS thruster will fire when yaw control input is given.
@@ -7735,16 +11062,34 @@ impl RCS {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `up_enabled`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn up_enabled_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "RCS_get_UpEnabled", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The vacuum specific impulse of the RCS, in seconds.
     pub async fn vacuum_specific_impulse(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "RCS_get_VacuumSpecificImpulse", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `vacuum_specific_impulse`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn vacuum_specific_impulse_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "RCS_get_VacuumSpecificImpulse", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the RCS thruster will fire when yaw control input is given.
     pub async fn yaw_enabled(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "RCS_get_YawEnabled", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `yaw_enabled`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn yaw_enabled_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "RCS_get_YawEnabled", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the RCS thrusters are enabled.
@@ -7855,10 +11200,22 @@ impl Radiator {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `deployable`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn deployable_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Radiator_get_Deployable", &[codec::arg(0, &self.id)]).await
+    }
+
     /// For a deployable radiator, `true` if the radiator is extended. If the radiator is not deployable, this is always `true`.
     pub async fn deployed(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Radiator_get_Deployed", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `deployed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn deployed_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Radiator_get_Deployed", &[codec::arg(0, &self.id)]).await
     }
 
     /// The part object for this radiator.
@@ -7867,12 +11224,24 @@ impl Radiator {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "Radiator_get_Part", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The current state of the radiator.
     ///
     /// A fixed radiator is always `SpaceCenter.RadiatorState.Extended`.
     pub async fn state(&self) -> crate::Result<RadiatorState> {
         let data = self.client.invoke("SpaceCenter", "Radiator_get_State", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `state`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn state_stream(&self) -> crate::Result<crate::Stream<RadiatorState>> {
+        self.client.stream("SpaceCenter", "Radiator_get_State", &[codec::arg(0, &self.id)]).await
     }
 
     /// For a deployable radiator, `true` if the radiator is extended. If the radiator is not deployable, this is always `true`.
@@ -7941,10 +11310,22 @@ impl ReactionWheel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `active`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn active_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "ReactionWheel_get_Active", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The available torque, in Newton meters, that can be produced by this reaction wheel, in the positive and negative pitch, roll and yaw axes of the vessel. These axes correspond to the coordinate axes of the `SpaceCenter.Vessel.ReferenceFrame`. Returns zero if the reaction wheel is inactive or broken.
     pub async fn available_torque(&self) -> crate::Result<((f64, f64, f64), (f64, f64, f64))> {
         let data = self.client.invoke("SpaceCenter", "ReactionWheel_get_AvailableTorque", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `available_torque`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn available_torque_stream(&self) -> crate::Result<crate::Stream<((f64, f64, f64), (f64, f64, f64))>> {
+        self.client.stream("SpaceCenter", "ReactionWheel_get_AvailableTorque", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the reaction wheel is broken.
@@ -7953,16 +11334,34 @@ impl ReactionWheel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `broken`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn broken_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "ReactionWheel_get_Broken", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The maximum torque, in Newton meters, that can be produced by this reaction wheel, when it is active, in the positive and negative pitch, roll and yaw axes of the vessel. These axes correspond to the coordinate axes of the `SpaceCenter.Vessel.ReferenceFrame`.
     pub async fn max_torque(&self) -> crate::Result<((f64, f64, f64), (f64, f64, f64))> {
         let data = self.client.invoke("SpaceCenter", "ReactionWheel_get_MaxTorque", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `max_torque`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn max_torque_stream(&self) -> crate::Result<crate::Stream<((f64, f64, f64), (f64, f64, f64))>> {
+        self.client.stream("SpaceCenter", "ReactionWheel_get_MaxTorque", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The part object for this reaction wheel.
     pub async fn part(&self) -> crate::Result<Part> {
         let data = self.client.invoke("SpaceCenter", "ReactionWheel_get_Part", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "ReactionWheel_get_Part", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the reaction wheel is active.
@@ -8059,6 +11458,25 @@ impl ReferenceFrame {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `create_relative`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn create_relative_stream(client: &crate::ClientRef, reference_frame: &ReferenceFrame, position: Option<(f64, f64, f64)>, rotation: Option<(f64, f64, f64, f64)>, velocity: Option<(f64, f64, f64)>, angular_velocity: Option<(f64, f64, f64)>) -> crate::Result<crate::Stream<ReferenceFrame>> {
+        let mut args = vec![codec::arg(0, &reference_frame)];
+        if let Some(v) = &position {
+            args.push(codec::arg(1, v));
+        }
+        if let Some(v) = &rotation {
+            args.push(codec::arg(2, v));
+        }
+        if let Some(v) = &velocity {
+            args.push(codec::arg(3, v));
+        }
+        if let Some(v) = &angular_velocity {
+            args.push(codec::arg(4, v));
+        }
+        client.stream("SpaceCenter", "ReferenceFrame_static_CreateRelative", &args).await
+    }
+
     /// Create a hybrid reference frame. This is a custom reference frame whose components inherited from other reference frames.
     ///
     /// The `position` reference frame is required but all other reference frames are optional. If omitted, they are set to the `position` reference frame.
@@ -8082,6 +11500,22 @@ impl ReferenceFrame {
         }
         let data = client.invoke("SpaceCenter", "ReferenceFrame_static_CreateHybrid", &args).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `create_hybrid`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn create_hybrid_stream(client: &crate::ClientRef, position: &ReferenceFrame, rotation: Option<ReferenceFrame>, velocity: Option<ReferenceFrame>, angular_velocity: Option<ReferenceFrame>) -> crate::Result<crate::Stream<ReferenceFrame>> {
+        let mut args = vec![codec::arg(0, &position)];
+        if let Some(v) = &rotation {
+            args.push(codec::arg(1, v));
+        }
+        if let Some(v) = &velocity {
+            args.push(codec::arg(2, v));
+        }
+        if let Some(v) = &angular_velocity {
+            args.push(codec::arg(3, v));
+        }
+        client.stream("SpaceCenter", "ReferenceFrame_static_CreateHybrid", &args).await
     }
 }
 
@@ -8144,10 +11578,22 @@ impl Resource {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `amount`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn amount_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Resource_get_Amount", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The density of the resource, in `kg/l`.
     pub async fn density(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Resource_get_Density", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `density`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn density_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Resource_get_Density", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether use of this resource is enabled.
@@ -8156,10 +11602,22 @@ impl Resource {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `enabled`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn enabled_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Resource_get_Enabled", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The flow mode of the resource.
     pub async fn flow_mode(&self) -> crate::Result<ResourceFlowMode> {
         let data = self.client.invoke("SpaceCenter", "Resource_get_FlowMode", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `flow_mode`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn flow_mode_stream(&self) -> crate::Result<crate::Stream<ResourceFlowMode>> {
+        self.client.stream("SpaceCenter", "Resource_get_FlowMode", &[codec::arg(0, &self.id)]).await
     }
 
     /// The total amount of the resource that can be stored in the part.
@@ -8168,16 +11626,34 @@ impl Resource {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `max`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn max_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Resource_get_Max", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The name of the resource.
     pub async fn name(&self) -> crate::Result<String> {
         let data = self.client.invoke("SpaceCenter", "Resource_get_Name", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `name`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn name_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "Resource_get_Name", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The part containing the resource.
     pub async fn part(&self) -> crate::Result<Part> {
         let data = self.client.invoke("SpaceCenter", "Resource_get_Part", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "Resource_get_Part", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether use of this resource is enabled.
@@ -8246,10 +11722,22 @@ impl ResourceConverter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `core_temperature`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn core_temperature_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "ResourceConverter_get_CoreTemperature", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The number of converters in the part.
     pub async fn count(&self) -> crate::Result<i32> {
         let data = self.client.invoke("SpaceCenter", "ResourceConverter_get_Count", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `count`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn count_stream(&self) -> crate::Result<crate::Stream<i32>> {
+        self.client.stream("SpaceCenter", "ResourceConverter_get_Count", &[codec::arg(0, &self.id)]).await
     }
 
     /// The core temperature at which the converter will operate with peak efficiency, in Kelvin.
@@ -8258,16 +11746,34 @@ impl ResourceConverter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `optimum_core_temperature`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn optimum_core_temperature_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "ResourceConverter_get_OptimumCoreTemperature", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The part object for this converter.
     pub async fn part(&self) -> crate::Result<Part> {
         let data = self.client.invoke("SpaceCenter", "ResourceConverter_get_Part", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "ResourceConverter_get_Part", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The thermal efficiency of the converter, as a percentage of its maximum.
     pub async fn thermal_efficiency(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "ResourceConverter_get_ThermalEfficiency", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `thermal_efficiency`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn thermal_efficiency_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "ResourceConverter_get_ThermalEfficiency", &[codec::arg(0, &self.id)]).await
     }
 
     /// True if the specified converter is active.
@@ -8280,6 +11786,12 @@ impl ResourceConverter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `active`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn active_stream(&self, index: i32) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "ResourceConverter_Active", &[codec::arg(0, &self.id), codec::arg(1, &index)]).await
+    }
+
     /// The name of the specified converter.
     ///
     /// # Arguments
@@ -8288,6 +11800,12 @@ impl ResourceConverter {
     pub async fn name(&self, index: i32) -> crate::Result<String> {
         let data = self.client.invoke("SpaceCenter", "ResourceConverter_Name", &[codec::arg(0, &self.id), codec::arg(1, &index)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `name`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn name_stream(&self, index: i32) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "ResourceConverter_Name", &[codec::arg(0, &self.id), codec::arg(1, &index)]).await
     }
 
     /// Start the specified converter.
@@ -8320,6 +11838,12 @@ impl ResourceConverter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `state`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn state_stream(&self, index: i32) -> crate::Result<crate::Stream<ResourceConverterState>> {
+        self.client.stream("SpaceCenter", "ResourceConverter_State", &[codec::arg(0, &self.id), codec::arg(1, &index)]).await
+    }
+
     /// Status information for the specified converter. This is the full status message shown in the in-game UI.
     ///
     /// # Arguments
@@ -8328,6 +11852,12 @@ impl ResourceConverter {
     pub async fn status_info(&self, index: i32) -> crate::Result<String> {
         let data = self.client.invoke("SpaceCenter", "ResourceConverter_StatusInfo", &[codec::arg(0, &self.id), codec::arg(1, &index)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `status_info`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn status_info_stream(&self, index: i32) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "ResourceConverter_StatusInfo", &[codec::arg(0, &self.id), codec::arg(1, &index)]).await
     }
 
     /// List of the names of resources consumed by the specified converter.
@@ -8340,6 +11870,12 @@ impl ResourceConverter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `inputs`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn inputs_stream(&self, index: i32) -> crate::Result<crate::Stream<Vec<String>>> {
+        self.client.stream("SpaceCenter", "ResourceConverter_Inputs", &[codec::arg(0, &self.id), codec::arg(1, &index)]).await
+    }
+
     /// List of the names of resources produced by the specified converter.
     ///
     /// # Arguments
@@ -8348,6 +11884,12 @@ impl ResourceConverter {
     pub async fn outputs(&self, index: i32) -> crate::Result<Vec<String>> {
         let data = self.client.invoke("SpaceCenter", "ResourceConverter_Outputs", &[codec::arg(0, &self.id), codec::arg(1, &index)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `outputs`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn outputs_stream(&self, index: i32) -> crate::Result<crate::Stream<Vec<String>>> {
+        self.client.stream("SpaceCenter", "ResourceConverter_Outputs", &[codec::arg(0, &self.id), codec::arg(1, &index)]).await
     }
 }
 
@@ -8410,10 +11952,22 @@ impl ResourceDrain {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `available_resources`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn available_resources_stream(&self) -> crate::Result<crate::Stream<Vec<Resource>>> {
+        self.client.stream("SpaceCenter", "ResourceDrain_get_AvailableResources", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Sets drain mode to part or vessel-wide
     pub async fn drain_mode(&self) -> crate::Result<DrainModes> {
         let data = self.client.invoke("SpaceCenter", "ResourceDrain_get_DrainMode", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `drain_mode`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn drain_mode_stream(&self) -> crate::Result<crate::Stream<DrainModes>> {
+        self.client.stream("SpaceCenter", "ResourceDrain_get_DrainMode", &[codec::arg(0, &self.id)]).await
     }
 
     /// Current rate of draining
@@ -8422,10 +11976,22 @@ impl ResourceDrain {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `drain_rate`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn drain_rate_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "ResourceDrain_get_DrainRate", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Maximum possible rate of draining.
     pub async fn max_drain_rate(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "ResourceDrain_get_MaxDrainRate", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `max_drain_rate`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn max_drain_rate_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "ResourceDrain_get_MaxDrainRate", &[codec::arg(0, &self.id)]).await
     }
 
     /// Minimum possible rate of draining
@@ -8434,10 +12000,22 @@ impl ResourceDrain {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `min_drain_rate`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn min_drain_rate_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "ResourceDrain_get_MinDrainRate", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The part object for this resource drain
     pub async fn part(&self) -> crate::Result<Part> {
         let data = self.client.invoke("SpaceCenter", "ResourceDrain_get_Part", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "ResourceDrain_get_Part", &[codec::arg(0, &self.id)]).await
     }
 
     /// Sets drain mode to part or vessel-wide
@@ -8462,6 +12040,12 @@ impl ResourceDrain {
     pub async fn check_resource_drain(&self, r: &Resource) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "ResourceDrain_CheckResourceDrain", &[codec::arg(0, &self.id), codec::arg(1, &r)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `check_resource_drain`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn check_resource_drain_stream(&self, r: &Resource) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "ResourceDrain_CheckResourceDrain", &[codec::arg(0, &self.id), codec::arg(1, &r)]).await
     }
 
     /// Activates resource drain for all enabled parts
@@ -8536,10 +12120,22 @@ impl ResourceHarvester {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `active`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn active_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "ResourceHarvester_get_Active", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The core temperature of the drill, in Kelvin.
     pub async fn core_temperature(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "ResourceHarvester_get_CoreTemperature", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `core_temperature`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn core_temperature_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "ResourceHarvester_get_CoreTemperature", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the harvester is deployed.
@@ -8548,10 +12144,22 @@ impl ResourceHarvester {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `deployed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn deployed_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "ResourceHarvester_get_Deployed", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The rate at which the drill is extracting ore, in units per second.
     pub async fn extraction_rate(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "ResourceHarvester_get_ExtractionRate", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `extraction_rate`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn extraction_rate_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "ResourceHarvester_get_ExtractionRate", &[codec::arg(0, &self.id)]).await
     }
 
     /// The core temperature at which the drill will operate with peak efficiency, in Kelvin.
@@ -8560,10 +12168,22 @@ impl ResourceHarvester {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `optimum_core_temperature`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn optimum_core_temperature_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "ResourceHarvester_get_OptimumCoreTemperature", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The part object for this harvester.
     pub async fn part(&self) -> crate::Result<Part> {
         let data = self.client.invoke("SpaceCenter", "ResourceHarvester_get_Part", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "ResourceHarvester_get_Part", &[codec::arg(0, &self.id)]).await
     }
 
     /// The state of the harvester.
@@ -8572,10 +12192,22 @@ impl ResourceHarvester {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `state`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn state_stream(&self) -> crate::Result<crate::Stream<ResourceHarvesterState>> {
+        self.client.stream("SpaceCenter", "ResourceHarvester_get_State", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The thermal efficiency of the drill, as a percentage of its maximum.
     pub async fn thermal_efficiency(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "ResourceHarvester_get_ThermalEfficiency", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `thermal_efficiency`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn thermal_efficiency_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "ResourceHarvester_get_ThermalEfficiency", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the harvester is actively drilling.
@@ -8650,10 +12282,22 @@ impl ResourceTransfer {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `amount`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn amount_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "ResourceTransfer_get_Amount", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the transfer has completed.
     pub async fn complete(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "ResourceTransfer_get_Complete", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `complete`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn complete_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "ResourceTransfer_get_Complete", &[codec::arg(0, &self.id)]).await
     }
 
     /// Start transferring a resource transfer between a pair of parts. The transfer will move at most `max_amount` units of the resource, depending on how much of the resource is available in the source part and how much storage is available in the destination part. Use `SpaceCenter.ResourceTransfer.Complete` to check if the transfer is complete. Use `SpaceCenter.ResourceTransfer.Amount` to see how much of the resource has been transferred.
@@ -8667,6 +12311,12 @@ impl ResourceTransfer {
     pub async fn start(client: &crate::ClientRef, from_part: &Part, to_part: &Part, resource: &str, max_amount: f32) -> crate::Result<ResourceTransfer> {
         let data = client.invoke("SpaceCenter", "ResourceTransfer_static_Start", &[codec::arg(0, &from_part), codec::arg(1, &to_part), codec::arg(2, &resource), codec::arg(3, &max_amount)]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `start`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn start_stream(client: &crate::ClientRef, from_part: &Part, to_part: &Part, resource: &str, max_amount: f32) -> crate::Result<crate::Stream<ResourceTransfer>> {
+        client.stream("SpaceCenter", "ResourceTransfer_static_Start", &[codec::arg(0, &from_part), codec::arg(1, &to_part), codec::arg(2, &resource), codec::arg(3, &max_amount)]).await
     }
 }
 
@@ -8729,6 +12379,12 @@ impl Resources {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `all`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn all_stream(&self) -> crate::Result<crate::Stream<Vec<Resource>>> {
+        self.client.stream("SpaceCenter", "Resources_get_All", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether use of all the resources are enabled.
     ///
     /// This is `true` if all of the resources are enabled. If any of the resources are not enabled, this is `false`.
@@ -8737,10 +12393,22 @@ impl Resources {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `enabled`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn enabled_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Resources_get_Enabled", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A list of resource names that can be stored.
     pub async fn names(&self) -> crate::Result<Vec<String>> {
         let data = self.client.invoke("SpaceCenter", "Resources_get_Names", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `names`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn names_stream(&self) -> crate::Result<crate::Stream<Vec<String>>> {
+        self.client.stream("SpaceCenter", "Resources_get_Names", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether use of all the resources are enabled.
@@ -8757,6 +12425,12 @@ impl Resources {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `with_resource`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn with_resource_stream(&self, name: &str) -> crate::Result<crate::Stream<Vec<Resource>>> {
+        self.client.stream("SpaceCenter", "Resources_WithResource", &[codec::arg(0, &self.id), codec::arg(1, &name)]).await
+    }
+
     /// Check whether the named resource can be stored.
     ///
     /// # Arguments
@@ -8765,6 +12439,12 @@ impl Resources {
     pub async fn has_resource(&self, name: &str) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Resources_HasResource", &[codec::arg(0, &self.id), codec::arg(1, &name)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `has_resource`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn has_resource_stream(&self, name: &str) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Resources_HasResource", &[codec::arg(0, &self.id), codec::arg(1, &name)]).await
     }
 
     /// Returns the amount of a resource that can be stored.
@@ -8777,6 +12457,12 @@ impl Resources {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `max`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn max_stream(&self, name: &str) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Resources_Max", &[codec::arg(0, &self.id), codec::arg(1, &name)]).await
+    }
+
     /// Returns the amount of a resource that is currently stored.
     ///
     /// # Arguments
@@ -8785,6 +12471,12 @@ impl Resources {
     pub async fn amount(&self, name: &str) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Resources_Amount", &[codec::arg(0, &self.id), codec::arg(1, &name)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `amount`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn amount_stream(&self, name: &str) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Resources_Amount", &[codec::arg(0, &self.id), codec::arg(1, &name)]).await
     }
 
     /// Returns the density of a resource, in `kg/l`.
@@ -8797,6 +12489,12 @@ impl Resources {
         Decode::decode_krpc(client, &data)
     }
 
+    /// Streamed variant of `density`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn density_stream(client: &crate::ClientRef, name: &str) -> crate::Result<crate::Stream<f32>> {
+        client.stream("SpaceCenter", "Resources_static_Density", &[codec::arg(0, &name)]).await
+    }
+
     /// Returns the flow mode of a resource.
     ///
     /// # Arguments
@@ -8805,6 +12503,12 @@ impl Resources {
     pub async fn flow_mode(client: &crate::ClientRef, name: &str) -> crate::Result<ResourceFlowMode> {
         let data = client.invoke("SpaceCenter", "Resources_static_FlowMode", &[codec::arg(0, &name)]).await?;
         Decode::decode_krpc(client, &data)
+    }
+
+    /// Streamed variant of `flow_mode`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn flow_mode_stream(client: &crate::ClientRef, name: &str) -> crate::Result<crate::Stream<ResourceFlowMode>> {
+        client.stream("SpaceCenter", "Resources_static_FlowMode", &[codec::arg(0, &name)]).await
     }
 }
 
@@ -8867,10 +12571,22 @@ impl RoboticController {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "RoboticController_get_Part", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the controller any axisfield from the part
     pub async fn has_part(&self, part: &Part) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "RoboticController_HasPart", &[codec::arg(0, &self.id), codec::arg(1, &part)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `has_part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn has_part_stream(&self, part: &Part) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "RoboticController_HasPart", &[codec::arg(0, &self.id), codec::arg(1, &part)]).await
     }
 
     /// List the axes for the controller.
@@ -8879,10 +12595,22 @@ impl RoboticController {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `list_axes`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn list_axes_stream(&self) -> crate::Result<crate::Stream<Vec<Vec<String>>>> {
+        self.client.stream("SpaceCenter", "RoboticController_ListAxes", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Add an axis to the controller
     pub async fn add_axis(&self, module: &Module, field_name: &str) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "RoboticController_AddAxis", &[codec::arg(0, &self.id), codec::arg(1, &module), codec::arg(2, &field_name)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `add_axis`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn add_axis_stream(&self, module: &Module, field_name: &str) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "RoboticController_AddAxis", &[codec::arg(0, &self.id), codec::arg(1, &module), codec::arg(2, &field_name)]).await
     }
 
     /// Add key frame value for controller axis.
@@ -8891,10 +12619,22 @@ impl RoboticController {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `add_key`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn add_key_stream(&self, module: &Module, field_name: &str, time: f32, value: f32) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "RoboticController_AddKey", &[codec::arg(0, &self.id), codec::arg(1, &module), codec::arg(2, &field_name), codec::arg(3, &time), codec::arg(4, &value)]).await
+    }
+
     /// Clear axis.
     pub async fn clear_axis(&self, module: &Module, field_name: &str) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "RoboticController_ClearAxis", &[codec::arg(0, &self.id), codec::arg(1, &module), codec::arg(2, &field_name)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `clear_axis`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn clear_axis_stream(&self, module: &Module, field_name: &str) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "RoboticController_ClearAxis", &[codec::arg(0, &self.id), codec::arg(1, &module), codec::arg(2, &field_name)]).await
     }
 }
 
@@ -8957,10 +12697,22 @@ impl RoboticHinge {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `current_angle`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn current_angle_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "RoboticHinge_get_CurrentAngle", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Damping Percentage>
     pub async fn damping(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "RoboticHinge_get_Damping", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `damping`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn damping_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "RoboticHinge_get_Damping", &[codec::arg(0, &self.id)]).await
     }
 
     /// Lock Movement
@@ -8969,10 +12721,22 @@ impl RoboticHinge {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `hinge_locked`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn hinge_locked_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "RoboticHinge_get_HingeLocked", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Engage/Disengage Motor
     pub async fn motor_engaged(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "RoboticHinge_get_MotorEngaged", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `motor_engaged`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn motor_engaged_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "RoboticHinge_get_MotorEngaged", &[codec::arg(0, &self.id)]).await
     }
 
     /// The part object for this robotic hinge.
@@ -8981,16 +12745,34 @@ impl RoboticHinge {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "RoboticHinge_get_Part", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Target Movement Rate in Degrees/s
     pub async fn rate(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "RoboticHinge_get_Rate", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `rate`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn rate_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "RoboticHinge_get_Rate", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Target Angle for Robotic Hinge
     pub async fn target_angle(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "RoboticHinge_get_TargetAngle", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `target_angle`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn target_angle_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "RoboticHinge_get_TargetAngle", &[codec::arg(0, &self.id)]).await
     }
 
     /// Damping Percentage>
@@ -9089,10 +12871,22 @@ impl RoboticPiston {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `current_position`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn current_position_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "RoboticPiston_get_CurrentPosition", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Damping Percentage>
     pub async fn damping(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "RoboticPiston_get_Damping", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `damping`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn damping_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "RoboticPiston_get_Damping", &[codec::arg(0, &self.id)]).await
     }
 
     /// Engage/Disengage Motor
@@ -9101,10 +12895,22 @@ impl RoboticPiston {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `motor_engaged`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn motor_engaged_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "RoboticPiston_get_MotorEngaged", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The part object for this robotic piston.
     pub async fn part(&self) -> crate::Result<Part> {
         let data = self.client.invoke("SpaceCenter", "RoboticPiston_get_Part", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "RoboticPiston_get_Part", &[codec::arg(0, &self.id)]).await
     }
 
     /// Lock Movement
@@ -9113,16 +12919,34 @@ impl RoboticPiston {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `piston_locked`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn piston_locked_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "RoboticPiston_get_PistonLocked", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Target Movement Rate in Degrees/s
     pub async fn rate(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "RoboticPiston_get_Rate", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `rate`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn rate_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "RoboticPiston_get_Rate", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Target Extension for robotic piston.
     pub async fn target_position(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "RoboticPiston_get_TargetPosition", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `target_position`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn target_position_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "RoboticPiston_get_TargetPosition", &[codec::arg(0, &self.id)]).await
     }
 
     /// Damping Percentage>
@@ -9221,10 +13045,22 @@ impl RoboticRotation {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `current_position`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn current_position_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "RoboticRotation_get_CurrentPosition", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Damping Percentage>
     pub async fn damping(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "RoboticRotation_get_Damping", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `damping`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn damping_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "RoboticRotation_get_Damping", &[codec::arg(0, &self.id)]).await
     }
 
     /// Engage/Disengage Motor
@@ -9233,10 +13069,22 @@ impl RoboticRotation {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `motor_engaged`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn motor_engaged_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "RoboticRotation_get_MotorEngaged", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The part object for this robotic servo.
     pub async fn part(&self) -> crate::Result<Part> {
         let data = self.client.invoke("SpaceCenter", "RoboticRotation_get_Part", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "RoboticRotation_get_Part", &[codec::arg(0, &self.id)]).await
     }
 
     /// Target Movement Rate in Degrees/s
@@ -9245,16 +13093,34 @@ impl RoboticRotation {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `rate`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn rate_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "RoboticRotation_get_Rate", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Lock Movement
     pub async fn rotation_locked(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "RoboticRotation_get_RotationLocked", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `rotation_locked`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn rotation_locked_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "RoboticRotation_get_RotationLocked", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Target Angle for Robotic Servo
     pub async fn target_position(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "RoboticRotation_get_TargetPosition", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `target_position`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn target_position_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "RoboticRotation_get_TargetPosition", &[codec::arg(0, &self.id)]).await
     }
 
     /// Damping Percentage>
@@ -9353,10 +13219,22 @@ impl RoboticRotor {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `current_rpm`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn current_rpm_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "RoboticRotor_get_CurrentRPM", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Invert Rotor Direction?
     pub async fn inverted(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "RoboticRotor_get_Inverted", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `inverted`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn inverted_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "RoboticRotor_get_Inverted", &[codec::arg(0, &self.id)]).await
     }
 
     /// Engage/Disengage Motor
@@ -9365,10 +13243,22 @@ impl RoboticRotor {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `motor_engaged`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn motor_engaged_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "RoboticRotor_get_MotorEngaged", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The part object for this robotic rotor.
     pub async fn part(&self) -> crate::Result<Part> {
         let data = self.client.invoke("SpaceCenter", "RoboticRotor_get_Part", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "RoboticRotor_get_Part", &[codec::arg(0, &self.id)]).await
     }
 
     /// Lock Movement
@@ -9377,16 +13267,34 @@ impl RoboticRotor {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `rotation_locked`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn rotation_locked_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "RoboticRotor_get_RotationLocked", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Target RPM for Robotic Rotor
     pub async fn target_rpm(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "RoboticRotor_get_TargetRPM", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `target_rpm`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn target_rpm_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "RoboticRotor_get_TargetRPM", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Torque Limit Percentage
     pub async fn torque_limit(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "RoboticRotor_get_TorqueLimit", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `torque_limit`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn torque_limit_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "RoboticRotor_get_TorqueLimit", &[codec::arg(0, &self.id)]).await
     }
 
     /// Invert Rotor Direction?
@@ -9479,16 +13387,34 @@ impl ScienceData {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `data_amount`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn data_amount_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "ScienceData_get_DataAmount", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Science value.
     pub async fn science_value(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "ScienceData_get_ScienceValue", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `science_value`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn science_value_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "ScienceData_get_ScienceValue", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Transmit value.
     pub async fn transmit_value(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "ScienceData_get_TransmitValue", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `transmit_value`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn transmit_value_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "ScienceData_get_TransmitValue", &[codec::arg(0, &self.id)]).await
     }
 }
 
@@ -9551,10 +13477,22 @@ impl ScienceSubject {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `data_scale`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn data_scale_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "ScienceSubject_get_DataScale", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the experiment has been completed.
     pub async fn is_complete(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "ScienceSubject_get_IsComplete", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `is_complete`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn is_complete_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "ScienceSubject_get_IsComplete", &[codec::arg(0, &self.id)]).await
     }
 
     /// Amount of science already earned from this subject, not updated until after transmission/recovery.
@@ -9563,10 +13501,22 @@ impl ScienceSubject {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `science`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn science_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "ScienceSubject_get_Science", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Total science allowable for this subject.
     pub async fn science_cap(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "ScienceSubject_get_ScienceCap", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `science_cap`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn science_cap_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "ScienceSubject_get_ScienceCap", &[codec::arg(0, &self.id)]).await
     }
 
     /// Diminishing value multiplier for decreasing the science value returned from repeated experiments.
@@ -9575,16 +13525,34 @@ impl ScienceSubject {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `scientific_value`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn scientific_value_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "ScienceSubject_get_ScientificValue", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Multiplier for specific Celestial Body/Experiment Situation combination.
     pub async fn subject_value(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "ScienceSubject_get_SubjectValue", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `subject_value`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn subject_value_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "ScienceSubject_get_SubjectValue", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Title of science subject, displayed in science archives
     pub async fn title(&self) -> crate::Result<String> {
         let data = self.client.invoke("SpaceCenter", "ScienceSubject_get_Title", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `title`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn title_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "ScienceSubject_get_Title", &[codec::arg(0, &self.id)]).await
     }
 }
 
@@ -9647,16 +13615,34 @@ impl Sensor {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `active`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn active_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Sensor_get_Active", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The part object for this sensor.
     pub async fn part(&self) -> crate::Result<Part> {
         let data = self.client.invoke("SpaceCenter", "Sensor_get_Part", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "Sensor_get_Part", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The current value of the sensor.
     pub async fn value(&self) -> crate::Result<String> {
         let data = self.client.invoke("SpaceCenter", "Sensor_get_Value", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `value`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn value_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "Sensor_get_Value", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the sensor is active.
@@ -9725,10 +13711,22 @@ impl SolarPanel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `deployable`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn deployable_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "SolarPanel_get_Deployable", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the solar panel is extended.
     pub async fn deployed(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "SolarPanel_get_Deployed", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `deployed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn deployed_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "SolarPanel_get_Deployed", &[codec::arg(0, &self.id)]).await
     }
 
     /// The current amount of energy being generated by the solar panel, in units of charge per second.
@@ -9737,10 +13735,22 @@ impl SolarPanel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `energy_flow`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn energy_flow_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "SolarPanel_get_EnergyFlow", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The part object for this solar panel.
     pub async fn part(&self) -> crate::Result<Part> {
         let data = self.client.invoke("SpaceCenter", "SolarPanel_get_Part", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "SolarPanel_get_Part", &[codec::arg(0, &self.id)]).await
     }
 
     /// The current state of the solar panel.
@@ -9749,10 +13759,22 @@ impl SolarPanel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `state`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn state_stream(&self) -> crate::Result<crate::Stream<SolarPanelState>> {
+        self.client.stream("SpaceCenter", "SolarPanel_get_State", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The current amount of sunlight that is incident on the solar panel, as a percentage. A value between 0 and 1.
     pub async fn sun_exposure(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "SolarPanel_get_SunExposure", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `sun_exposure`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn sun_exposure_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "SolarPanel_get_SunExposure", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the solar panel is extended.
@@ -9823,16 +13845,34 @@ impl Thruster {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `gimbal_angle`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn gimbal_angle_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Thruster_get_GimbalAngle", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the thruster is gimballed.
     pub async fn gimballed(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Thruster_get_Gimballed", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `gimballed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn gimballed_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Thruster_get_Gimballed", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The `SpaceCenter.Part` that contains this thruster.
     pub async fn part(&self) -> crate::Result<Part> {
         let data = self.client.invoke("SpaceCenter", "Thruster_get_Part", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "Thruster_get_Part", &[codec::arg(0, &self.id)]).await
     }
 
     /// A reference frame that is fixed relative to the thruster and orientated with its thrust direction (`SpaceCenter.Thruster.ThrustDirection`). For gimballed engines, this takes into account the current rotation of the gimbal.
@@ -9843,6 +13883,12 @@ impl Thruster {
     pub async fn thrust_reference_frame(&self) -> crate::Result<ReferenceFrame> {
         let data = self.client.invoke("SpaceCenter", "Thruster_get_ThrustReferenceFrame", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `thrust_reference_frame`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn thrust_reference_frame_stream(&self) -> crate::Result<crate::Stream<ReferenceFrame>> {
+        self.client.stream("SpaceCenter", "Thruster_get_ThrustReferenceFrame", &[codec::arg(0, &self.id)]).await
     }
 
     /// The position at which the thruster generates thrust, in the given reference frame. For gimballed engines, this takes into account the current rotation of the gimbal.
@@ -9859,6 +13905,12 @@ impl Thruster {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `thrust_position`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn thrust_position_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Thruster_ThrustPosition", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
+    }
+
     /// The direction of the force generated by the thruster, in the given reference frame. This is opposite to the direction in which the thruster expels propellant. For gimballed engines, this takes into account the current rotation of the gimbal.
     ///
     /// # Arguments
@@ -9871,6 +13923,12 @@ impl Thruster {
     pub async fn thrust_direction(&self, reference_frame: &ReferenceFrame) -> crate::Result<(f64, f64, f64)> {
         let data = self.client.invoke("SpaceCenter", "Thruster_ThrustDirection", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `thrust_direction`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn thrust_direction_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Thruster_ThrustDirection", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
     }
 
     /// The position at which the thruster generates thrust, when the engine is in its initial position (no gimballing), in the given reference frame.
@@ -9889,6 +13947,12 @@ impl Thruster {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `initial_thrust_position`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn initial_thrust_position_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Thruster_InitialThrustPosition", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
+    }
+
     /// The direction of the force generated by the thruster, when the engine is in its initial position (no gimballing), in the given reference frame. This is opposite to the direction in which the thruster expels propellant.
     ///
     /// # Arguments
@@ -9903,6 +13967,12 @@ impl Thruster {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `initial_thrust_direction`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn initial_thrust_direction_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Thruster_InitialThrustDirection", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
+    }
+
     /// Position around which the gimbal pivots.
     ///
     /// # Arguments
@@ -9915,6 +13985,12 @@ impl Thruster {
     pub async fn gimbal_position(&self, reference_frame: &ReferenceFrame) -> crate::Result<(f64, f64, f64)> {
         let data = self.client.invoke("SpaceCenter", "Thruster_GimbalPosition", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `gimbal_position`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn gimbal_position_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Thruster_GimbalPosition", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
     }
 }
 
@@ -9977,10 +14053,22 @@ impl Vessel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `auto_pilot`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn auto_pilot_stream(&self) -> crate::Result<crate::Stream<AutoPilot>> {
+        self.client.stream("SpaceCenter", "Vessel_get_AutoPilot", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The maximum torque that the aerodynamic control surfaces can generate. Returns the torques in `N.m` around each of the coordinate axes of the vessels reference frame (`SpaceCenter.ReferenceFrame`). These axes are equivalent to the pitch, roll and yaw axes of the vessel.
     pub async fn available_control_surface_torque(&self) -> crate::Result<((f64, f64, f64), (f64, f64, f64))> {
         let data = self.client.invoke("SpaceCenter", "Vessel_get_AvailableControlSurfaceTorque", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `available_control_surface_torque`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn available_control_surface_torque_stream(&self) -> crate::Result<crate::Stream<((f64, f64, f64), (f64, f64, f64))>> {
+        self.client.stream("SpaceCenter", "Vessel_get_AvailableControlSurfaceTorque", &[codec::arg(0, &self.id)]).await
     }
 
     /// The maximum torque that the currently active and gimballed engines can generate. Returns the torques in `N.m` around each of the coordinate axes of the vessels reference frame (`SpaceCenter.ReferenceFrame`). These axes are equivalent to the pitch, roll and yaw axes of the vessel.
@@ -9989,10 +14077,22 @@ impl Vessel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `available_engine_torque`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn available_engine_torque_stream(&self) -> crate::Result<crate::Stream<((f64, f64, f64), (f64, f64, f64))>> {
+        self.client.stream("SpaceCenter", "Vessel_get_AvailableEngineTorque", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The maximum torque that parts (excluding reaction wheels, gimballed engines, RCS and control surfaces) can generate. Returns the torques in `N.m` around each of the coordinate axes of the vessels reference frame (`SpaceCenter.ReferenceFrame`). These axes are equivalent to the pitch, roll and yaw axes of the vessel.
     pub async fn available_other_torque(&self) -> crate::Result<((f64, f64, f64), (f64, f64, f64))> {
         let data = self.client.invoke("SpaceCenter", "Vessel_get_AvailableOtherTorque", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `available_other_torque`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn available_other_torque_stream(&self) -> crate::Result<crate::Stream<((f64, f64, f64), (f64, f64, f64))>> {
+        self.client.stream("SpaceCenter", "Vessel_get_AvailableOtherTorque", &[codec::arg(0, &self.id)]).await
     }
 
     /// The maximum torque that the currently active RCS thrusters can generate. Returns the torques in `N.m` around each of the coordinate axes of the vessels reference frame (`SpaceCenter.ReferenceFrame`). These axes are equivalent to the pitch, roll and yaw axes of the vessel.
@@ -10001,10 +14101,22 @@ impl Vessel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `available_rcs_torque`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn available_rcs_torque_stream(&self) -> crate::Result<crate::Stream<((f64, f64, f64), (f64, f64, f64))>> {
+        self.client.stream("SpaceCenter", "Vessel_get_AvailableRCSTorque", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The maximum torque that the currently active and powered reaction wheels can generate. Returns the torques in `N.m` around each of the coordinate axes of the vessels reference frame (`SpaceCenter.ReferenceFrame`). These axes are equivalent to the pitch, roll and yaw axes of the vessel.
     pub async fn available_reaction_wheel_torque(&self) -> crate::Result<((f64, f64, f64), (f64, f64, f64))> {
         let data = self.client.invoke("SpaceCenter", "Vessel_get_AvailableReactionWheelTorque", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `available_reaction_wheel_torque`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn available_reaction_wheel_torque_stream(&self) -> crate::Result<crate::Stream<((f64, f64, f64), (f64, f64, f64))>> {
+        self.client.stream("SpaceCenter", "Vessel_get_AvailableReactionWheelTorque", &[codec::arg(0, &self.id)]).await
     }
 
     /// Gets the total available thrust that can be produced by the vessel's active engines, in Newtons. This is computed by summing `SpaceCenter.Engine.AvailableThrust` for every active engine in the vessel.
@@ -10013,10 +14125,22 @@ impl Vessel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `available_thrust`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn available_thrust_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Vessel_get_AvailableThrust", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The maximum torque that the vessel generates. Includes contributions from reaction wheels, RCS, gimballed engines and aerodynamic control surfaces. Returns the torques in `N.m` around each of the coordinate axes of the vessels reference frame (`SpaceCenter.ReferenceFrame`). These axes are equivalent to the pitch, roll and yaw axes of the vessel.
     pub async fn available_torque(&self) -> crate::Result<((f64, f64, f64), (f64, f64, f64))> {
         let data = self.client.invoke("SpaceCenter", "Vessel_get_AvailableTorque", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `available_torque`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn available_torque_stream(&self) -> crate::Result<crate::Stream<((f64, f64, f64), (f64, f64, f64))>> {
+        self.client.stream("SpaceCenter", "Vessel_get_AvailableTorque", &[codec::arg(0, &self.id)]).await
     }
 
     /// The name of the biome the vessel is currently in.
@@ -10025,10 +14149,22 @@ impl Vessel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `biome`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn biome_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "Vessel_get_Biome", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Returns a `SpaceCenter.Comms` object that can be used to interact with CommNet for this vessel.
     pub async fn comms(&self) -> crate::Result<Comms> {
         let data = self.client.invoke("SpaceCenter", "Vessel_get_Comms", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `comms`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn comms_stream(&self) -> crate::Result<crate::Stream<Comms>> {
+        self.client.stream("SpaceCenter", "Vessel_get_Comms", &[codec::arg(0, &self.id)]).await
     }
 
     /// Returns a `SpaceCenter.Control` object that can be used to manipulate the vessel's control inputs. For example, its pitch/yaw/roll controls, RCS and thrust.
@@ -10037,10 +14173,22 @@ impl Vessel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `control`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn control_stream(&self) -> crate::Result<crate::Stream<Control>> {
+        self.client.stream("SpaceCenter", "Vessel_get_Control", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The crew in the vessel.
     pub async fn crew(&self) -> crate::Result<Vec<CrewMember>> {
         let data = self.client.invoke("SpaceCenter", "Vessel_get_Crew", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `crew`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn crew_stream(&self) -> crate::Result<crate::Stream<Vec<CrewMember>>> {
+        self.client.stream("SpaceCenter", "Vessel_get_Crew", &[codec::arg(0, &self.id)]).await
     }
 
     /// The number of crew that can occupy the vessel.
@@ -10049,10 +14197,22 @@ impl Vessel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `crew_capacity`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn crew_capacity_stream(&self) -> crate::Result<crate::Stream<i32>> {
+        self.client.stream("SpaceCenter", "Vessel_get_CrewCapacity", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The number of crew that are occupying the vessel.
     pub async fn crew_count(&self) -> crate::Result<i32> {
         let data = self.client.invoke("SpaceCenter", "Vessel_get_CrewCount", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `crew_count`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn crew_count_stream(&self) -> crate::Result<crate::Stream<i32>> {
+        self.client.stream("SpaceCenter", "Vessel_get_CrewCount", &[codec::arg(0, &self.id)]).await
     }
 
     /// The total mass of the vessel, excluding resources, in kg.
@@ -10061,10 +14221,22 @@ impl Vessel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `dry_mass`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn dry_mass_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Vessel_get_DryMass", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The inertia tensor of the vessel around its center of mass, in the vessels reference frame (`SpaceCenter.ReferenceFrame`). Returns the 3x3 matrix as a list of elements, in row-major order.
     pub async fn inertia_tensor(&self) -> crate::Result<Vec<f64>> {
         let data = self.client.invoke("SpaceCenter", "Vessel_get_InertiaTensor", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `inertia_tensor`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn inertia_tensor_stream(&self) -> crate::Result<crate::Stream<Vec<f64>>> {
+        self.client.stream("SpaceCenter", "Vessel_get_InertiaTensor", &[codec::arg(0, &self.id)]).await
     }
 
     /// The combined specific impulse of all active engines at sea level on Kerbin, in seconds. This is computed using the formula [described here](https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines).
@@ -10073,10 +14245,22 @@ impl Vessel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `kerbin_sea_level_specific_impulse`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn kerbin_sea_level_specific_impulse_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Vessel_get_KerbinSeaLevelSpecificImpulse", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The mission elapsed time in seconds.
     pub async fn met(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Vessel_get_MET", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `met`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn met_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Vessel_get_MET", &[codec::arg(0, &self.id)]).await
     }
 
     /// The total mass of the vessel, including resources, in kg.
@@ -10085,10 +14269,22 @@ impl Vessel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `mass`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn mass_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Vessel_get_Mass", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The total maximum thrust that can be produced by the vessel's active engines, in Newtons. This is computed by summing `SpaceCenter.Engine.MaxThrust` for every active engine.
     pub async fn max_thrust(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Vessel_get_MaxThrust", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `max_thrust`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn max_thrust_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Vessel_get_MaxThrust", &[codec::arg(0, &self.id)]).await
     }
 
     /// The total maximum thrust that can be produced by the vessel's active engines when the vessel is in a vacuum, in Newtons. This is computed by summing `SpaceCenter.Engine.MaxVacuumThrust` for every active engine.
@@ -10097,10 +14293,22 @@ impl Vessel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `max_vacuum_thrust`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn max_vacuum_thrust_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Vessel_get_MaxVacuumThrust", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The moment of inertia of the vessel around its center of mass in `kg.m^2`. The inertia values in the returned 3-tuple are around the pitch, roll and yaw directions respectively. This corresponds to the vessels reference frame (`SpaceCenter.ReferenceFrame`).
     pub async fn moment_of_inertia(&self) -> crate::Result<(f64, f64, f64)> {
         let data = self.client.invoke("SpaceCenter", "Vessel_get_MomentOfInertia", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `moment_of_inertia`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn moment_of_inertia_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Vessel_get_MomentOfInertia", &[codec::arg(0, &self.id)]).await
     }
 
     /// The name of the vessel.
@@ -10109,10 +14317,22 @@ impl Vessel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `name`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn name_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "Vessel_get_Name", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The current orbit of the vessel.
     pub async fn orbit(&self) -> crate::Result<Orbit> {
         let data = self.client.invoke("SpaceCenter", "Vessel_get_Orbit", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `orbit`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn orbit_stream(&self) -> crate::Result<crate::Stream<Orbit>> {
+        self.client.stream("SpaceCenter", "Vessel_get_Orbit", &[codec::arg(0, &self.id)]).await
     }
 
     /// The reference frame that is fixed relative to the vessel, and orientated with the vessels orbital prograde/normal/radial directions.
@@ -10128,16 +14348,34 @@ impl Vessel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `orbital_reference_frame`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn orbital_reference_frame_stream(&self) -> crate::Result<crate::Stream<ReferenceFrame>> {
+        self.client.stream("SpaceCenter", "Vessel_get_OrbitalReferenceFrame", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A `SpaceCenter.Parts` object, that can used to interact with the parts that make up this vessel.
     pub async fn parts(&self) -> crate::Result<Parts> {
         let data = self.client.invoke("SpaceCenter", "Vessel_get_Parts", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `parts`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn parts_stream(&self) -> crate::Result<crate::Stream<Parts>> {
+        self.client.stream("SpaceCenter", "Vessel_get_Parts", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the vessel is recoverable.
     pub async fn recoverable(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Vessel_get_Recoverable", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `recoverable`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn recoverable_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Vessel_get_Recoverable", &[codec::arg(0, &self.id)]).await
     }
 
     /// The reference frame that is fixed relative to the vessel, and orientated with the vessel.
@@ -10151,10 +14389,22 @@ impl Vessel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `reference_frame`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn reference_frame_stream(&self) -> crate::Result<crate::Stream<ReferenceFrame>> {
+        self.client.stream("SpaceCenter", "Vessel_get_ReferenceFrame", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A `SpaceCenter.Resources` object, that can used to get information about resources stored in the vessel.
     pub async fn resources(&self) -> crate::Result<Resources> {
         let data = self.client.invoke("SpaceCenter", "Vessel_get_Resources", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `resources`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn resources_stream(&self) -> crate::Result<crate::Stream<Resources>> {
+        self.client.stream("SpaceCenter", "Vessel_get_Resources", &[codec::arg(0, &self.id)]).await
     }
 
     /// The situation the vessel is in.
@@ -10163,10 +14413,22 @@ impl Vessel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `situation`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn situation_stream(&self) -> crate::Result<crate::Stream<VesselSituation>> {
+        self.client.stream("SpaceCenter", "Vessel_get_Situation", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The combined specific impulse of all active engines, in seconds. This is computed using the formula [described here](https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines).
     pub async fn specific_impulse(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Vessel_get_SpecificImpulse", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `specific_impulse`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn specific_impulse_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Vessel_get_SpecificImpulse", &[codec::arg(0, &self.id)]).await
     }
 
     /// The reference frame that is fixed relative to the vessel, and orientated with the surface of the body being orbited.
@@ -10182,6 +14444,12 @@ impl Vessel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `surface_reference_frame`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn surface_reference_frame_stream(&self) -> crate::Result<crate::Stream<ReferenceFrame>> {
+        self.client.stream("SpaceCenter", "Vessel_get_SurfaceReferenceFrame", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The reference frame that is fixed relative to the vessel, and orientated with the velocity vector of the vessel relative to the surface of the body being orbited.
     /// - The origin is at the center of mass of the vessel.
     /// - The axes rotate with the vessel's velocity vector.
@@ -10193,10 +14461,22 @@ impl Vessel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `surface_velocity_reference_frame`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn surface_velocity_reference_frame_stream(&self) -> crate::Result<crate::Stream<ReferenceFrame>> {
+        self.client.stream("SpaceCenter", "Vessel_get_SurfaceVelocityReferenceFrame", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The total thrust currently being produced by the vessel's engines, in Newtons. This is computed by summing `SpaceCenter.Engine.Thrust` for every engine in the vessel.
     pub async fn thrust(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Vessel_get_Thrust", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `thrust`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn thrust_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Vessel_get_Thrust", &[codec::arg(0, &self.id)]).await
     }
 
     /// The type of the vessel.
@@ -10205,10 +14485,22 @@ impl Vessel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `r#type`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn r#type_stream(&self) -> crate::Result<crate::Stream<VesselType>> {
+        self.client.stream("SpaceCenter", "Vessel_get_Type", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The combined vacuum specific impulse of all active engines, in seconds. This is computed using the formula [described here](https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines).
     pub async fn vacuum_specific_impulse(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Vessel_get_VacuumSpecificImpulse", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `vacuum_specific_impulse`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn vacuum_specific_impulse_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Vessel_get_VacuumSpecificImpulse", &[codec::arg(0, &self.id)]).await
     }
 
     /// The name of the vessel.
@@ -10243,6 +14535,16 @@ impl Vessel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `flight`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn flight_stream(&self, reference_frame: Option<ReferenceFrame>) -> crate::Result<crate::Stream<Flight>> {
+        let mut args = vec![codec::arg(0, &self.id)];
+        if let Some(v) = &reference_frame {
+            args.push(codec::arg(1, v));
+        }
+        self.client.stream("SpaceCenter", "Vessel_Flight", &args).await
+    }
+
     /// Returns a `SpaceCenter.Resources` object, that can used to get information about resources stored in a given `stage`.
     ///
     /// # Arguments
@@ -10256,6 +14558,16 @@ impl Vessel {
         }
         let data = self.client.invoke("SpaceCenter", "Vessel_ResourcesInDecoupleStage", &args).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `resources_in_decouple_stage`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn resources_in_decouple_stage_stream(&self, stage: i32, cumulative: Option<bool>) -> crate::Result<crate::Stream<Resources>> {
+        let mut args = vec![codec::arg(0, &self.id), codec::arg(1, &stage)];
+        if let Some(v) = &cumulative {
+            args.push(codec::arg(2, v));
+        }
+        self.client.stream("SpaceCenter", "Vessel_ResourcesInDecoupleStage", &args).await
     }
 
     /// The position of the center of mass of the vessel, in the given reference frame.
@@ -10272,6 +14584,12 @@ impl Vessel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `position`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn position_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Vessel_Position", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
+    }
+
     /// The axis-aligned bounding box of the vessel in the given reference frame.
     ///
     /// # Arguments
@@ -10284,6 +14602,12 @@ impl Vessel {
     pub async fn bounding_box(&self, reference_frame: &ReferenceFrame) -> crate::Result<((f64, f64, f64), (f64, f64, f64))> {
         let data = self.client.invoke("SpaceCenter", "Vessel_BoundingBox", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `bounding_box`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn bounding_box_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<((f64, f64, f64), (f64, f64, f64))>> {
+        self.client.stream("SpaceCenter", "Vessel_BoundingBox", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
     }
 
     /// The velocity of the center of mass of the vessel, in the given reference frame.
@@ -10300,6 +14624,12 @@ impl Vessel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `velocity`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn velocity_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Vessel_Velocity", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
+    }
+
     /// The rotation of the vessel, in the given reference frame.
     ///
     /// # Arguments
@@ -10312,6 +14642,12 @@ impl Vessel {
     pub async fn rotation(&self, reference_frame: &ReferenceFrame) -> crate::Result<(f64, f64, f64, f64)> {
         let data = self.client.invoke("SpaceCenter", "Vessel_Rotation", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `rotation`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn rotation_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Vessel_Rotation", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
     }
 
     /// The direction in which the vessel is pointing, in the given reference frame.
@@ -10328,6 +14664,12 @@ impl Vessel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `direction`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn direction_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Vessel_Direction", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
+    }
+
     /// The angular velocity of the vessel, in the given reference frame.
     ///
     /// # Arguments
@@ -10340,6 +14682,12 @@ impl Vessel {
     pub async fn angular_velocity(&self, reference_frame: &ReferenceFrame) -> crate::Result<(f64, f64, f64)> {
         let data = self.client.invoke("SpaceCenter", "Vessel_AngularVelocity", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `angular_velocity`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn angular_velocity_stream(&self, reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "Vessel_AngularVelocity", &[codec::arg(0, &self.id), codec::arg(1, &reference_frame)]).await
     }
 }
 
@@ -10402,10 +14750,22 @@ impl Waypoint {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `bedrock_altitude`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn bedrock_altitude_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Waypoint_get_BedrockAltitude", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The celestial body the waypoint is attached to.
     pub async fn body(&self) -> crate::Result<CelestialBody> {
         let data = self.client.invoke("SpaceCenter", "Waypoint_get_Body", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `body`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn body_stream(&self) -> crate::Result<crate::Stream<CelestialBody>> {
+        self.client.stream("SpaceCenter", "Waypoint_get_Body", &[codec::arg(0, &self.id)]).await
     }
 
     /// `true` if this waypoint is part of a set of clustered waypoints with greek letter names appended (Alpha, Beta, Gamma, etc). If `true`, there is a one-to-one correspondence with the greek letter name and the `SpaceCenter.Waypoint.Index`.
@@ -10414,10 +14774,22 @@ impl Waypoint {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `clustered`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn clustered_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Waypoint_get_Clustered", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The seed of the icon color. See `SpaceCenter.WaypointManager.Colors` for example colors.
     pub async fn color(&self) -> crate::Result<i32> {
         let data = self.client.invoke("SpaceCenter", "Waypoint_get_Color", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `color`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn color_stream(&self) -> crate::Result<crate::Stream<i32>> {
+        self.client.stream("SpaceCenter", "Waypoint_get_Color", &[codec::arg(0, &self.id)]).await
     }
 
     /// The associated contract.
@@ -10426,10 +14798,22 @@ impl Waypoint {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `contract`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn contract_stream(&self) -> crate::Result<crate::Stream<Contract>> {
+        self.client.stream("SpaceCenter", "Waypoint_get_Contract", &[codec::arg(0, &self.id)]).await
+    }
+
     /// `true` if the waypoint is attached to the ground.
     pub async fn grounded(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Waypoint_get_Grounded", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `grounded`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn grounded_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Waypoint_get_Grounded", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the waypoint belongs to a contract.
@@ -10438,10 +14822,22 @@ impl Waypoint {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `has_contract`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn has_contract_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Waypoint_get_HasContract", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The icon of the waypoint.
     pub async fn icon(&self) -> crate::Result<String> {
         let data = self.client.invoke("SpaceCenter", "Waypoint_get_Icon", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `icon`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn icon_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "Waypoint_get_Icon", &[codec::arg(0, &self.id)]).await
     }
 
     /// The integer index of this waypoint within its cluster of sibling waypoints. In other words, when you have a cluster of waypoints called "Somewhere Alpha", "Somewhere Beta" and "Somewhere Gamma", the alpha site has index 0, the beta site has index 1 and the gamma site has index 2. When `SpaceCenter.Waypoint.Clustered` is `false`, this is zero.
@@ -10450,10 +14846,22 @@ impl Waypoint {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `index`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn index_stream(&self) -> crate::Result<crate::Stream<i32>> {
+        self.client.stream("SpaceCenter", "Waypoint_get_Index", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The latitude of the waypoint.
     pub async fn latitude(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Waypoint_get_Latitude", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `latitude`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn latitude_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Waypoint_get_Latitude", &[codec::arg(0, &self.id)]).await
     }
 
     /// The longitude of the waypoint.
@@ -10462,10 +14870,22 @@ impl Waypoint {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `longitude`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn longitude_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Waypoint_get_Longitude", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The altitude of the waypoint above sea level, in meters.
     pub async fn mean_altitude(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Waypoint_get_MeanAltitude", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `mean_altitude`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn mean_altitude_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Waypoint_get_MeanAltitude", &[codec::arg(0, &self.id)]).await
     }
 
     /// The name of the waypoint as it appears on the map and the contract.
@@ -10474,16 +14894,34 @@ impl Waypoint {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `name`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn name_stream(&self) -> crate::Result<crate::Stream<String>> {
+        self.client.stream("SpaceCenter", "Waypoint_get_Name", &[codec::arg(0, &self.id)]).await
+    }
+
     /// `true` if the waypoint is near to the surface of a body.
     pub async fn near_surface(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Waypoint_get_NearSurface", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `near_surface`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn near_surface_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Waypoint_get_NearSurface", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The altitude of the waypoint above the surface of the body or sea level, whichever is closer, in meters.
     pub async fn surface_altitude(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "Waypoint_get_SurfaceAltitude", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `surface_altitude`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn surface_altitude_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "Waypoint_get_SurfaceAltitude", &[codec::arg(0, &self.id)]).await
     }
 
     /// The altitude of the waypoint above the surface of the body, in meters. When over water, this is the altitude above the sea floor.
@@ -10606,16 +15044,34 @@ impl WaypointManager {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `colors`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn colors_stream(&self) -> crate::Result<crate::Stream<std::collections::HashMap<String, i32>>> {
+        self.client.stream("SpaceCenter", "WaypointManager_get_Colors", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Returns all available icons (from "GameData/Squad/Contracts/Icons/").
     pub async fn icons(&self) -> crate::Result<Vec<String>> {
         let data = self.client.invoke("SpaceCenter", "WaypointManager_get_Icons", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `icons`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn icons_stream(&self) -> crate::Result<crate::Stream<Vec<String>>> {
+        self.client.stream("SpaceCenter", "WaypointManager_get_Icons", &[codec::arg(0, &self.id)]).await
+    }
+
     /// A list of all existing waypoints.
     pub async fn waypoints(&self) -> crate::Result<Vec<Waypoint>> {
         let data = self.client.invoke("SpaceCenter", "WaypointManager_get_Waypoints", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `waypoints`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn waypoints_stream(&self) -> crate::Result<crate::Stream<Vec<Waypoint>>> {
+        self.client.stream("SpaceCenter", "WaypointManager_get_Waypoints", &[codec::arg(0, &self.id)]).await
     }
 
     /// Creates a waypoint at the given position at ground level, and returns a `SpaceCenter.Waypoint` object that can be used to modify it.
@@ -10631,6 +15087,12 @@ impl WaypointManager {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `add_waypoint`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn add_waypoint_stream(&self, latitude: f64, longitude: f64, body: &CelestialBody, name: &str) -> crate::Result<crate::Stream<Waypoint>> {
+        self.client.stream("SpaceCenter", "WaypointManager_AddWaypoint", &[codec::arg(0, &self.id), codec::arg(1, &latitude), codec::arg(2, &longitude), codec::arg(3, &body), codec::arg(4, &name)]).await
+    }
+
     /// Creates a waypoint at the given position and altitude, and returns a `SpaceCenter.Waypoint` object that can be used to modify it.
     ///
     /// # Arguments
@@ -10643,6 +15105,12 @@ impl WaypointManager {
     pub async fn add_waypoint_at_altitude(&self, latitude: f64, longitude: f64, altitude: f64, body: &CelestialBody, name: &str) -> crate::Result<Waypoint> {
         let data = self.client.invoke("SpaceCenter", "WaypointManager_AddWaypointAtAltitude", &[codec::arg(0, &self.id), codec::arg(1, &latitude), codec::arg(2, &longitude), codec::arg(3, &altitude), codec::arg(4, &body), codec::arg(5, &name)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `add_waypoint_at_altitude`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn add_waypoint_at_altitude_stream(&self, latitude: f64, longitude: f64, altitude: f64, body: &CelestialBody, name: &str) -> crate::Result<crate::Stream<Waypoint>> {
+        self.client.stream("SpaceCenter", "WaypointManager_AddWaypointAtAltitude", &[codec::arg(0, &self.id), codec::arg(1, &latitude), codec::arg(2, &longitude), codec::arg(3, &altitude), codec::arg(4, &body), codec::arg(5, &name)]).await
     }
 }
 
@@ -10705,10 +15173,22 @@ impl Wheel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `auto_friction_control`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn auto_friction_control_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Wheel_get_AutoFrictionControl", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The braking force, as a percentage of maximum, when the brakes are applied.
     pub async fn brakes(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Wheel_get_Brakes", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `brakes`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn brakes_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Wheel_get_Brakes", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the wheel is broken.
@@ -10717,10 +15197,22 @@ impl Wheel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `broken`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn broken_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Wheel_get_Broken", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Current deflection of the wheel.
     pub async fn deflection(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Wheel_get_Deflection", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `deflection`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn deflection_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Wheel_get_Deflection", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the wheel is deployable.
@@ -10729,10 +15221,22 @@ impl Wheel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `deployable`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn deployable_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Wheel_get_Deployable", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the wheel is deployed.
     pub async fn deployed(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Wheel_get_Deployed", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `deployed`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn deployed_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Wheel_get_Deployed", &[codec::arg(0, &self.id)]).await
     }
 
     /// Manual setting for the motor limiter. Only takes effect if the wheel has automatic traction control disabled. A value between 0 and 100 inclusive.
@@ -10741,10 +15245,22 @@ impl Wheel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `drive_limiter`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn drive_limiter_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Wheel_get_DriveLimiter", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the wheel is touching the ground.
     pub async fn grounded(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Wheel_get_Grounded", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `grounded`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn grounded_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Wheel_get_Grounded", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the wheel has brakes.
@@ -10753,10 +15269,22 @@ impl Wheel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `has_brakes`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn has_brakes_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Wheel_get_HasBrakes", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the wheel has suspension.
     pub async fn has_suspension(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Wheel_get_HasSuspension", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `has_suspension`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn has_suspension_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Wheel_get_HasSuspension", &[codec::arg(0, &self.id)]).await
     }
 
     /// Manual friction control value. Only has an effect if automatic friction control is disabled. A value between 0 and 5 inclusive.
@@ -10765,10 +15293,22 @@ impl Wheel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `manual_friction_control`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn manual_friction_control_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Wheel_get_ManualFrictionControl", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the motor is enabled.
     pub async fn motor_enabled(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Wheel_get_MotorEnabled", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `motor_enabled`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn motor_enabled_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Wheel_get_MotorEnabled", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the direction of the motor is inverted.
@@ -10777,10 +15317,22 @@ impl Wheel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `motor_inverted`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn motor_inverted_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Wheel_get_MotorInverted", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The output of the motor. This is the torque currently being generated, in Newton meters.
     pub async fn motor_output(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Wheel_get_MotorOutput", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `motor_output`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn motor_output_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Wheel_get_MotorOutput", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the direction of the motor is inverted.
@@ -10789,10 +15341,22 @@ impl Wheel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `motor_state`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn motor_state_stream(&self) -> crate::Result<crate::Stream<MotorState>> {
+        self.client.stream("SpaceCenter", "Wheel_get_MotorState", &[codec::arg(0, &self.id)]).await
+    }
+
     /// The part object for this wheel.
     pub async fn part(&self) -> crate::Result<Part> {
         let data = self.client.invoke("SpaceCenter", "Wheel_get_Part", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn part_stream(&self) -> crate::Result<crate::Stream<Part>> {
+        self.client.stream("SpaceCenter", "Wheel_get_Part", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the wheel is powered by a motor.
@@ -10801,10 +15365,22 @@ impl Wheel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `powered`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn powered_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Wheel_get_Powered", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Radius of the wheel, in meters.
     pub async fn radius(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Wheel_get_Radius", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `radius`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn radius_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Wheel_get_Radius", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the wheel is repairable.
@@ -10813,10 +15389,22 @@ impl Wheel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `repairable`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn repairable_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Wheel_get_Repairable", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Current slip of the wheel.
     pub async fn slip(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Wheel_get_Slip", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `slip`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn slip_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Wheel_get_Slip", &[codec::arg(0, &self.id)]).await
     }
 
     /// The current state of the wheel.
@@ -10825,10 +15413,22 @@ impl Wheel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `state`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn state_stream(&self) -> crate::Result<crate::Stream<WheelState>> {
+        self.client.stream("SpaceCenter", "Wheel_get_State", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the wheel has steering.
     pub async fn steerable(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Wheel_get_Steerable", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `steerable`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn steerable_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Wheel_get_Steerable", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether the wheel steering is enabled.
@@ -10837,10 +15437,22 @@ impl Wheel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `steering_enabled`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn steering_enabled_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Wheel_get_SteeringEnabled", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether the wheel steering is inverted.
     pub async fn steering_inverted(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Wheel_get_SteeringInverted", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `steering_inverted`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn steering_inverted_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Wheel_get_SteeringInverted", &[codec::arg(0, &self.id)]).await
     }
 
     /// Current stress on the wheel.
@@ -10849,10 +15461,22 @@ impl Wheel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `stress`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn stress_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Wheel_get_Stress", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Current stress on the wheel as a percentage of its stress tolerance.
     pub async fn stress_percentage(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Wheel_get_StressPercentage", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `stress_percentage`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn stress_percentage_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Wheel_get_StressPercentage", &[codec::arg(0, &self.id)]).await
     }
 
     /// Stress tolerance of the wheel.
@@ -10861,10 +15485,22 @@ impl Wheel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `stress_tolerance`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn stress_tolerance_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Wheel_get_StressTolerance", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Suspension damper strength, as set in the editor.
     pub async fn suspension_damper_strength(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Wheel_get_SuspensionDamperStrength", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `suspension_damper_strength`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn suspension_damper_strength_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Wheel_get_SuspensionDamperStrength", &[codec::arg(0, &self.id)]).await
     }
 
     /// Suspension spring strength, as set in the editor.
@@ -10873,16 +15509,34 @@ impl Wheel {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `suspension_spring_strength`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn suspension_spring_strength_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Wheel_get_SuspensionSpringStrength", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Setting for the traction control. Only takes effect if the wheel has automatic traction control enabled. A value between 0 and 5 inclusive.
     pub async fn traction_control(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "Wheel_get_TractionControl", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `traction_control`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn traction_control_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "Wheel_get_TractionControl", &[codec::arg(0, &self.id)]).await
+    }
+
     /// Whether automatic traction control is enabled. A wheel only has traction control if it is powered.
     pub async fn traction_control_enabled(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "Wheel_get_TractionControlEnabled", &[codec::arg(0, &self.id)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `traction_control_enabled`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn traction_control_enabled_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "Wheel_get_TractionControlEnabled", &[codec::arg(0, &self.id)]).await
     }
 
     /// Whether automatic friction control is enabled.
@@ -11002,10 +15656,22 @@ impl SpaceCenter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `active_vessel`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn active_vessel_stream(&self) -> crate::Result<crate::Stream<Vessel>> {
+        self.client.stream("SpaceCenter", "get_ActiveVessel", &[]).await
+    }
+
     /// The Alarm Clock Module.
     pub async fn alarm_clock(&self) -> crate::Result<AlarmClock> {
         let data = self.client.invoke("SpaceCenter", "get_AlarmClock", &[]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `alarm_clock`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn alarm_clock_stream(&self) -> crate::Result<crate::Stream<AlarmClock>> {
+        self.client.stream("SpaceCenter", "get_AlarmClock", &[]).await
     }
 
     /// A dictionary of all celestial bodies (planets, moons, etc.) in the game, keyed by the name of the body.
@@ -11014,10 +15680,22 @@ impl SpaceCenter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `bodies`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn bodies_stream(&self) -> crate::Result<crate::Stream<std::collections::HashMap<String, CelestialBody>>> {
+        self.client.stream("SpaceCenter", "get_Bodies", &[]).await
+    }
+
     /// An object that can be used to control the camera.
     pub async fn camera(&self) -> crate::Result<Camera> {
         let data = self.client.invoke("SpaceCenter", "get_Camera", &[]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `camera`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn camera_stream(&self) -> crate::Result<crate::Stream<Camera>> {
+        self.client.stream("SpaceCenter", "get_Camera", &[]).await
     }
 
     /// The contract manager.
@@ -11026,10 +15704,22 @@ impl SpaceCenter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `contract_manager`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn contract_manager_stream(&self) -> crate::Result<crate::Stream<ContractManager>> {
+        self.client.stream("SpaceCenter", "get_ContractManager", &[]).await
+    }
+
     /// Whether [Ferram Aerospace Research](https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/) is installed.
     pub async fn far_available(&self) -> crate::Result<bool> {
         let data = self.client.invoke("SpaceCenter", "get_FARAvailable", &[]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `far_available`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn far_available_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "get_FARAvailable", &[]).await
     }
 
     /// The current amount of funds.
@@ -11038,10 +15728,22 @@ impl SpaceCenter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `funds`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn funds_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "get_Funds", &[]).await
+    }
+
     /// The value of the [gravitational constant](https://en.wikipedia.org/wiki/Gravitational_constant) G in `N(m/kg)^2`.
     pub async fn g(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "get_G", &[]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `g`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn g_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "get_G", &[]).await
     }
 
     /// The current mode the game is in.
@@ -11050,10 +15752,22 @@ impl SpaceCenter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `game_mode`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn game_mode_stream(&self) -> crate::Result<crate::Stream<GameMode>> {
+        self.client.stream("SpaceCenter", "get_GameMode", &[]).await
+    }
+
     /// The current maximum regular "on-rails" warp factor that can be set. A value between 0 and 7 inclusive. See [the KSP wiki](https://wiki.kerbalspaceprogram.com/wiki/Time_warp) for details.
     pub async fn maximum_rails_warp_factor(&self) -> crate::Result<i32> {
         let data = self.client.invoke("SpaceCenter", "get_MaximumRailsWarpFactor", &[]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `maximum_rails_warp_factor`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn maximum_rails_warp_factor_stream(&self) -> crate::Result<crate::Stream<i32>> {
+        self.client.stream("SpaceCenter", "get_MaximumRailsWarpFactor", &[]).await
     }
 
     /// Whether the navball is visible.
@@ -11062,10 +15776,22 @@ impl SpaceCenter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `navball`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn navball_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "get_Navball", &[]).await
+    }
+
     /// The physical time warp rate. A value between 0 and 3 inclusive. 0 means no time warp. Returns 0 if regular "on-rails" time warp is active.
     pub async fn physics_warp_factor(&self) -> crate::Result<i32> {
         let data = self.client.invoke("SpaceCenter", "get_PhysicsWarpFactor", &[]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `physics_warp_factor`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn physics_warp_factor_stream(&self) -> crate::Result<crate::Stream<i32>> {
+        self.client.stream("SpaceCenter", "get_PhysicsWarpFactor", &[]).await
     }
 
     /// The time warp rate, using regular "on-rails" time warp. A value between 0 and 7 inclusive. 0 means no time warp. Returns 0 if physical time warp is active. If requested time warp factor cannot be set, it will be set to the next lowest possible value. For example, if the vessel is too close to a planet. See [the KSP wiki](https://wiki.kerbalspaceprogram.com/wiki/Time_warp) for details.
@@ -11074,10 +15800,22 @@ impl SpaceCenter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `rails_warp_factor`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn rails_warp_factor_stream(&self) -> crate::Result<crate::Stream<i32>> {
+        self.client.stream("SpaceCenter", "get_RailsWarpFactor", &[]).await
+    }
+
     /// The current amount of reputation.
     pub async fn reputation(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "get_Reputation", &[]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `reputation`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn reputation_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "get_Reputation", &[]).await
     }
 
     /// The current amount of science.
@@ -11086,10 +15824,22 @@ impl SpaceCenter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `science`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn science_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "get_Science", &[]).await
+    }
+
     /// The currently targeted celestial body.
     pub async fn target_body(&self) -> crate::Result<Option<CelestialBody>> {
         let data = self.client.invoke("SpaceCenter", "get_TargetBody", &[]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `target_body`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn target_body_stream(&self) -> crate::Result<crate::Stream<Option<CelestialBody>>> {
+        self.client.stream("SpaceCenter", "get_TargetBody", &[]).await
     }
 
     /// The currently targeted docking port.
@@ -11098,10 +15848,22 @@ impl SpaceCenter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `target_docking_port`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn target_docking_port_stream(&self) -> crate::Result<crate::Stream<Option<DockingPort>>> {
+        self.client.stream("SpaceCenter", "get_TargetDockingPort", &[]).await
+    }
+
     /// The currently targeted vessel.
     pub async fn target_vessel(&self) -> crate::Result<Option<Vessel>> {
         let data = self.client.invoke("SpaceCenter", "get_TargetVessel", &[]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `target_vessel`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn target_vessel_stream(&self) -> crate::Result<crate::Stream<Option<Vessel>>> {
+        self.client.stream("SpaceCenter", "get_TargetVessel", &[]).await
     }
 
     /// Whether the UI is visible.
@@ -11110,10 +15872,22 @@ impl SpaceCenter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `ui_visible`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn ui_visible_stream(&self) -> crate::Result<crate::Stream<bool>> {
+        self.client.stream("SpaceCenter", "get_UIVisible", &[]).await
+    }
+
     /// The current universal time in seconds.
     pub async fn ut(&self) -> crate::Result<f64> {
         let data = self.client.invoke("SpaceCenter", "get_UT", &[]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `ut`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn ut_stream(&self) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "get_UT", &[]).await
     }
 
     /// A list of all the vessels in the game.
@@ -11122,10 +15896,22 @@ impl SpaceCenter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `vessels`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn vessels_stream(&self) -> crate::Result<crate::Stream<Vec<Vessel>>> {
+        self.client.stream("SpaceCenter", "get_Vessels", &[]).await
+    }
+
     /// The current warp factor. This is the index of the rate at which time is passing for either regular "on-rails" or physical time warp. Returns 0 if time warp is not active. When in on-rails time warp, this is equal to `SpaceCenter.RailsWarpFactor`, and in physics time warp, this is equal to `SpaceCenter.PhysicsWarpFactor`.
     pub async fn warp_factor(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "get_WarpFactor", &[]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `warp_factor`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn warp_factor_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "get_WarpFactor", &[]).await
     }
 
     /// The current time warp mode. Returns `SpaceCenter.WarpMode.None` if time warp is not active, `SpaceCenter.WarpMode.Rails` if regular "on-rails" time warp is active, or `SpaceCenter.WarpMode.Physics` if physical time warp is active.
@@ -11134,16 +15920,34 @@ impl SpaceCenter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `warp_mode`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn warp_mode_stream(&self) -> crate::Result<crate::Stream<WarpMode>> {
+        self.client.stream("SpaceCenter", "get_WarpMode", &[]).await
+    }
+
     /// The current warp rate. This is the rate at which time is passing for either on-rails or physical time warp. For example, a value of 10 means time is passing 10x faster than normal. Returns 1 if time warp is not active.
     pub async fn warp_rate(&self) -> crate::Result<f32> {
         let data = self.client.invoke("SpaceCenter", "get_WarpRate", &[]).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `warp_rate`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn warp_rate_stream(&self) -> crate::Result<crate::Stream<f32>> {
+        self.client.stream("SpaceCenter", "get_WarpRate", &[]).await
+    }
+
     /// The waypoint manager.
     pub async fn waypoint_manager(&self) -> crate::Result<WaypointManager> {
         let data = self.client.invoke("SpaceCenter", "get_WaypointManager", &[]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `waypoint_manager`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn waypoint_manager_stream(&self) -> crate::Result<crate::Stream<WaypointManager>> {
+        self.client.stream("SpaceCenter", "get_WaypointManager", &[]).await
     }
 
     /// The currently active vessel.
@@ -11208,6 +16012,12 @@ impl SpaceCenter {
     pub async fn launchable_vessels(&self, craft_directory: &str) -> crate::Result<Vec<String>> {
         let data = self.client.invoke("SpaceCenter", "LaunchableVessels", &[codec::arg(0, &craft_directory)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `launchable_vessels`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn launchable_vessels_stream(&self, craft_directory: &str) -> crate::Result<crate::Stream<Vec<String>>> {
+        self.client.stream("SpaceCenter", "LaunchableVessels", &[codec::arg(0, &craft_directory)]).await
     }
 
     /// Launch a vessel.
@@ -11305,6 +16115,16 @@ impl SpaceCenter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `can_rails_warp_at`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn can_rails_warp_at_stream(&self, factor: Option<i32>) -> crate::Result<crate::Stream<bool>> {
+        let mut args = vec![];
+        if let Some(v) = &factor {
+            args.push(codec::arg(0, v));
+        }
+        self.client.stream("SpaceCenter", "CanRailsWarpAt", &args).await
+    }
+
     /// Uses time acceleration to warp forward to a time in the future, specified by universal time `ut`. This call blocks until the desired time is reached. Uses regular "on-rails" or physical time warp as appropriate. For example, physical time warp is used when the active vessel is traveling through an atmosphere. When using regular "on-rails" time warp, the warp rate is limited by `max_rails_rate`, and when using physical time warp, the warp rate is limited by `max_physics_rate`.
     ///
     /// # Arguments
@@ -11344,6 +16164,12 @@ impl SpaceCenter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `transform_position`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn transform_position_stream(&self, position: (f64, f64, f64), from: &ReferenceFrame, to: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "TransformPosition", &[codec::arg(0, &position), codec::arg(1, &from), codec::arg(2, &to)]).await
+    }
+
     /// Converts a direction from one reference frame to another.
     ///
     /// # Arguments
@@ -11360,6 +16186,12 @@ impl SpaceCenter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `transform_direction`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn transform_direction_stream(&self, direction: (f64, f64, f64), from: &ReferenceFrame, to: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "TransformDirection", &[codec::arg(0, &direction), codec::arg(1, &from), codec::arg(2, &to)]).await
+    }
+
     /// Converts a rotation from one reference frame to another.
     ///
     /// # Arguments
@@ -11374,6 +16206,12 @@ impl SpaceCenter {
     pub async fn transform_rotation(&self, rotation: (f64, f64, f64, f64), from: &ReferenceFrame, to: &ReferenceFrame) -> crate::Result<(f64, f64, f64, f64)> {
         let data = self.client.invoke("SpaceCenter", "TransformRotation", &[codec::arg(0, &rotation), codec::arg(1, &from), codec::arg(2, &to)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `transform_rotation`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn transform_rotation_stream(&self, rotation: (f64, f64, f64, f64), from: &ReferenceFrame, to: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "TransformRotation", &[codec::arg(0, &rotation), codec::arg(1, &from), codec::arg(2, &to)]).await
     }
 
     /// Converts a velocity (acting at the specified position) from one reference frame to another. The position is required to take the relative angular velocity of the reference frames into account.
@@ -11393,6 +16231,12 @@ impl SpaceCenter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `transform_velocity`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn transform_velocity_stream(&self, position: (f64, f64, f64), velocity: (f64, f64, f64), from: &ReferenceFrame, to: &ReferenceFrame) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
+        self.client.stream("SpaceCenter", "TransformVelocity", &[codec::arg(0, &position), codec::arg(1, &velocity), codec::arg(2, &from), codec::arg(3, &to)]).await
+    }
+
     /// Cast a ray from a given position in a given direction, and return the distance to the hit point. If no hit occurs, returns infinity.
     ///
     /// # Arguments
@@ -11409,6 +16253,12 @@ impl SpaceCenter {
         Decode::decode_krpc(&self.client, &data)
     }
 
+    /// Streamed variant of `raycast_distance`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn raycast_distance_stream(&self, position: (f64, f64, f64), direction: (f64, f64, f64), reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<f64>> {
+        self.client.stream("SpaceCenter", "RaycastDistance", &[codec::arg(0, &position), codec::arg(1, &direction), codec::arg(2, &reference_frame)]).await
+    }
+
     /// Cast a ray from a given position in a given direction, and return the part that it hits. If no hit occurs, returns `None`.
     ///
     /// # Arguments
@@ -11423,5 +16273,11 @@ impl SpaceCenter {
     pub async fn raycast_part(&self, position: (f64, f64, f64), direction: (f64, f64, f64), reference_frame: &ReferenceFrame) -> crate::Result<Option<Part>> {
         let data = self.client.invoke("SpaceCenter", "RaycastPart", &[codec::arg(0, &position), codec::arg(1, &direction), codec::arg(2, &reference_frame)]).await?;
         Decode::decode_krpc(&self.client, &data)
+    }
+
+    /// Streamed variant of `raycast_part`: the server pushes the value
+    /// at the stream's update rate instead of being polled.
+    pub async fn raycast_part_stream(&self, position: (f64, f64, f64), direction: (f64, f64, f64), reference_frame: &ReferenceFrame) -> crate::Result<crate::Stream<Option<Part>>> {
+        self.client.stream("SpaceCenter", "RaycastPart", &[codec::arg(0, &position), codec::arg(1, &direction), codec::arg(2, &reference_frame)]).await
     }
 }

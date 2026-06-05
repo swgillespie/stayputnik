@@ -357,25 +357,25 @@ mod tests {
     use super::*;
     use crate::client::test_client;
 
-    async fn round_trip<T: Encode + Decode + PartialEq + std::fmt::Debug>(val: T) {
-        let client = test_client().await;
+    fn round_trip<T: Encode + Decode + PartialEq + std::fmt::Debug>(val: T) {
+        let client = test_client();
         assert_eq!(T::decode_krpc(&client, &val.encode_krpc()).unwrap(), val);
     }
 
-    #[tokio::test]
-    async fn round_trip_u32() {
-        round_trip(300u32).await;
+    #[test]
+    fn round_trip_u32() {
+        round_trip(300u32);
     }
 
-    #[tokio::test]
-    async fn round_trip_u64() {
-        round_trip(123456789u64).await;
+    #[test]
+    fn round_trip_u64() {
+        round_trip(123456789u64);
     }
 
-    #[tokio::test]
-    async fn round_trip_i32() {
+    #[test]
+    fn round_trip_i32() {
         for val in [0i32, 1, -1, 2, -2, i32::MAX, i32::MIN] {
-            round_trip(val).await;
+            round_trip(val);
         }
     }
 
@@ -387,32 +387,32 @@ mod tests {
         assert_eq!(zigzag_encode32(-2), 3);
     }
 
-    #[tokio::test]
-    async fn round_trip_i64() {
+    #[test]
+    fn round_trip_i64() {
         for val in [0i64, 1, -1, i64::MAX, i64::MIN] {
-            round_trip(val).await;
+            round_trip(val);
         }
     }
 
-    #[tokio::test]
-    async fn round_trip_f32() {
-        round_trip(std::f32::consts::PI).await;
+    #[test]
+    fn round_trip_f32() {
+        round_trip(std::f32::consts::PI);
     }
 
-    #[tokio::test]
-    async fn round_trip_f64() {
-        round_trip(std::f64::consts::PI).await;
+    #[test]
+    fn round_trip_f64() {
+        round_trip(std::f64::consts::PI);
     }
 
-    #[tokio::test]
-    async fn round_trip_bool() {
-        round_trip(true).await;
-        round_trip(false).await;
+    #[test]
+    fn round_trip_bool() {
+        round_trip(true);
+        round_trip(false);
     }
 
-    #[tokio::test]
-    async fn round_trip_string() {
-        round_trip("hello".to_string()).await;
+    #[test]
+    fn round_trip_string() {
+        round_trip("hello".to_string());
     }
 
     #[test]
@@ -421,14 +421,14 @@ mod tests {
         assert_eq!(encoded, vec![5, b'h', b'e', b'l', b'l', b'o']);
     }
 
-    #[tokio::test]
-    async fn round_trip_tuple3() {
-        round_trip((1.0f64, 2.0f64, 3.0f64)).await;
+    #[test]
+    fn round_trip_tuple3() {
+        round_trip((1.0f64, 2.0f64, 3.0f64));
     }
 
-    #[tokio::test]
-    async fn truncated_string_errors() {
-        let client = test_client().await;
+    #[test]
+    fn truncated_string_errors() {
+        let client = test_client();
         // Length prefix says 100 bytes but only 5 follow.
         let mut bytes = encode_varint(100);
         bytes.extend_from_slice(b"hello");
@@ -436,16 +436,16 @@ mod tests {
         assert!(Vec::<u8>::decode_krpc(&client, &bytes).is_err());
     }
 
-    #[tokio::test]
-    async fn short_tuple_errors() {
-        let client = test_client().await;
+    #[test]
+    fn short_tuple_errors() {
+        let client = test_client();
         let encoded = (1.0f64, 2.0f64).encode_krpc();
         assert!(<(f64, f64, f64)>::decode_krpc(&client, &encoded).is_err());
     }
 
-    #[tokio::test]
-    async fn wrong_float_width_errors() {
-        let client = test_client().await;
+    #[test]
+    fn wrong_float_width_errors() {
+        let client = test_client();
         assert!(f32::decode_krpc(&client, &[0u8; 3]).is_err());
         assert!(f64::decode_krpc(&client, &[0u8; 4]).is_err());
     }
