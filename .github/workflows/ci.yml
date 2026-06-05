@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Build
+        run: cargo build --all-targets
+
+      - name: Test
+        run: cargo test
+
+      - name: Clippy
+        run: cargo clippy --all-targets -- -D warnings
+
+      # The bindings in src/services/ are generated from proto/services.bin
+      # by stayputnik-codegen; regenerating must produce no diff.
+      - name: Check generated code is in sync
+        run: |
+          cargo run --bin stayputnik-codegen -- generate
+          # --intent-to-add so newly generated (untracked) modules also fail the diff
+          git add --intent-to-add src/services
+          if ! git diff --exit-code src/services; then
+            echo "::error::Generated code is out of sync with proto/services.bin." \
+                 "Run 'cargo run --bin stayputnik-codegen -- generate' and commit the result."
+            exit 1
+          fi
