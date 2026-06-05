@@ -2,17 +2,31 @@
 name = "stayputnik"
 version = "0.1.0"
 edition = "2024"
+rust-version = "1.85"
+description = "An async client for kRPC, the Remote Procedure Call server for Kerbal Space Program"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/swgillespie/stayputnik"
+keywords = ["krpc", "ksp", "kerbal", "rocket", "rpc"]
+categories = ["api-bindings", "games", "asynchronous"]
+exclude = [".github/", "proto/services.bin"]
 
 [dependencies]
 futures-core = "0.3"
 heck = "0.5"
 prost = "0.13"
 thiserror = "2"
-tokio = { version = "1", features = ["net", "io-util", "rt-multi-thread", "macros", "sync"] }
+tokio = { version = "1", features = [
+    "net",
+    "io-util",
+    "rt-multi-thread",
+    "macros",
+    "sync",
+] }
 tokio-stream = { version = "0.1", features = ["sync"] }
 
 [build-dependencies]
 prost-build = "0.13"
+protox = "0.7"
 
 [[bin]]
 name = "stayputnik-codegen"
