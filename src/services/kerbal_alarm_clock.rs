@@ -148,223 +148,301 @@ impl Alarm {
 
     /// The action that the alarm triggers.
     pub async fn action(&self) -> crate::Result<AlarmAction> {
-        let data = self.client.invoke("KerbalAlarmClock", "Alarm_get_Action", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.action_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `action`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn action_stream(&self) -> crate::Result<crate::Stream<AlarmAction>> {
-        self.client.stream("KerbalAlarmClock", "Alarm_get_Action", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.action_call().into()).await
+    }
+
+    /// Builds the procedure call for `action` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn action_call(&self) -> crate::expr::Call<AlarmAction> {
+        crate::expr::Call::new(codec::call("KerbalAlarmClock", "Alarm_get_Action", vec![codec::arg(0, &self.id)]))
     }
 
     /// The unique identifier for the alarm.
     pub async fn id(&self) -> crate::Result<String> {
-        let data = self.client.invoke("KerbalAlarmClock", "Alarm_get_ID", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.id_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `id`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn id_stream(&self) -> crate::Result<crate::Stream<String>> {
-        self.client.stream("KerbalAlarmClock", "Alarm_get_ID", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.id_call().into()).await
+    }
+
+    /// Builds the procedure call for `id` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn id_call(&self) -> crate::expr::Call<String> {
+        crate::expr::Call::new(codec::call("KerbalAlarmClock", "Alarm_get_ID", vec![codec::arg(0, &self.id)]))
     }
 
     /// The number of seconds before the event that the alarm will fire.
     pub async fn margin(&self) -> crate::Result<f64> {
-        let data = self.client.invoke("KerbalAlarmClock", "Alarm_get_Margin", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.margin_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `margin`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn margin_stream(&self) -> crate::Result<crate::Stream<f64>> {
-        self.client.stream("KerbalAlarmClock", "Alarm_get_Margin", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.margin_call().into()).await
+    }
+
+    /// Builds the procedure call for `margin` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn margin_call(&self) -> crate::expr::Call<f64> {
+        crate::expr::Call::new(codec::call("KerbalAlarmClock", "Alarm_get_Margin", vec![codec::arg(0, &self.id)]))
     }
 
     /// The short name of the alarm.
     pub async fn name(&self) -> crate::Result<String> {
-        let data = self.client.invoke("KerbalAlarmClock", "Alarm_get_Name", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.name_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `name`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn name_stream(&self) -> crate::Result<crate::Stream<String>> {
-        self.client.stream("KerbalAlarmClock", "Alarm_get_Name", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.name_call().into()).await
+    }
+
+    /// Builds the procedure call for `name` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn name_call(&self) -> crate::expr::Call<String> {
+        crate::expr::Call::new(codec::call("KerbalAlarmClock", "Alarm_get_Name", vec![codec::arg(0, &self.id)]))
     }
 
     /// The long description of the alarm.
     pub async fn notes(&self) -> crate::Result<String> {
-        let data = self.client.invoke("KerbalAlarmClock", "Alarm_get_Notes", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.notes_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `notes`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn notes_stream(&self) -> crate::Result<crate::Stream<String>> {
-        self.client.stream("KerbalAlarmClock", "Alarm_get_Notes", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.notes_call().into()).await
+    }
+
+    /// Builds the procedure call for `notes` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn notes_call(&self) -> crate::expr::Call<String> {
+        crate::expr::Call::new(codec::call("KerbalAlarmClock", "Alarm_get_Notes", vec![codec::arg(0, &self.id)]))
     }
 
     /// The number of seconds until the alarm will fire.
     pub async fn remaining(&self) -> crate::Result<f64> {
-        let data = self.client.invoke("KerbalAlarmClock", "Alarm_get_Remaining", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.remaining_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `remaining`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn remaining_stream(&self) -> crate::Result<crate::Stream<f64>> {
-        self.client.stream("KerbalAlarmClock", "Alarm_get_Remaining", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.remaining_call().into()).await
+    }
+
+    /// Builds the procedure call for `remaining` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn remaining_call(&self) -> crate::expr::Call<f64> {
+        crate::expr::Call::new(codec::call("KerbalAlarmClock", "Alarm_get_Remaining", vec![codec::arg(0, &self.id)]))
     }
 
     /// Whether the alarm will be repeated after it has fired.
     pub async fn repeat(&self) -> crate::Result<bool> {
-        let data = self.client.invoke("KerbalAlarmClock", "Alarm_get_Repeat", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.repeat_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `repeat`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn repeat_stream(&self) -> crate::Result<crate::Stream<bool>> {
-        self.client.stream("KerbalAlarmClock", "Alarm_get_Repeat", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.repeat_call().into()).await
+    }
+
+    /// Builds the procedure call for `repeat` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn repeat_call(&self) -> crate::expr::Call<bool> {
+        crate::expr::Call::new(codec::call("KerbalAlarmClock", "Alarm_get_Repeat", vec![codec::arg(0, &self.id)]))
     }
 
     /// The time delay to automatically create an alarm after it has fired.
     pub async fn repeat_period(&self) -> crate::Result<f64> {
-        let data = self.client.invoke("KerbalAlarmClock", "Alarm_get_RepeatPeriod", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.repeat_period_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `repeat_period`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn repeat_period_stream(&self) -> crate::Result<crate::Stream<f64>> {
-        self.client.stream("KerbalAlarmClock", "Alarm_get_RepeatPeriod", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.repeat_period_call().into()).await
+    }
+
+    /// Builds the procedure call for `repeat_period` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn repeat_period_call(&self) -> crate::expr::Call<f64> {
+        crate::expr::Call::new(codec::call("KerbalAlarmClock", "Alarm_get_RepeatPeriod", vec![codec::arg(0, &self.id)]))
     }
 
     /// The time at which the alarm will fire.
     pub async fn time(&self) -> crate::Result<f64> {
-        let data = self.client.invoke("KerbalAlarmClock", "Alarm_get_Time", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.time_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `time`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn time_stream(&self) -> crate::Result<crate::Stream<f64>> {
-        self.client.stream("KerbalAlarmClock", "Alarm_get_Time", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.time_call().into()).await
+    }
+
+    /// Builds the procedure call for `time` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn time_call(&self) -> crate::expr::Call<f64> {
+        crate::expr::Call::new(codec::call("KerbalAlarmClock", "Alarm_get_Time", vec![codec::arg(0, &self.id)]))
     }
 
     /// The type of the alarm.
     pub async fn r#type(&self) -> crate::Result<AlarmType> {
-        let data = self.client.invoke("KerbalAlarmClock", "Alarm_get_Type", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.r#type_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `r#type`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn r#type_stream(&self) -> crate::Result<crate::Stream<AlarmType>> {
-        self.client.stream("KerbalAlarmClock", "Alarm_get_Type", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.r#type_call().into()).await
+    }
+
+    /// Builds the procedure call for `r#type` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn r#type_call(&self) -> crate::expr::Call<AlarmType> {
+        crate::expr::Call::new(codec::call("KerbalAlarmClock", "Alarm_get_Type", vec![codec::arg(0, &self.id)]))
     }
 
     /// The vessel that the alarm is attached to.
     pub async fn vessel(&self) -> crate::Result<super::space_center::Vessel> {
-        let data = self.client.invoke("KerbalAlarmClock", "Alarm_get_Vessel", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.vessel_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `vessel`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn vessel_stream(&self) -> crate::Result<crate::Stream<super::space_center::Vessel>> {
-        self.client.stream("KerbalAlarmClock", "Alarm_get_Vessel", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.vessel_call().into()).await
+    }
+
+    /// Builds the procedure call for `vessel` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn vessel_call(&self) -> crate::expr::Call<super::space_center::Vessel> {
+        crate::expr::Call::new(codec::call("KerbalAlarmClock", "Alarm_get_Vessel", vec![codec::arg(0, &self.id)]))
     }
 
     /// The celestial body the vessel is departing from.
     pub async fn xfer_origin_body(&self) -> crate::Result<super::space_center::CelestialBody> {
-        let data = self.client.invoke("KerbalAlarmClock", "Alarm_get_XferOriginBody", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.xfer_origin_body_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `xfer_origin_body`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn xfer_origin_body_stream(&self) -> crate::Result<crate::Stream<super::space_center::CelestialBody>> {
-        self.client.stream("KerbalAlarmClock", "Alarm_get_XferOriginBody", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.xfer_origin_body_call().into()).await
+    }
+
+    /// Builds the procedure call for `xfer_origin_body` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn xfer_origin_body_call(&self) -> crate::expr::Call<super::space_center::CelestialBody> {
+        crate::expr::Call::new(codec::call("KerbalAlarmClock", "Alarm_get_XferOriginBody", vec![codec::arg(0, &self.id)]))
     }
 
     /// The celestial body the vessel is arriving at.
     pub async fn xfer_target_body(&self) -> crate::Result<super::space_center::CelestialBody> {
-        let data = self.client.invoke("KerbalAlarmClock", "Alarm_get_XferTargetBody", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.xfer_target_body_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `xfer_target_body`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn xfer_target_body_stream(&self) -> crate::Result<crate::Stream<super::space_center::CelestialBody>> {
-        self.client.stream("KerbalAlarmClock", "Alarm_get_XferTargetBody", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.xfer_target_body_call().into()).await
+    }
+
+    /// Builds the procedure call for `xfer_target_body` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn xfer_target_body_call(&self) -> crate::expr::Call<super::space_center::CelestialBody> {
+        crate::expr::Call::new(codec::call("KerbalAlarmClock", "Alarm_get_XferTargetBody", vec![codec::arg(0, &self.id)]))
     }
 
     /// The action that the alarm triggers.
     pub async fn set_action(&self, value: AlarmAction) -> crate::Result<()> {
-        self.client.invoke("KerbalAlarmClock", "Alarm_set_Action", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("KerbalAlarmClock", "Alarm_set_Action", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// The number of seconds before the event that the alarm will fire.
     pub async fn set_margin(&self, value: f64) -> crate::Result<()> {
-        self.client.invoke("KerbalAlarmClock", "Alarm_set_Margin", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("KerbalAlarmClock", "Alarm_set_Margin", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// The short name of the alarm.
     pub async fn set_name(&self, value: &str) -> crate::Result<()> {
-        self.client.invoke("KerbalAlarmClock", "Alarm_set_Name", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("KerbalAlarmClock", "Alarm_set_Name", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// The long description of the alarm.
     pub async fn set_notes(&self, value: &str) -> crate::Result<()> {
-        self.client.invoke("KerbalAlarmClock", "Alarm_set_Notes", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("KerbalAlarmClock", "Alarm_set_Notes", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Whether the alarm will be repeated after it has fired.
     pub async fn set_repeat(&self, value: bool) -> crate::Result<()> {
-        self.client.invoke("KerbalAlarmClock", "Alarm_set_Repeat", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("KerbalAlarmClock", "Alarm_set_Repeat", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// The time delay to automatically create an alarm after it has fired.
     pub async fn set_repeat_period(&self, value: f64) -> crate::Result<()> {
-        self.client.invoke("KerbalAlarmClock", "Alarm_set_RepeatPeriod", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("KerbalAlarmClock", "Alarm_set_RepeatPeriod", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// The time at which the alarm will fire.
     pub async fn set_time(&self, value: f64) -> crate::Result<()> {
-        self.client.invoke("KerbalAlarmClock", "Alarm_set_Time", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("KerbalAlarmClock", "Alarm_set_Time", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// The vessel that the alarm is attached to.
     pub async fn set_vessel(&self, value: &super::space_center::Vessel) -> crate::Result<()> {
-        self.client.invoke("KerbalAlarmClock", "Alarm_set_Vessel", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("KerbalAlarmClock", "Alarm_set_Vessel", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// The celestial body the vessel is departing from.
     pub async fn set_xfer_origin_body(&self, value: &super::space_center::CelestialBody) -> crate::Result<()> {
-        self.client.invoke("KerbalAlarmClock", "Alarm_set_XferOriginBody", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("KerbalAlarmClock", "Alarm_set_XferOriginBody", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// The celestial body the vessel is arriving at.
     pub async fn set_xfer_target_body(&self, value: &super::space_center::CelestialBody) -> crate::Result<()> {
-        self.client.invoke("KerbalAlarmClock", "Alarm_set_XferTargetBody", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("KerbalAlarmClock", "Alarm_set_XferTargetBody", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Removes the alarm.
     pub async fn remove(&self) -> crate::Result<()> {
-        self.client.invoke("KerbalAlarmClock", "Alarm_Remove", &[codec::arg(0, &self.id)]).await?;
+        self.client.invoke(codec::call("KerbalAlarmClock", "Alarm_Remove", vec![codec::arg(0, &self.id)])).await?;
         Ok(())
     }
 }
@@ -415,26 +493,38 @@ impl KerbalAlarmClock {
 
     /// A list of all the alarms.
     pub async fn alarms(&self) -> crate::Result<Vec<Alarm>> {
-        let data = self.client.invoke("KerbalAlarmClock", "get_Alarms", &[]).await?;
+        let data = self.client.invoke(self.alarms_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `alarms`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn alarms_stream(&self) -> crate::Result<crate::Stream<Vec<Alarm>>> {
-        self.client.stream("KerbalAlarmClock", "get_Alarms", &[]).await
+        self.client.stream(self.alarms_call().into()).await
+    }
+
+    /// Builds the procedure call for `alarms` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn alarms_call(&self) -> crate::expr::Call<Vec<Alarm>> {
+        crate::expr::Call::new(codec::call("KerbalAlarmClock", "get_Alarms", vec![]))
     }
 
     /// Whether Kerbal Alarm Clock is available.
     pub async fn available(&self) -> crate::Result<bool> {
-        let data = self.client.invoke("KerbalAlarmClock", "get_Available", &[]).await?;
+        let data = self.client.invoke(self.available_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `available`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn available_stream(&self) -> crate::Result<crate::Stream<bool>> {
-        self.client.stream("KerbalAlarmClock", "get_Available", &[]).await
+        self.client.stream(self.available_call().into()).await
+    }
+
+    /// Builds the procedure call for `available` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn available_call(&self) -> crate::expr::Call<bool> {
+        crate::expr::Call::new(codec::call("KerbalAlarmClock", "get_Available", vec![]))
     }
 
     /// Get the alarm with the given `name`, or `None` if no alarms have that name. If more than one alarm has the name, only returns one of them.
@@ -443,14 +533,20 @@ impl KerbalAlarmClock {
     ///
     /// * `name` - Name of the alarm to search for.
     pub async fn alarm_with_name(&self, name: &str) -> crate::Result<Option<Alarm>> {
-        let data = self.client.invoke("KerbalAlarmClock", "AlarmWithName", &[codec::arg(0, &name)]).await?;
+        let data = self.client.invoke(self.alarm_with_name_call(name).into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `alarm_with_name`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn alarm_with_name_stream(&self, name: &str) -> crate::Result<crate::Stream<Option<Alarm>>> {
-        self.client.stream("KerbalAlarmClock", "AlarmWithName", &[codec::arg(0, &name)]).await
+        self.client.stream(self.alarm_with_name_call(name).into()).await
+    }
+
+    /// Builds the procedure call for `alarm_with_name` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn alarm_with_name_call(&self, name: &str) -> crate::expr::Call<Option<Alarm>> {
+        crate::expr::Call::new(codec::call("KerbalAlarmClock", "AlarmWithName", vec![codec::arg(0, &name)]))
     }
 
     /// Get a list of alarms of the specified `r#type`.
@@ -459,14 +555,20 @@ impl KerbalAlarmClock {
     ///
     /// * `r#type` - Type of alarm to return.
     pub async fn alarms_with_type(&self, r#type: AlarmType) -> crate::Result<Vec<Alarm>> {
-        let data = self.client.invoke("KerbalAlarmClock", "AlarmsWithType", &[codec::arg(0, &r#type)]).await?;
+        let data = self.client.invoke(self.alarms_with_type_call(r#type).into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `alarms_with_type`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn alarms_with_type_stream(&self, r#type: AlarmType) -> crate::Result<crate::Stream<Vec<Alarm>>> {
-        self.client.stream("KerbalAlarmClock", "AlarmsWithType", &[codec::arg(0, &r#type)]).await
+        self.client.stream(self.alarms_with_type_call(r#type).into()).await
+    }
+
+    /// Builds the procedure call for `alarms_with_type` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn alarms_with_type_call(&self, r#type: AlarmType) -> crate::expr::Call<Vec<Alarm>> {
+        crate::expr::Call::new(codec::call("KerbalAlarmClock", "AlarmsWithType", vec![codec::arg(0, &r#type)]))
     }
 
     /// Create a new alarm and return it.
@@ -477,13 +579,19 @@ impl KerbalAlarmClock {
     /// * `name` - Name of the new alarm.
     /// * `ut` - Time at which the new alarm should trigger.
     pub async fn create_alarm(&self, r#type: AlarmType, name: &str, ut: f64) -> crate::Result<Alarm> {
-        let data = self.client.invoke("KerbalAlarmClock", "CreateAlarm", &[codec::arg(0, &r#type), codec::arg(1, &name), codec::arg(2, &ut)]).await?;
+        let data = self.client.invoke(self.create_alarm_call(r#type, name, ut).into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `create_alarm`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn create_alarm_stream(&self, r#type: AlarmType, name: &str, ut: f64) -> crate::Result<crate::Stream<Alarm>> {
-        self.client.stream("KerbalAlarmClock", "CreateAlarm", &[codec::arg(0, &r#type), codec::arg(1, &name), codec::arg(2, &ut)]).await
+        self.client.stream(self.create_alarm_call(r#type, name, ut).into()).await
+    }
+
+    /// Builds the procedure call for `create_alarm` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn create_alarm_call(&self, r#type: AlarmType, name: &str, ut: f64) -> crate::expr::Call<Alarm> {
+        crate::expr::Call::new(codec::call("KerbalAlarmClock", "CreateAlarm", vec![codec::arg(0, &r#type), codec::arg(1, &name), codec::arg(2, &ut)]))
     }
 }

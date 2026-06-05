@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::future::{Future, IntoFuture};
 use std::marker::PhantomData;
 use std::pin::Pin;
 use std::sync::{Arc, Mutex};
@@ -7,7 +8,7 @@ use std::task::{Context, Poll};
 use tokio::sync::watch;
 use tokio_stream::wrappers::WatchStream;
 
-use crate::codec::{arg, Decode};
+use crate::codec::{self, arg, Decode};
 use crate::krpc::schema as proto;
 use crate::{ClientRef, Error, Result};
 
@@ -193,7 +194,11 @@ impl<T: Decode> Stream<T> {
     /// Sets the update rate in hertz. `0.0` updates every game tick.
     pub async fn set_rate(&self, hz: f32) -> Result<()> {
         self.client
-            .invoke("KRPC", "SetStreamRate", &[arg(0, &self.id), arg(1, &hz)])
+            .invoke(codec::call(
+                "KRPC",
+                "SetStreamRate",
+                vec![arg(0, &self.id), arg(1, &hz)],
+            ))
             .await?;
         Ok(())
     }
@@ -205,7 +210,7 @@ impl<T: Decode> Stream<T> {
         self.removed = true;
         if self.registry.release(self.id) {
             self.client
-                .invoke("KRPC", "RemoveStream", &[arg(0, &self.id)])
+                .invoke(codec::call("KRPC", "RemoveStream", vec![arg(0, &self.id)]))
                 .await?;
         }
         Ok(())
@@ -241,8 +246,75 @@ impl<T> Drop for Stream<T> {
             // Fire-and-forget: drop cannot await, but enqueueing on the
             // connection actor's channel is synchronous.
             self.client
-                .invoke_forget("KRPC", "RemoveStream", vec![arg(0, &self.id)]);
+                .invoke_forget(codec::call("KRPC", "RemoveStream", vec![arg(0, &self.id)]));
         }
+    }
+}
+
+/// A server-side event: the server evaluates a boolean
+/// [`Expression`](crate::services::krpc::Expression) every physics tick and
+/// pushes on an underlying [`Stream<bool>`](Stream) when it fires. Created
+/// with [`KRPC::add_event`](crate::services::krpc::KRPC::add_event).
+///
+/// Compared to polling the same condition over RPCs, no traffic flows until
+/// the condition is met, and the condition is evaluated at tick granularity.
+///
+/// An `Event` can be `.await`ed directly (consuming it), or waited on
+/// repeatedly with [`Event::wait`]. Dropping the event removes the
+/// underlying server stream.
+pub struct Event {
+    stream: Stream<bool>,
+    /// The server creates event streams stopped; started on first wait.
+    started: bool,
+}
+
+impl Event {
+    /// Waits until the event fires.
+    pub async fn wait(&mut self) -> Result<()> {
+        if !self.started {
+            self.stream
+                .client
+                .invoke(codec::call(
+                    "KRPC",
+                    "StartStream",
+                    vec![arg(0, &self.stream.id)],
+                ))
+                .await?;
+            self.started = true;
+        }
+        // The latest value may already be true; otherwise wait for updates.
+        if self.stream.get().await? {
+            return Ok(());
+        }
+        loop {
+            if self.stream.next().await? {
+                return Ok(());
+            }
+        }
+    }
+}
+
+/// `event.await` waits for the event to fire once and then discards it
+/// (removing the server-side stream). To wait for the same event several
+/// times, use [`Event::wait`], which borrows instead of consuming.
+impl IntoFuture for Event {
+    type Output = Result<()>;
+    type IntoFuture = Pin<Box<dyn Future<Output = Result<()>> + Send>>;
+
+    fn into_future(mut self) -> Self::IntoFuture {
+        Box::pin(async move { self.wait().await })
+    }
+}
+
+impl Decode for Event {
+    fn decode_krpc(client: &ClientRef, bytes: &[u8]) -> Result<Self> {
+        use prost::Message;
+        let event = proto::Event::decode(bytes).map_err(crate::Error::Decode)?;
+        let id = StreamId::new(event.stream.map(|s| s.id).unwrap_or_default());
+        Ok(Event {
+            stream: client.adopt_stream(id),
+            started: false,
+        })
     }
 }
 

@@ -3,9 +3,9 @@ use std::sync::Arc;
 use prost::Message;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::TcpStream;
-use tokio::sync::{mpsc, oneshot, Mutex};
+use tokio::sync::{mpsc, oneshot};
 
-use crate::codec::{arg, Decode};
+use crate::codec::{self, Decode};
 use crate::krpc::schema as proto;
 use crate::stream::{Stream, StreamId, StreamRegistry};
 use crate::{Error, Result};
@@ -17,47 +17,41 @@ pub struct Client {
 }
 
 impl Client {
-    /// Connects to a kRPC server and starts the connection task.
+    /// Connects to a kRPC server and starts the connection tasks.
     ///
-    /// The stream server is assumed to listen on `rpc_port + 1` (the kRPC
-    /// default); it is only connected to when the first stream is created.
+    /// Both the RPC connection and the stream connection are established
+    /// here; the stream server is expected to listen on `rpc_port + 1`,
+    /// the kRPC default. Connecting both up front means stream- and
+    /// event-creating procedures work unconditionally — the server
+    /// requires the stream connection to exist before they are called.
     pub async fn connect(name: &str, address: &str, rpc_port: u16) -> Result<Client> {
-        let mut stream =
-            TcpStream::connect((address, rpc_port))
-                .await
-                .map_err(|source| Error::Connect {
-                    address: address.to_string(),
-                    port: rpc_port,
-                    source,
-                })?;
-
-        let request = proto::ConnectionRequest {
+        let rpc_request = proto::ConnectionRequest {
             r#type: proto::connection_request::Type::Rpc as i32,
             client_name: name.to_string(),
             client_identifier: vec![],
         };
-        send_message(&mut stream, &request).await?;
+        let (rpc_stream, response) = open_connection(address, rpc_port, &rpc_request).await?;
+        let client_identifier = response.client_identifier;
 
-        let response_bytes = receive_message(&mut stream).await?;
-        let response = proto::ConnectionResponse::decode(response_bytes.as_slice())?;
-
-        if response.status() != proto::connection_response::Status::Ok {
-            return Err(Error::ConnectionRejected {
-                status: response.status(),
-                message: response.message,
-            });
-        }
+        let stream_request = proto::ConnectionRequest {
+            r#type: proto::connection_request::Type::Stream as i32,
+            client_name: String::new(),
+            client_identifier: client_identifier.clone(),
+        };
+        let (stream_stream, _) = open_connection(address, rpc_port + 1, &stream_request).await?;
 
         let (rpc_tx, rpc_rx) = mpsc::unbounded_channel();
-        tokio::spawn(rpc_actor(stream, rpc_rx));
+        tokio::spawn(rpc_actor(rpc_stream, rpc_rx));
+
+        let registry = Arc::new(StreamRegistry::default());
+        tokio::spawn(stream_reader(stream_stream, registry.clone()));
 
         Ok(Client {
             inner: ClientRef(Arc::new(Inner {
                 rpc_tx,
                 address: address.to_string(),
-                stream_port: rpc_port + 1,
-                client_identifier: response.client_identifier,
-                streams: Mutex::new(None),
+                client_identifier,
+                registry,
             })),
         })
     }
@@ -71,17 +65,43 @@ impl Client {
     }
 }
 
-/// A cheaply clonable handle to the connection task.
+/// Connects to a kRPC listener and performs the connection handshake.
+async fn open_connection(
+    address: &str,
+    port: u16,
+    request: &proto::ConnectionRequest,
+) -> Result<(TcpStream, proto::ConnectionResponse)> {
+    let mut stream = TcpStream::connect((address, port))
+        .await
+        .map_err(|source| Error::Connect {
+            address: address.to_string(),
+            port,
+            source,
+        })?;
+
+    send_message(&mut stream, request).await?;
+    let response_bytes = receive_message(&mut stream).await?;
+    let response = proto::ConnectionResponse::decode(response_bytes.as_slice())?;
+
+    if response.status() != proto::connection_response::Status::Ok {
+        return Err(Error::ConnectionRejected {
+            status: response.status(),
+            message: response.message,
+        });
+    }
+
+    Ok((stream, response))
+}
+
+/// A cheaply clonable handle to the connection tasks.
 #[derive(Clone)]
 pub struct ClientRef(Arc<Inner>);
 
 struct Inner {
     rpc_tx: mpsc::UnboundedSender<RpcRequest>,
     address: String,
-    stream_port: u16,
     client_identifier: Vec<u8>,
-    /// Stream connection state; established lazily on first stream creation.
-    streams: Mutex<Option<Arc<StreamRegistry>>>,
+    registry: Arc<StreamRegistry>,
 }
 
 impl std::fmt::Debug for ClientRef {
@@ -98,13 +118,7 @@ struct RpcRequest {
 }
 
 impl ClientRef {
-    pub(crate) async fn invoke(
-        &self,
-        service: &str,
-        procedure: &str,
-        arguments: &[proto::Argument],
-    ) -> Result<Vec<u8>> {
-        let call = procedure_call(service, procedure, arguments.to_vec());
+    pub(crate) async fn invoke(&self, call: proto::ProcedureCall) -> Result<Vec<u8>> {
         let (tx, rx) = oneshot::channel();
         self.0
             .rpc_tx
@@ -115,82 +129,31 @@ impl ClientRef {
 
     /// Enqueues a call whose result nobody waits for. Used from `Drop`
     /// implementations, which cannot await.
-    pub(crate) fn invoke_forget(
-        &self,
-        service: &str,
-        procedure: &str,
-        arguments: Vec<proto::Argument>,
-    ) {
-        let call = procedure_call(service, procedure, arguments);
+    pub(crate) fn invoke_forget(&self, call: proto::ProcedureCall) {
         let (tx, _) = oneshot::channel();
         let _ = self.0.rpc_tx.send(RpcRequest { call, resp: tx });
     }
 
     /// Creates a server-side stream for the given procedure and returns a
     /// typed handle to it.
-    pub(crate) async fn stream<T: Decode>(
-        &self,
-        service: &str,
-        procedure: &str,
-        arguments: &[proto::Argument],
-    ) -> Result<Stream<T>> {
-        let registry = self.ensure_stream_connection().await?;
-        let call = procedure_call(service, procedure, arguments.to_vec());
+    pub(crate) async fn stream<T: Decode>(&self, call: proto::ProcedureCall) -> Result<Stream<T>> {
         let data = self
-            .invoke("KRPC", "AddStream", &[arg(0, &call), arg(1, &true)])
+            .invoke(codec::call(
+                "KRPC",
+                "AddStream",
+                vec![codec::arg(0, &call), codec::arg(1, &true)],
+            ))
             .await?;
         let id = StreamId::new(proto::Stream::decode(data.as_slice())?.id);
+        Ok(self.adopt_stream(id))
+    }
+
+    /// Subscribes to a stream the server already created (e.g. an event's
+    /// underlying stream).
+    pub(crate) fn adopt_stream<T: Decode>(&self, id: StreamId) -> Stream<T> {
+        let registry = self.0.registry.clone();
         let rx = registry.register(id);
-        Ok(Stream::new(id, self.clone(), registry, rx))
-    }
-
-    async fn ensure_stream_connection(&self) -> Result<Arc<StreamRegistry>> {
-        let mut guard = self.0.streams.lock().await;
-        if let Some(registry) = &*guard {
-            return Ok(registry.clone());
-        }
-
-        let address = self.0.address.as_str();
-        let mut stream = TcpStream::connect((address, self.0.stream_port))
-            .await
-            .map_err(|source| Error::Connect {
-                address: address.to_string(),
-                port: self.0.stream_port,
-                source,
-            })?;
-
-        let request = proto::ConnectionRequest {
-            r#type: proto::connection_request::Type::Stream as i32,
-            client_name: String::new(),
-            client_identifier: self.0.client_identifier.clone(),
-        };
-        send_message(&mut stream, &request).await?;
-        let response_bytes = receive_message(&mut stream).await?;
-        let response = proto::ConnectionResponse::decode(response_bytes.as_slice())?;
-        if response.status() != proto::connection_response::Status::Ok {
-            return Err(Error::ConnectionRejected {
-                status: response.status(),
-                message: response.message,
-            });
-        }
-
-        let registry = Arc::new(StreamRegistry::default());
-        tokio::spawn(stream_reader(stream, registry.clone()));
-        *guard = Some(registry.clone());
-        Ok(registry)
-    }
-}
-
-fn procedure_call(
-    service: &str,
-    procedure: &str,
-    arguments: Vec<proto::Argument>,
-) -> proto::ProcedureCall {
-    proto::ProcedureCall {
-        service: service.to_string(),
-        procedure: procedure.to_string(),
-        arguments,
-        ..Default::default()
+        Stream::new(id, self.clone(), registry, rx)
     }
 }
 
@@ -264,9 +227,8 @@ pub(crate) fn test_client() -> ClientRef {
     ClientRef(Arc::new(Inner {
         rpc_tx,
         address: String::new(),
-        stream_port: 0,
         client_identifier: vec![],
-        streams: Mutex::new(None),
+        registry: Arc::new(StreamRegistry::default()),
     }))
 }
 

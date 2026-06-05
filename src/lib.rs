@@ -68,8 +68,15 @@ mod error;
 mod client;
 mod stream;
 pub mod codec;
+pub mod expr;
 pub mod services;
 
 pub use error::{Error, Result};
 pub use client::{Client, ClientRef};
-pub use stream::{Stream, StreamId};
+pub use stream::{Event, Stream, StreamId};
+
+/// A not-yet-invoked procedure call. The generated `*_call()` methods
+/// build a typed [`expr::Call<T>`](expr::Call), which converts `.into()`
+/// this when the type tag is not needed. Reference a procedure's value in
+/// a server-side expression via [`expr::Expr`].
+pub use krpc::schema::ProcedureCall;

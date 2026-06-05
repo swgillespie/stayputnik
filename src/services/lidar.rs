@@ -20,26 +20,38 @@ impl Laser {
 
     /// Get the pointcloud.
     pub async fn cloud(&self) -> crate::Result<Vec<f64>> {
-        let data = self.client.invoke("LiDAR", "Laser_get_Cloud", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.cloud_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `cloud`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn cloud_stream(&self) -> crate::Result<crate::Stream<Vec<f64>>> {
-        self.client.stream("LiDAR", "Laser_get_Cloud", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.cloud_call().into()).await
+    }
+
+    /// Builds the procedure call for `cloud` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn cloud_call(&self) -> crate::expr::Call<Vec<f64>> {
+        crate::expr::Call::new(codec::call("LiDAR", "Laser_get_Cloud", vec![codec::arg(0, &self.id)]))
     }
 
     /// Get the part containing this LiDAR.
     pub async fn part(&self) -> crate::Result<super::space_center::Part> {
-        let data = self.client.invoke("LiDAR", "Laser_get_Part", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.part_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `part`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn part_stream(&self) -> crate::Result<crate::Stream<super::space_center::Part>> {
-        self.client.stream("LiDAR", "Laser_get_Part", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.part_call().into()).await
+    }
+
+    /// Builds the procedure call for `part` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn part_call(&self) -> crate::expr::Call<super::space_center::Part> {
+        crate::expr::Call::new(codec::call("LiDAR", "Laser_get_Part", vec![codec::arg(0, &self.id)]))
     }
 }
 
@@ -89,25 +101,37 @@ impl LiDAR {
 
     /// Check if the LaserDist API is avaiable
     pub async fn available(&self) -> crate::Result<bool> {
-        let data = self.client.invoke("LiDAR", "get_Available", &[]).await?;
+        let data = self.client.invoke(self.available_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `available`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn available_stream(&self) -> crate::Result<crate::Stream<bool>> {
-        self.client.stream("LiDAR", "get_Available", &[]).await
+        self.client.stream(self.available_call().into()).await
+    }
+
+    /// Builds the procedure call for `available` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn available_call(&self) -> crate::expr::Call<bool> {
+        crate::expr::Call::new(codec::call("LiDAR", "get_Available", vec![]))
     }
 
     /// Get a LaserDist part
     pub async fn laser(&self, part: &super::space_center::Part) -> crate::Result<Laser> {
-        let data = self.client.invoke("LiDAR", "Laser", &[codec::arg(0, &part)]).await?;
+        let data = self.client.invoke(self.laser_call(part).into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `laser`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn laser_stream(&self, part: &super::space_center::Part) -> crate::Result<crate::Stream<Laser>> {
-        self.client.stream("LiDAR", "Laser", &[codec::arg(0, &part)]).await
+        self.client.stream(self.laser_call(part).into()).await
+    }
+
+    /// Builds the procedure call for `laser` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn laser_call(&self, part: &super::space_center::Part) -> crate::expr::Call<Laser> {
+        crate::expr::Call::new(codec::call("LiDAR", "Laser", vec![codec::arg(0, &part)]))
     }
 }

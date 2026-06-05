@@ -517,8 +517,8 @@ fn rust_type(ty: &proto::Type, current_service: &str) -> String {
             }
         }
         // Protocol-level message types
-        TypeCode::Event => "crate::krpc::schema::Event".into(),
-        TypeCode::ProcedureCall => "crate::krpc::schema::ProcedureCall".into(),
+        TypeCode::Event => "crate::Event".into(),
+        TypeCode::ProcedureCall => "crate::ProcedureCall".into(),
         TypeCode::Stream => "crate::krpc::schema::Stream".into(),
         TypeCode::Status => "crate::krpc::schema::Status".into(),
         TypeCode::Services => "crate::krpc::schema::Services".into(),
@@ -955,39 +955,33 @@ fn write_method(
     };
 
     let too_many_args = user_params.len() + 1 > 7;
+    let param_names: Vec<String> = user_params.iter().map(|p| safe_ident(&p.name)).collect();
+    let names_joined = param_names.join(", ");
 
-    // The plain RPC method.
-    writeln!(out).unwrap();
-    write_doc(out, "    ", &proc.documentation);
-    // The receiver (or `client` parameter) counts toward clippy's
-    // too-many-arguments threshold of 7.
-    if too_many_args {
-        writeln!(out, "    #[allow(clippy::too_many_arguments)]").unwrap();
-    }
-    writeln!(out, "    pub async fn {method_name}({recv}{sig_params}) -> crate::Result<{ret_type}> {{").unwrap();
-    let args_expr = write_args(out, &user_params, receiver, position_offset);
     if returns_value(proc) {
-        writeln!(
-            out,
-            "        let data = {client_expr}.invoke(\"{service_name}\", \"{}\", {args_expr}).await?;",
-            proc.name
-        )
-        .unwrap();
+        // Value-returning procedures get three forms — `x()`, `x_stream()`,
+        // and `x_call()` — with the first two delegating to the third.
+        // `_call()` returns a typed `expr::Call<T>`; the transport takes
+        // the underlying `ProcedureCall`.
+        let call_expr = match receiver {
+            Receiver::Instance | Receiver::Service => {
+                format!("self.{method_name}_call({names_joined}).into()")
+            }
+            Receiver::Static => format!("Self::{method_name}_call({names_joined}).into()"),
+        };
+
+        writeln!(out).unwrap();
+        write_doc(out, "    ", &proc.documentation);
+        // The receiver (or `client` parameter) counts toward clippy's
+        // too-many-arguments threshold of 7.
+        if too_many_args {
+            writeln!(out, "    #[allow(clippy::too_many_arguments)]").unwrap();
+        }
+        writeln!(out, "    pub async fn {method_name}({recv}{sig_params}) -> crate::Result<{ret_type}> {{").unwrap();
+        writeln!(out, "        let data = {client_expr}.invoke({call_expr}).await?;").unwrap();
         writeln!(out, "        Decode::decode_krpc({client_ref_expr}, &data)").unwrap();
-    } else {
-        writeln!(
-            out,
-            "        {client_expr}.invoke(\"{service_name}\", \"{}\", {args_expr}).await?;",
-            proc.name
-        )
-        .unwrap();
-        writeln!(out, "        Ok(())").unwrap();
-    }
-    writeln!(out, "    }}").unwrap();
+        writeln!(out, "    }}").unwrap();
 
-    // The streamed variant: the server executes the procedure repeatedly
-    // and pushes results. Only value-returning procedures are streamable.
-    if returns_value(proc) {
         writeln!(out).unwrap();
         writeln!(out, "    /// Streamed variant of `{method_name}`: the server pushes the value").unwrap();
         writeln!(out, "    /// at the stream's update rate instead of being polled.").unwrap();
@@ -995,19 +989,47 @@ fn write_method(
             writeln!(out, "    #[allow(clippy::too_many_arguments)]").unwrap();
         }
         writeln!(out, "    pub async fn {method_name}_stream({recv}{sig_params}) -> crate::Result<crate::Stream<{ret_type}>> {{").unwrap();
+        writeln!(out, "        {client_expr}.stream({call_expr}).await").unwrap();
+        writeln!(out, "    }}").unwrap();
+
+        // The call builder: pure construction, no RPC, hence no client and
+        // no async. Feeds `Expression::call` for server-side expressions.
+        let call_recv = match receiver {
+            Receiver::Instance | Receiver::Service => format!("&self{sig_params}"),
+            Receiver::Static => sig_params.trim_start_matches(", ").to_string(),
+        };
+        writeln!(out).unwrap();
+        writeln!(out, "    /// Builds the procedure call for `{method_name}` without invoking it,").unwrap();
+        writeln!(out, "    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.").unwrap();
+        if too_many_args {
+            writeln!(out, "    #[allow(clippy::too_many_arguments)]").unwrap();
+        }
+        writeln!(out, "    pub fn {method_name}_call({call_recv}) -> crate::expr::Call<{ret_type}> {{").unwrap();
+        let args_expr = write_args(out, &user_params, receiver, position_offset);
+        writeln!(out, "        crate::expr::Call::new(codec::call(\"{service_name}\", \"{}\", {args_expr}))", proc.name).unwrap();
+        writeln!(out, "    }}").unwrap();
+    } else {
+        // Void procedures (setters and the like): plain form only.
+        writeln!(out).unwrap();
+        write_doc(out, "    ", &proc.documentation);
+        if too_many_args {
+            writeln!(out, "    #[allow(clippy::too_many_arguments)]").unwrap();
+        }
+        writeln!(out, "    pub async fn {method_name}({recv}{sig_params}) -> crate::Result<()> {{").unwrap();
         let args_expr = write_args(out, &user_params, receiver, position_offset);
         writeln!(
             out,
-            "        {client_expr}.stream(\"{service_name}\", \"{}\", {args_expr}).await",
+            "        {client_expr}.invoke(codec::call(\"{service_name}\", \"{}\", {args_expr})).await?;",
             proc.name
         )
         .unwrap();
+        writeln!(out, "        Ok(())").unwrap();
         writeln!(out, "    }}").unwrap();
     }
 }
 
 /// Emits the argument-building statements for a method body and returns the
-/// expression naming the arguments.
+/// (owned `Vec`) expression naming the arguments.
 fn write_args(
     out: &mut String,
     user_params: &[&proto::Parameter],
@@ -1030,8 +1052,7 @@ fn write_args(
     }
 
     if first_optional == user_params.len() {
-        // All required: borrow an array directly.
-        format!("&[{}]", inline_args.join(", "))
+        format!("vec![{}]", inline_args.join(", "))
     } else {
         writeln!(out, "        let mut args = vec![{}];", inline_args.join(", ")).unwrap();
         for (i, p) in user_params.iter().enumerate().skip(first_optional) {
@@ -1045,7 +1066,7 @@ fn write_args(
                 writeln!(out, "        args.push(codec::arg({pos}, &{name}));").unwrap();
             }
         }
-        "&args".to_string()
+        "args".to_string()
     }
 }
 

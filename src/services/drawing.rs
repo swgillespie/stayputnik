@@ -22,133 +22,175 @@ impl Line {
 
     /// Set the color
     pub async fn color(&self) -> crate::Result<(f64, f64, f64)> {
-        let data = self.client.invoke("Drawing", "Line_get_Color", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.color_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `color`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn color_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
-        self.client.stream("Drawing", "Line_get_Color", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.color_call().into()).await
+    }
+
+    /// Builds the procedure call for `color` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn color_call(&self) -> crate::expr::Call<(f64, f64, f64)> {
+        crate::expr::Call::new(codec::call("Drawing", "Line_get_Color", vec![codec::arg(0, &self.id)]))
     }
 
     /// End position of the line.
     pub async fn end(&self) -> crate::Result<(f64, f64, f64)> {
-        let data = self.client.invoke("Drawing", "Line_get_End", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.end_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `end`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn end_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
-        self.client.stream("Drawing", "Line_get_End", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.end_call().into()).await
+    }
+
+    /// Builds the procedure call for `end` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn end_call(&self) -> crate::expr::Call<(f64, f64, f64)> {
+        crate::expr::Call::new(codec::call("Drawing", "Line_get_End", vec![codec::arg(0, &self.id)]))
     }
 
     /// Material used to render the object. Creates the material from a shader with the given name.
     pub async fn material(&self) -> crate::Result<String> {
-        let data = self.client.invoke("Drawing", "Line_get_Material", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.material_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `material`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn material_stream(&self) -> crate::Result<crate::Stream<String>> {
-        self.client.stream("Drawing", "Line_get_Material", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.material_call().into()).await
+    }
+
+    /// Builds the procedure call for `material` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn material_call(&self) -> crate::expr::Call<String> {
+        crate::expr::Call::new(codec::call("Drawing", "Line_get_Material", vec![codec::arg(0, &self.id)]))
     }
 
     /// Reference frame for the positions of the object.
     pub async fn reference_frame(&self) -> crate::Result<super::space_center::ReferenceFrame> {
-        let data = self.client.invoke("Drawing", "Line_get_ReferenceFrame", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.reference_frame_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `reference_frame`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn reference_frame_stream(&self) -> crate::Result<crate::Stream<super::space_center::ReferenceFrame>> {
-        self.client.stream("Drawing", "Line_get_ReferenceFrame", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.reference_frame_call().into()).await
+    }
+
+    /// Builds the procedure call for `reference_frame` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn reference_frame_call(&self) -> crate::expr::Call<super::space_center::ReferenceFrame> {
+        crate::expr::Call::new(codec::call("Drawing", "Line_get_ReferenceFrame", vec![codec::arg(0, &self.id)]))
     }
 
     /// Start position of the line.
     pub async fn start(&self) -> crate::Result<(f64, f64, f64)> {
-        let data = self.client.invoke("Drawing", "Line_get_Start", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.start_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `start`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn start_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
-        self.client.stream("Drawing", "Line_get_Start", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.start_call().into()).await
+    }
+
+    /// Builds the procedure call for `start` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn start_call(&self) -> crate::expr::Call<(f64, f64, f64)> {
+        crate::expr::Call::new(codec::call("Drawing", "Line_get_Start", vec![codec::arg(0, &self.id)]))
     }
 
     /// Set the thickness
     pub async fn thickness(&self) -> crate::Result<f32> {
-        let data = self.client.invoke("Drawing", "Line_get_Thickness", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.thickness_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `thickness`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn thickness_stream(&self) -> crate::Result<crate::Stream<f32>> {
-        self.client.stream("Drawing", "Line_get_Thickness", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.thickness_call().into()).await
+    }
+
+    /// Builds the procedure call for `thickness` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn thickness_call(&self) -> crate::expr::Call<f32> {
+        crate::expr::Call::new(codec::call("Drawing", "Line_get_Thickness", vec![codec::arg(0, &self.id)]))
     }
 
     /// Whether the object is visible.
     pub async fn visible(&self) -> crate::Result<bool> {
-        let data = self.client.invoke("Drawing", "Line_get_Visible", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.visible_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `visible`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn visible_stream(&self) -> crate::Result<crate::Stream<bool>> {
-        self.client.stream("Drawing", "Line_get_Visible", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.visible_call().into()).await
+    }
+
+    /// Builds the procedure call for `visible` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn visible_call(&self) -> crate::expr::Call<bool> {
+        crate::expr::Call::new(codec::call("Drawing", "Line_get_Visible", vec![codec::arg(0, &self.id)]))
     }
 
     /// Set the color
     pub async fn set_color(&self, value: (f64, f64, f64)) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Line_set_Color", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Line_set_Color", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// End position of the line.
     pub async fn set_end(&self, value: (f64, f64, f64)) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Line_set_End", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Line_set_End", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Material used to render the object. Creates the material from a shader with the given name.
     pub async fn set_material(&self, value: &str) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Line_set_Material", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Line_set_Material", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Reference frame for the positions of the object.
     pub async fn set_reference_frame(&self, value: &super::space_center::ReferenceFrame) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Line_set_ReferenceFrame", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Line_set_ReferenceFrame", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Start position of the line.
     pub async fn set_start(&self, value: (f64, f64, f64)) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Line_set_Start", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Line_set_Start", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Set the thickness
     pub async fn set_thickness(&self, value: f32) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Line_set_Thickness", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Line_set_Thickness", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Whether the object is visible.
     pub async fn set_visible(&self, value: bool) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Line_set_Visible", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Line_set_Visible", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Remove the object.
     pub async fn remove(&self) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Line_Remove", &[codec::arg(0, &self.id)]).await?;
+        self.client.invoke(codec::call("Drawing", "Line_Remove", vec![codec::arg(0, &self.id)])).await?;
         Ok(())
     }
 }
@@ -203,115 +245,151 @@ impl Polygon {
 
     /// Set the color
     pub async fn color(&self) -> crate::Result<(f64, f64, f64)> {
-        let data = self.client.invoke("Drawing", "Polygon_get_Color", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.color_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `color`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn color_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
-        self.client.stream("Drawing", "Polygon_get_Color", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.color_call().into()).await
+    }
+
+    /// Builds the procedure call for `color` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn color_call(&self) -> crate::expr::Call<(f64, f64, f64)> {
+        crate::expr::Call::new(codec::call("Drawing", "Polygon_get_Color", vec![codec::arg(0, &self.id)]))
     }
 
     /// Material used to render the object. Creates the material from a shader with the given name.
     pub async fn material(&self) -> crate::Result<String> {
-        let data = self.client.invoke("Drawing", "Polygon_get_Material", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.material_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `material`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn material_stream(&self) -> crate::Result<crate::Stream<String>> {
-        self.client.stream("Drawing", "Polygon_get_Material", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.material_call().into()).await
+    }
+
+    /// Builds the procedure call for `material` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn material_call(&self) -> crate::expr::Call<String> {
+        crate::expr::Call::new(codec::call("Drawing", "Polygon_get_Material", vec![codec::arg(0, &self.id)]))
     }
 
     /// Reference frame for the positions of the object.
     pub async fn reference_frame(&self) -> crate::Result<super::space_center::ReferenceFrame> {
-        let data = self.client.invoke("Drawing", "Polygon_get_ReferenceFrame", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.reference_frame_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `reference_frame`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn reference_frame_stream(&self) -> crate::Result<crate::Stream<super::space_center::ReferenceFrame>> {
-        self.client.stream("Drawing", "Polygon_get_ReferenceFrame", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.reference_frame_call().into()).await
+    }
+
+    /// Builds the procedure call for `reference_frame` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn reference_frame_call(&self) -> crate::expr::Call<super::space_center::ReferenceFrame> {
+        crate::expr::Call::new(codec::call("Drawing", "Polygon_get_ReferenceFrame", vec![codec::arg(0, &self.id)]))
     }
 
     /// Set the thickness
     pub async fn thickness(&self) -> crate::Result<f32> {
-        let data = self.client.invoke("Drawing", "Polygon_get_Thickness", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.thickness_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `thickness`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn thickness_stream(&self) -> crate::Result<crate::Stream<f32>> {
-        self.client.stream("Drawing", "Polygon_get_Thickness", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.thickness_call().into()).await
+    }
+
+    /// Builds the procedure call for `thickness` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn thickness_call(&self) -> crate::expr::Call<f32> {
+        crate::expr::Call::new(codec::call("Drawing", "Polygon_get_Thickness", vec![codec::arg(0, &self.id)]))
     }
 
     /// Vertices for the polygon.
     pub async fn vertices(&self) -> crate::Result<Vec<(f64, f64, f64)>> {
-        let data = self.client.invoke("Drawing", "Polygon_get_Vertices", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.vertices_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `vertices`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn vertices_stream(&self) -> crate::Result<crate::Stream<Vec<(f64, f64, f64)>>> {
-        self.client.stream("Drawing", "Polygon_get_Vertices", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.vertices_call().into()).await
+    }
+
+    /// Builds the procedure call for `vertices` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn vertices_call(&self) -> crate::expr::Call<Vec<(f64, f64, f64)>> {
+        crate::expr::Call::new(codec::call("Drawing", "Polygon_get_Vertices", vec![codec::arg(0, &self.id)]))
     }
 
     /// Whether the object is visible.
     pub async fn visible(&self) -> crate::Result<bool> {
-        let data = self.client.invoke("Drawing", "Polygon_get_Visible", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.visible_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `visible`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn visible_stream(&self) -> crate::Result<crate::Stream<bool>> {
-        self.client.stream("Drawing", "Polygon_get_Visible", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.visible_call().into()).await
+    }
+
+    /// Builds the procedure call for `visible` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn visible_call(&self) -> crate::expr::Call<bool> {
+        crate::expr::Call::new(codec::call("Drawing", "Polygon_get_Visible", vec![codec::arg(0, &self.id)]))
     }
 
     /// Set the color
     pub async fn set_color(&self, value: (f64, f64, f64)) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Polygon_set_Color", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Polygon_set_Color", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Material used to render the object. Creates the material from a shader with the given name.
     pub async fn set_material(&self, value: &str) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Polygon_set_Material", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Polygon_set_Material", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Reference frame for the positions of the object.
     pub async fn set_reference_frame(&self, value: &super::space_center::ReferenceFrame) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Polygon_set_ReferenceFrame", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Polygon_set_ReferenceFrame", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Set the thickness
     pub async fn set_thickness(&self, value: f32) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Polygon_set_Thickness", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Polygon_set_Thickness", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Vertices for the polygon.
     pub async fn set_vertices(&self, value: Vec<(f64, f64, f64)>) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Polygon_set_Vertices", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Polygon_set_Vertices", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Whether the object is visible.
     pub async fn set_visible(&self, value: bool) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Polygon_set_Visible", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Polygon_set_Visible", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Remove the object.
     pub async fn remove(&self) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Polygon_Remove", &[codec::arg(0, &self.id)]).await?;
+        self.client.invoke(codec::call("Drawing", "Polygon_Remove", vec![codec::arg(0, &self.id)])).await?;
         Ok(())
     }
 }
@@ -366,272 +444,362 @@ impl Text {
 
     /// Alignment.
     pub async fn alignment(&self) -> crate::Result<super::ui::TextAlignment> {
-        let data = self.client.invoke("Drawing", "Text_get_Alignment", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.alignment_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `alignment`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn alignment_stream(&self) -> crate::Result<crate::Stream<super::ui::TextAlignment>> {
-        self.client.stream("Drawing", "Text_get_Alignment", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.alignment_call().into()).await
+    }
+
+    /// Builds the procedure call for `alignment` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn alignment_call(&self) -> crate::expr::Call<super::ui::TextAlignment> {
+        crate::expr::Call::new(codec::call("Drawing", "Text_get_Alignment", vec![codec::arg(0, &self.id)]))
     }
 
     /// Anchor.
     pub async fn anchor(&self) -> crate::Result<super::ui::TextAnchor> {
-        let data = self.client.invoke("Drawing", "Text_get_Anchor", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.anchor_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `anchor`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn anchor_stream(&self) -> crate::Result<crate::Stream<super::ui::TextAnchor>> {
-        self.client.stream("Drawing", "Text_get_Anchor", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.anchor_call().into()).await
+    }
+
+    /// Builds the procedure call for `anchor` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn anchor_call(&self) -> crate::expr::Call<super::ui::TextAnchor> {
+        crate::expr::Call::new(codec::call("Drawing", "Text_get_Anchor", vec![codec::arg(0, &self.id)]))
     }
 
     /// Character size.
     pub async fn character_size(&self) -> crate::Result<f32> {
-        let data = self.client.invoke("Drawing", "Text_get_CharacterSize", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.character_size_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `character_size`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn character_size_stream(&self) -> crate::Result<crate::Stream<f32>> {
-        self.client.stream("Drawing", "Text_get_CharacterSize", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.character_size_call().into()).await
+    }
+
+    /// Builds the procedure call for `character_size` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn character_size_call(&self) -> crate::expr::Call<f32> {
+        crate::expr::Call::new(codec::call("Drawing", "Text_get_CharacterSize", vec![codec::arg(0, &self.id)]))
     }
 
     /// Set the color
     pub async fn color(&self) -> crate::Result<(f64, f64, f64)> {
-        let data = self.client.invoke("Drawing", "Text_get_Color", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.color_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `color`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn color_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
-        self.client.stream("Drawing", "Text_get_Color", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.color_call().into()).await
+    }
+
+    /// Builds the procedure call for `color` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn color_call(&self) -> crate::expr::Call<(f64, f64, f64)> {
+        crate::expr::Call::new(codec::call("Drawing", "Text_get_Color", vec![codec::arg(0, &self.id)]))
     }
 
     /// The text string
     pub async fn content(&self) -> crate::Result<String> {
-        let data = self.client.invoke("Drawing", "Text_get_Content", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.content_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `content`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn content_stream(&self) -> crate::Result<crate::Stream<String>> {
-        self.client.stream("Drawing", "Text_get_Content", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.content_call().into()).await
+    }
+
+    /// Builds the procedure call for `content` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn content_call(&self) -> crate::expr::Call<String> {
+        crate::expr::Call::new(codec::call("Drawing", "Text_get_Content", vec![codec::arg(0, &self.id)]))
     }
 
     /// Name of the font
     pub async fn font(&self) -> crate::Result<String> {
-        let data = self.client.invoke("Drawing", "Text_get_Font", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.font_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `font`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn font_stream(&self) -> crate::Result<crate::Stream<String>> {
-        self.client.stream("Drawing", "Text_get_Font", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.font_call().into()).await
+    }
+
+    /// Builds the procedure call for `font` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn font_call(&self) -> crate::expr::Call<String> {
+        crate::expr::Call::new(codec::call("Drawing", "Text_get_Font", vec![codec::arg(0, &self.id)]))
     }
 
     /// Line spacing.
     pub async fn line_spacing(&self) -> crate::Result<f32> {
-        let data = self.client.invoke("Drawing", "Text_get_LineSpacing", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.line_spacing_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `line_spacing`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn line_spacing_stream(&self) -> crate::Result<crate::Stream<f32>> {
-        self.client.stream("Drawing", "Text_get_LineSpacing", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.line_spacing_call().into()).await
+    }
+
+    /// Builds the procedure call for `line_spacing` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn line_spacing_call(&self) -> crate::expr::Call<f32> {
+        crate::expr::Call::new(codec::call("Drawing", "Text_get_LineSpacing", vec![codec::arg(0, &self.id)]))
     }
 
     /// Material used to render the object. Creates the material from a shader with the given name.
     pub async fn material(&self) -> crate::Result<String> {
-        let data = self.client.invoke("Drawing", "Text_get_Material", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.material_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `material`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn material_stream(&self) -> crate::Result<crate::Stream<String>> {
-        self.client.stream("Drawing", "Text_get_Material", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.material_call().into()).await
+    }
+
+    /// Builds the procedure call for `material` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn material_call(&self) -> crate::expr::Call<String> {
+        crate::expr::Call::new(codec::call("Drawing", "Text_get_Material", vec![codec::arg(0, &self.id)]))
     }
 
     /// Position of the text.
     pub async fn position(&self) -> crate::Result<(f64, f64, f64)> {
-        let data = self.client.invoke("Drawing", "Text_get_Position", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.position_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `position`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn position_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64)>> {
-        self.client.stream("Drawing", "Text_get_Position", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.position_call().into()).await
+    }
+
+    /// Builds the procedure call for `position` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn position_call(&self) -> crate::expr::Call<(f64, f64, f64)> {
+        crate::expr::Call::new(codec::call("Drawing", "Text_get_Position", vec![codec::arg(0, &self.id)]))
     }
 
     /// Reference frame for the positions of the object.
     pub async fn reference_frame(&self) -> crate::Result<super::space_center::ReferenceFrame> {
-        let data = self.client.invoke("Drawing", "Text_get_ReferenceFrame", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.reference_frame_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `reference_frame`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn reference_frame_stream(&self) -> crate::Result<crate::Stream<super::space_center::ReferenceFrame>> {
-        self.client.stream("Drawing", "Text_get_ReferenceFrame", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.reference_frame_call().into()).await
+    }
+
+    /// Builds the procedure call for `reference_frame` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn reference_frame_call(&self) -> crate::expr::Call<super::space_center::ReferenceFrame> {
+        crate::expr::Call::new(codec::call("Drawing", "Text_get_ReferenceFrame", vec![codec::arg(0, &self.id)]))
     }
 
     /// Rotation of the text as a quaternion.
     pub async fn rotation(&self) -> crate::Result<(f64, f64, f64, f64)> {
-        let data = self.client.invoke("Drawing", "Text_get_Rotation", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.rotation_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `rotation`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn rotation_stream(&self) -> crate::Result<crate::Stream<(f64, f64, f64, f64)>> {
-        self.client.stream("Drawing", "Text_get_Rotation", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.rotation_call().into()).await
+    }
+
+    /// Builds the procedure call for `rotation` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn rotation_call(&self) -> crate::expr::Call<(f64, f64, f64, f64)> {
+        crate::expr::Call::new(codec::call("Drawing", "Text_get_Rotation", vec![codec::arg(0, &self.id)]))
     }
 
     /// Font size.
     pub async fn size(&self) -> crate::Result<i32> {
-        let data = self.client.invoke("Drawing", "Text_get_Size", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.size_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `size`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn size_stream(&self) -> crate::Result<crate::Stream<i32>> {
-        self.client.stream("Drawing", "Text_get_Size", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.size_call().into()).await
+    }
+
+    /// Builds the procedure call for `size` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn size_call(&self) -> crate::expr::Call<i32> {
+        crate::expr::Call::new(codec::call("Drawing", "Text_get_Size", vec![codec::arg(0, &self.id)]))
     }
 
     /// Font style.
     pub async fn style(&self) -> crate::Result<super::ui::FontStyle> {
-        let data = self.client.invoke("Drawing", "Text_get_Style", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.style_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `style`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn style_stream(&self) -> crate::Result<crate::Stream<super::ui::FontStyle>> {
-        self.client.stream("Drawing", "Text_get_Style", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.style_call().into()).await
+    }
+
+    /// Builds the procedure call for `style` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn style_call(&self) -> crate::expr::Call<super::ui::FontStyle> {
+        crate::expr::Call::new(codec::call("Drawing", "Text_get_Style", vec![codec::arg(0, &self.id)]))
     }
 
     /// Whether the object is visible.
     pub async fn visible(&self) -> crate::Result<bool> {
-        let data = self.client.invoke("Drawing", "Text_get_Visible", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.visible_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `visible`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn visible_stream(&self) -> crate::Result<crate::Stream<bool>> {
-        self.client.stream("Drawing", "Text_get_Visible", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.visible_call().into()).await
+    }
+
+    /// Builds the procedure call for `visible` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn visible_call(&self) -> crate::expr::Call<bool> {
+        crate::expr::Call::new(codec::call("Drawing", "Text_get_Visible", vec![codec::arg(0, &self.id)]))
     }
 
     /// Alignment.
     pub async fn set_alignment(&self, value: super::ui::TextAlignment) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Text_set_Alignment", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Text_set_Alignment", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Anchor.
     pub async fn set_anchor(&self, value: super::ui::TextAnchor) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Text_set_Anchor", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Text_set_Anchor", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Character size.
     pub async fn set_character_size(&self, value: f32) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Text_set_CharacterSize", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Text_set_CharacterSize", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Set the color
     pub async fn set_color(&self, value: (f64, f64, f64)) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Text_set_Color", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Text_set_Color", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// The text string
     pub async fn set_content(&self, value: &str) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Text_set_Content", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Text_set_Content", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Name of the font
     pub async fn set_font(&self, value: &str) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Text_set_Font", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Text_set_Font", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Line spacing.
     pub async fn set_line_spacing(&self, value: f32) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Text_set_LineSpacing", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Text_set_LineSpacing", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Material used to render the object. Creates the material from a shader with the given name.
     pub async fn set_material(&self, value: &str) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Text_set_Material", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Text_set_Material", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Position of the text.
     pub async fn set_position(&self, value: (f64, f64, f64)) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Text_set_Position", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Text_set_Position", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Reference frame for the positions of the object.
     pub async fn set_reference_frame(&self, value: &super::space_center::ReferenceFrame) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Text_set_ReferenceFrame", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Text_set_ReferenceFrame", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Rotation of the text as a quaternion.
     pub async fn set_rotation(&self, value: (f64, f64, f64, f64)) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Text_set_Rotation", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Text_set_Rotation", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Font size.
     pub async fn set_size(&self, value: i32) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Text_set_Size", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Text_set_Size", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Font style.
     pub async fn set_style(&self, value: super::ui::FontStyle) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Text_set_Style", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Text_set_Style", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Whether the object is visible.
     pub async fn set_visible(&self, value: bool) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Text_set_Visible", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("Drawing", "Text_set_Visible", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Remove the object.
     pub async fn remove(&self) -> crate::Result<()> {
-        self.client.invoke("Drawing", "Text_Remove", &[codec::arg(0, &self.id)]).await?;
+        self.client.invoke(codec::call("Drawing", "Text_Remove", vec![codec::arg(0, &self.id)])).await?;
         Ok(())
     }
 
     /// A list of all available fonts.
     pub async fn available_fonts(client: &crate::ClientRef) -> crate::Result<Vec<String>> {
-        let data = client.invoke("Drawing", "Text_static_AvailableFonts", &[]).await?;
+        let data = client.invoke(Self::available_fonts_call().into()).await?;
         Decode::decode_krpc(client, &data)
     }
 
     /// Streamed variant of `available_fonts`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn available_fonts_stream(client: &crate::ClientRef) -> crate::Result<crate::Stream<Vec<String>>> {
-        client.stream("Drawing", "Text_static_AvailableFonts", &[]).await
+        client.stream(Self::available_fonts_call().into()).await
+    }
+
+    /// Builds the procedure call for `available_fonts` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn available_fonts_call() -> crate::expr::Call<Vec<String>> {
+        crate::expr::Call::new(codec::call("Drawing", "Text_static_AvailableFonts", vec![]))
     }
 }
 
@@ -690,22 +858,24 @@ impl Drawing {
     /// * `reference_frame` - Reference frame that the positions are in.
     /// * `visible` - Whether the line is visible.
     pub async fn add_line(&self, start: (f64, f64, f64), end: (f64, f64, f64), reference_frame: &super::space_center::ReferenceFrame, visible: Option<bool>) -> crate::Result<Line> {
-        let mut args = vec![codec::arg(0, &start), codec::arg(1, &end), codec::arg(2, &reference_frame)];
-        if let Some(v) = &visible {
-            args.push(codec::arg(3, v));
-        }
-        let data = self.client.invoke("Drawing", "AddLine", &args).await?;
+        let data = self.client.invoke(self.add_line_call(start, end, reference_frame, visible).into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `add_line`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn add_line_stream(&self, start: (f64, f64, f64), end: (f64, f64, f64), reference_frame: &super::space_center::ReferenceFrame, visible: Option<bool>) -> crate::Result<crate::Stream<Line>> {
+        self.client.stream(self.add_line_call(start, end, reference_frame, visible).into()).await
+    }
+
+    /// Builds the procedure call for `add_line` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn add_line_call(&self, start: (f64, f64, f64), end: (f64, f64, f64), reference_frame: &super::space_center::ReferenceFrame, visible: Option<bool>) -> crate::expr::Call<Line> {
         let mut args = vec![codec::arg(0, &start), codec::arg(1, &end), codec::arg(2, &reference_frame)];
         if let Some(v) = &visible {
             args.push(codec::arg(3, v));
         }
-        self.client.stream("Drawing", "AddLine", &args).await
+        crate::expr::Call::new(codec::call("Drawing", "AddLine", args))
     }
 
     /// Draw a direction vector in the scene, starting from the origin of the given reference frame.
@@ -717,20 +887,19 @@ impl Drawing {
     /// * `length` - The length of the line.
     /// * `visible` - Whether the line is visible.
     pub async fn add_direction(&self, direction: (f64, f64, f64), reference_frame: &super::space_center::ReferenceFrame, length: Option<f32>, visible: Option<bool>) -> crate::Result<Line> {
-        let mut args = vec![codec::arg(0, &direction), codec::arg(1, &reference_frame)];
-        if let Some(v) = &length {
-            args.push(codec::arg(2, v));
-        }
-        if let Some(v) = &visible {
-            args.push(codec::arg(3, v));
-        }
-        let data = self.client.invoke("Drawing", "AddDirection", &args).await?;
+        let data = self.client.invoke(self.add_direction_call(direction, reference_frame, length, visible).into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `add_direction`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn add_direction_stream(&self, direction: (f64, f64, f64), reference_frame: &super::space_center::ReferenceFrame, length: Option<f32>, visible: Option<bool>) -> crate::Result<crate::Stream<Line>> {
+        self.client.stream(self.add_direction_call(direction, reference_frame, length, visible).into()).await
+    }
+
+    /// Builds the procedure call for `add_direction` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn add_direction_call(&self, direction: (f64, f64, f64), reference_frame: &super::space_center::ReferenceFrame, length: Option<f32>, visible: Option<bool>) -> crate::expr::Call<Line> {
         let mut args = vec![codec::arg(0, &direction), codec::arg(1, &reference_frame)];
         if let Some(v) = &length {
             args.push(codec::arg(2, v));
@@ -738,7 +907,7 @@ impl Drawing {
         if let Some(v) = &visible {
             args.push(codec::arg(3, v));
         }
-        self.client.stream("Drawing", "AddDirection", &args).await
+        crate::expr::Call::new(codec::call("Drawing", "AddDirection", args))
     }
 
     /// Draw a direction vector in the scene, from the center of mass of the active vessel.
@@ -750,20 +919,19 @@ impl Drawing {
     /// * `length` - The length of the line.
     /// * `visible` - Whether the line is visible.
     pub async fn add_direction_from_com(&self, direction: (f64, f64, f64), reference_frame: &super::space_center::ReferenceFrame, length: Option<f32>, visible: Option<bool>) -> crate::Result<Line> {
-        let mut args = vec![codec::arg(0, &direction), codec::arg(1, &reference_frame)];
-        if let Some(v) = &length {
-            args.push(codec::arg(2, v));
-        }
-        if let Some(v) = &visible {
-            args.push(codec::arg(3, v));
-        }
-        let data = self.client.invoke("Drawing", "AddDirectionFromCom", &args).await?;
+        let data = self.client.invoke(self.add_direction_from_com_call(direction, reference_frame, length, visible).into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `add_direction_from_com`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn add_direction_from_com_stream(&self, direction: (f64, f64, f64), reference_frame: &super::space_center::ReferenceFrame, length: Option<f32>, visible: Option<bool>) -> crate::Result<crate::Stream<Line>> {
+        self.client.stream(self.add_direction_from_com_call(direction, reference_frame, length, visible).into()).await
+    }
+
+    /// Builds the procedure call for `add_direction_from_com` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn add_direction_from_com_call(&self, direction: (f64, f64, f64), reference_frame: &super::space_center::ReferenceFrame, length: Option<f32>, visible: Option<bool>) -> crate::expr::Call<Line> {
         let mut args = vec![codec::arg(0, &direction), codec::arg(1, &reference_frame)];
         if let Some(v) = &length {
             args.push(codec::arg(2, v));
@@ -771,7 +939,7 @@ impl Drawing {
         if let Some(v) = &visible {
             args.push(codec::arg(3, v));
         }
-        self.client.stream("Drawing", "AddDirectionFromCom", &args).await
+        crate::expr::Call::new(codec::call("Drawing", "AddDirectionFromCom", args))
     }
 
     /// Draw a polygon in the scene, defined by a list of vertices.
@@ -782,22 +950,24 @@ impl Drawing {
     /// * `reference_frame` - Reference frame that the vertices are in.
     /// * `visible` - Whether the polygon is visible.
     pub async fn add_polygon(&self, vertices: Vec<(f64, f64, f64)>, reference_frame: &super::space_center::ReferenceFrame, visible: Option<bool>) -> crate::Result<Polygon> {
-        let mut args = vec![codec::arg(0, &vertices), codec::arg(1, &reference_frame)];
-        if let Some(v) = &visible {
-            args.push(codec::arg(2, v));
-        }
-        let data = self.client.invoke("Drawing", "AddPolygon", &args).await?;
+        let data = self.client.invoke(self.add_polygon_call(vertices, reference_frame, visible).into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `add_polygon`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn add_polygon_stream(&self, vertices: Vec<(f64, f64, f64)>, reference_frame: &super::space_center::ReferenceFrame, visible: Option<bool>) -> crate::Result<crate::Stream<Polygon>> {
+        self.client.stream(self.add_polygon_call(vertices, reference_frame, visible).into()).await
+    }
+
+    /// Builds the procedure call for `add_polygon` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn add_polygon_call(&self, vertices: Vec<(f64, f64, f64)>, reference_frame: &super::space_center::ReferenceFrame, visible: Option<bool>) -> crate::expr::Call<Polygon> {
         let mut args = vec![codec::arg(0, &vertices), codec::arg(1, &reference_frame)];
         if let Some(v) = &visible {
             args.push(codec::arg(2, v));
         }
-        self.client.stream("Drawing", "AddPolygon", &args).await
+        crate::expr::Call::new(codec::call("Drawing", "AddPolygon", args))
     }
 
     /// Draw text in the scene.
@@ -810,22 +980,24 @@ impl Drawing {
     /// * `rotation` - Rotation of the text, as a quaternion.
     /// * `visible` - Whether the text is visible.
     pub async fn add_text(&self, text: &str, reference_frame: &super::space_center::ReferenceFrame, position: (f64, f64, f64), rotation: (f64, f64, f64, f64), visible: Option<bool>) -> crate::Result<Text> {
-        let mut args = vec![codec::arg(0, &text), codec::arg(1, &reference_frame), codec::arg(2, &position), codec::arg(3, &rotation)];
-        if let Some(v) = &visible {
-            args.push(codec::arg(4, v));
-        }
-        let data = self.client.invoke("Drawing", "AddText", &args).await?;
+        let data = self.client.invoke(self.add_text_call(text, reference_frame, position, rotation, visible).into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `add_text`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn add_text_stream(&self, text: &str, reference_frame: &super::space_center::ReferenceFrame, position: (f64, f64, f64), rotation: (f64, f64, f64, f64), visible: Option<bool>) -> crate::Result<crate::Stream<Text>> {
+        self.client.stream(self.add_text_call(text, reference_frame, position, rotation, visible).into()).await
+    }
+
+    /// Builds the procedure call for `add_text` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn add_text_call(&self, text: &str, reference_frame: &super::space_center::ReferenceFrame, position: (f64, f64, f64), rotation: (f64, f64, f64, f64), visible: Option<bool>) -> crate::expr::Call<Text> {
         let mut args = vec![codec::arg(0, &text), codec::arg(1, &reference_frame), codec::arg(2, &position), codec::arg(3, &rotation)];
         if let Some(v) = &visible {
             args.push(codec::arg(4, v));
         }
-        self.client.stream("Drawing", "AddText", &args).await
+        crate::expr::Call::new(codec::call("Drawing", "AddText", args))
     }
 
     /// Remove all objects being drawn.
@@ -838,7 +1010,7 @@ impl Drawing {
         if let Some(v) = &client_only {
             args.push(codec::arg(0, v));
         }
-        self.client.invoke("Drawing", "Clear", &args).await?;
+        self.client.invoke(codec::call("Drawing", "Clear", args)).await?;
         Ok(())
     }
 }

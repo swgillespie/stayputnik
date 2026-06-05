@@ -20,26 +20,38 @@ impl Camera {
 
     /// Get the image.
     pub async fn image(&self) -> crate::Result<Vec<u8>> {
-        let data = self.client.invoke("DockingCamera", "Camera_get_Image", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.image_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `image`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn image_stream(&self) -> crate::Result<crate::Stream<Vec<u8>>> {
-        self.client.stream("DockingCamera", "Camera_get_Image", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.image_call().into()).await
+    }
+
+    /// Builds the procedure call for `image` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn image_call(&self) -> crate::expr::Call<Vec<u8>> {
+        crate::expr::Call::new(codec::call("DockingCamera", "Camera_get_Image", vec![codec::arg(0, &self.id)]))
     }
 
     /// Get the part containing this Camera.
     pub async fn part(&self) -> crate::Result<super::space_center::Part> {
-        let data = self.client.invoke("DockingCamera", "Camera_get_Part", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.part_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `part`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn part_stream(&self) -> crate::Result<crate::Stream<super::space_center::Part>> {
-        self.client.stream("DockingCamera", "Camera_get_Part", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.part_call().into()).await
+    }
+
+    /// Builds the procedure call for `part` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn part_call(&self) -> crate::expr::Call<super::space_center::Part> {
+        crate::expr::Call::new(codec::call("DockingCamera", "Camera_get_Part", vec![codec::arg(0, &self.id)]))
     }
 }
 
@@ -89,25 +101,37 @@ impl DockingCamera {
 
     /// Check if the Camera API is avaiable
     pub async fn available(&self) -> crate::Result<bool> {
-        let data = self.client.invoke("DockingCamera", "get_Available", &[]).await?;
+        let data = self.client.invoke(self.available_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `available`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn available_stream(&self) -> crate::Result<crate::Stream<bool>> {
-        self.client.stream("DockingCamera", "get_Available", &[]).await
+        self.client.stream(self.available_call().into()).await
+    }
+
+    /// Builds the procedure call for `available` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn available_call(&self) -> crate::expr::Call<bool> {
+        crate::expr::Call::new(codec::call("DockingCamera", "get_Available", vec![]))
     }
 
     /// Get a Camera part
     pub async fn camera(&self, part: &super::space_center::Part) -> crate::Result<Camera> {
-        let data = self.client.invoke("DockingCamera", "Camera", &[codec::arg(0, &part)]).await?;
+        let data = self.client.invoke(self.camera_call(part).into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `camera`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn camera_stream(&self, part: &super::space_center::Part) -> crate::Result<crate::Stream<Camera>> {
-        self.client.stream("DockingCamera", "Camera", &[codec::arg(0, &part)]).await
+        self.client.stream(self.camera_call(part).into()).await
+    }
+
+    /// Builds the procedure call for `camera` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn camera_call(&self, part: &super::space_center::Part) -> crate::expr::Call<Camera> {
+        crate::expr::Call::new(codec::call("DockingCamera", "Camera", vec![codec::arg(0, &part)]))
     }
 }

@@ -20,265 +20,355 @@ impl Servo {
 
     /// The current speed multiplier set in the UI.
     pub async fn acceleration(&self) -> crate::Result<f32> {
-        let data = self.client.invoke("InfernalRobotics", "Servo_get_Acceleration", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.acceleration_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `acceleration`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn acceleration_stream(&self) -> crate::Result<crate::Stream<f32>> {
-        self.client.stream("InfernalRobotics", "Servo_get_Acceleration", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.acceleration_call().into()).await
+    }
+
+    /// Builds the procedure call for `acceleration` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn acceleration_call(&self) -> crate::expr::Call<f32> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "Servo_get_Acceleration", vec![codec::arg(0, &self.id)]))
     }
 
     /// The speed multiplier of the servo, specified by the part configuration.
     pub async fn config_speed(&self) -> crate::Result<f32> {
-        let data = self.client.invoke("InfernalRobotics", "Servo_get_ConfigSpeed", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.config_speed_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `config_speed`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn config_speed_stream(&self) -> crate::Result<crate::Stream<f32>> {
-        self.client.stream("InfernalRobotics", "Servo_get_ConfigSpeed", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.config_speed_call().into()).await
+    }
+
+    /// Builds the procedure call for `config_speed` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn config_speed_call(&self) -> crate::expr::Call<f32> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "Servo_get_ConfigSpeed", vec![codec::arg(0, &self.id)]))
     }
 
     /// The current speed at which the servo is moving.
     pub async fn current_speed(&self) -> crate::Result<f32> {
-        let data = self.client.invoke("InfernalRobotics", "Servo_get_CurrentSpeed", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.current_speed_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `current_speed`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn current_speed_stream(&self) -> crate::Result<crate::Stream<f32>> {
-        self.client.stream("InfernalRobotics", "Servo_get_CurrentSpeed", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.current_speed_call().into()).await
+    }
+
+    /// Builds the procedure call for `current_speed` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn current_speed_call(&self) -> crate::expr::Call<f32> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "Servo_get_CurrentSpeed", vec![codec::arg(0, &self.id)]))
     }
 
     /// Whether the servos axis is inverted.
     pub async fn is_axis_inverted(&self) -> crate::Result<bool> {
-        let data = self.client.invoke("InfernalRobotics", "Servo_get_IsAxisInverted", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.is_axis_inverted_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `is_axis_inverted`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn is_axis_inverted_stream(&self) -> crate::Result<crate::Stream<bool>> {
-        self.client.stream("InfernalRobotics", "Servo_get_IsAxisInverted", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.is_axis_inverted_call().into()).await
+    }
+
+    /// Builds the procedure call for `is_axis_inverted` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn is_axis_inverted_call(&self) -> crate::expr::Call<bool> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "Servo_get_IsAxisInverted", vec![codec::arg(0, &self.id)]))
     }
 
     /// Whether the servo is freely moving.
     pub async fn is_free_moving(&self) -> crate::Result<bool> {
-        let data = self.client.invoke("InfernalRobotics", "Servo_get_IsFreeMoving", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.is_free_moving_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `is_free_moving`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn is_free_moving_stream(&self) -> crate::Result<crate::Stream<bool>> {
-        self.client.stream("InfernalRobotics", "Servo_get_IsFreeMoving", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.is_free_moving_call().into()).await
+    }
+
+    /// Builds the procedure call for `is_free_moving` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn is_free_moving_call(&self) -> crate::expr::Call<bool> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "Servo_get_IsFreeMoving", vec![codec::arg(0, &self.id)]))
     }
 
     /// Whether the servo is locked.
     pub async fn is_locked(&self) -> crate::Result<bool> {
-        let data = self.client.invoke("InfernalRobotics", "Servo_get_IsLocked", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.is_locked_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `is_locked`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn is_locked_stream(&self) -> crate::Result<crate::Stream<bool>> {
-        self.client.stream("InfernalRobotics", "Servo_get_IsLocked", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.is_locked_call().into()).await
+    }
+
+    /// Builds the procedure call for `is_locked` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn is_locked_call(&self) -> crate::expr::Call<bool> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "Servo_get_IsLocked", vec![codec::arg(0, &self.id)]))
     }
 
     /// Whether the servo is moving.
     pub async fn is_moving(&self) -> crate::Result<bool> {
-        let data = self.client.invoke("InfernalRobotics", "Servo_get_IsMoving", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.is_moving_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `is_moving`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn is_moving_stream(&self) -> crate::Result<crate::Stream<bool>> {
-        self.client.stream("InfernalRobotics", "Servo_get_IsMoving", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.is_moving_call().into()).await
+    }
+
+    /// Builds the procedure call for `is_moving` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn is_moving_call(&self) -> crate::expr::Call<bool> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "Servo_get_IsMoving", vec![codec::arg(0, &self.id)]))
     }
 
     /// The maximum position of the servo, specified by the part configuration.
     pub async fn max_config_position(&self) -> crate::Result<f32> {
-        let data = self.client.invoke("InfernalRobotics", "Servo_get_MaxConfigPosition", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.max_config_position_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `max_config_position`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn max_config_position_stream(&self) -> crate::Result<crate::Stream<f32>> {
-        self.client.stream("InfernalRobotics", "Servo_get_MaxConfigPosition", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.max_config_position_call().into()).await
+    }
+
+    /// Builds the procedure call for `max_config_position` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn max_config_position_call(&self) -> crate::expr::Call<f32> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "Servo_get_MaxConfigPosition", vec![codec::arg(0, &self.id)]))
     }
 
     /// The maximum position of the servo, specified by the in-game tweak menu.
     pub async fn max_position(&self) -> crate::Result<f32> {
-        let data = self.client.invoke("InfernalRobotics", "Servo_get_MaxPosition", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.max_position_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `max_position`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn max_position_stream(&self) -> crate::Result<crate::Stream<f32>> {
-        self.client.stream("InfernalRobotics", "Servo_get_MaxPosition", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.max_position_call().into()).await
+    }
+
+    /// Builds the procedure call for `max_position` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn max_position_call(&self) -> crate::expr::Call<f32> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "Servo_get_MaxPosition", vec![codec::arg(0, &self.id)]))
     }
 
     /// The minimum position of the servo, specified by the part configuration.
     pub async fn min_config_position(&self) -> crate::Result<f32> {
-        let data = self.client.invoke("InfernalRobotics", "Servo_get_MinConfigPosition", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.min_config_position_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `min_config_position`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn min_config_position_stream(&self) -> crate::Result<crate::Stream<f32>> {
-        self.client.stream("InfernalRobotics", "Servo_get_MinConfigPosition", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.min_config_position_call().into()).await
+    }
+
+    /// Builds the procedure call for `min_config_position` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn min_config_position_call(&self) -> crate::expr::Call<f32> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "Servo_get_MinConfigPosition", vec![codec::arg(0, &self.id)]))
     }
 
     /// The minimum position of the servo, specified by the in-game tweak menu.
     pub async fn min_position(&self) -> crate::Result<f32> {
-        let data = self.client.invoke("InfernalRobotics", "Servo_get_MinPosition", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.min_position_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `min_position`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn min_position_stream(&self) -> crate::Result<crate::Stream<f32>> {
-        self.client.stream("InfernalRobotics", "Servo_get_MinPosition", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.min_position_call().into()).await
+    }
+
+    /// Builds the procedure call for `min_position` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn min_position_call(&self) -> crate::expr::Call<f32> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "Servo_get_MinPosition", vec![codec::arg(0, &self.id)]))
     }
 
     /// The name of the servo.
     pub async fn name(&self) -> crate::Result<String> {
-        let data = self.client.invoke("InfernalRobotics", "Servo_get_Name", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.name_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `name`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn name_stream(&self) -> crate::Result<crate::Stream<String>> {
-        self.client.stream("InfernalRobotics", "Servo_get_Name", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.name_call().into()).await
+    }
+
+    /// Builds the procedure call for `name` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn name_call(&self) -> crate::expr::Call<String> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "Servo_get_Name", vec![codec::arg(0, &self.id)]))
     }
 
     /// The part containing the servo.
     pub async fn part(&self) -> crate::Result<super::space_center::Part> {
-        let data = self.client.invoke("InfernalRobotics", "Servo_get_Part", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.part_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `part`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn part_stream(&self) -> crate::Result<crate::Stream<super::space_center::Part>> {
-        self.client.stream("InfernalRobotics", "Servo_get_Part", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.part_call().into()).await
+    }
+
+    /// Builds the procedure call for `part` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn part_call(&self) -> crate::expr::Call<super::space_center::Part> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "Servo_get_Part", vec![codec::arg(0, &self.id)]))
     }
 
     /// The position of the servo.
     pub async fn position(&self) -> crate::Result<f32> {
-        let data = self.client.invoke("InfernalRobotics", "Servo_get_Position", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.position_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `position`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn position_stream(&self) -> crate::Result<crate::Stream<f32>> {
-        self.client.stream("InfernalRobotics", "Servo_get_Position", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.position_call().into()).await
+    }
+
+    /// Builds the procedure call for `position` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn position_call(&self) -> crate::expr::Call<f32> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "Servo_get_Position", vec![codec::arg(0, &self.id)]))
     }
 
     /// The speed multiplier of the servo, specified by the in-game tweak menu.
     pub async fn speed(&self) -> crate::Result<f32> {
-        let data = self.client.invoke("InfernalRobotics", "Servo_get_Speed", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.speed_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `speed`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn speed_stream(&self) -> crate::Result<crate::Stream<f32>> {
-        self.client.stream("InfernalRobotics", "Servo_get_Speed", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.speed_call().into()).await
+    }
+
+    /// Builds the procedure call for `speed` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn speed_call(&self) -> crate::expr::Call<f32> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "Servo_get_Speed", vec![codec::arg(0, &self.id)]))
     }
 
     /// The current speed multiplier set in the UI.
     pub async fn set_acceleration(&self, value: f32) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "Servo_set_Acceleration", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "Servo_set_Acceleration", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// The current speed at which the servo is moving.
     pub async fn set_current_speed(&self, value: f32) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "Servo_set_CurrentSpeed", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "Servo_set_CurrentSpeed", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Whether the servo should be highlighted in-game.
     pub async fn set_highlight(&self, value: bool) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "Servo_set_Highlight", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "Servo_set_Highlight", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Whether the servos axis is inverted.
     pub async fn set_is_axis_inverted(&self, value: bool) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "Servo_set_IsAxisInverted", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "Servo_set_IsAxisInverted", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Whether the servo is locked.
     pub async fn set_is_locked(&self, value: bool) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "Servo_set_IsLocked", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "Servo_set_IsLocked", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// The maximum position of the servo, specified by the in-game tweak menu.
     pub async fn set_max_position(&self, value: f32) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "Servo_set_MaxPosition", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "Servo_set_MaxPosition", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// The minimum position of the servo, specified by the in-game tweak menu.
     pub async fn set_min_position(&self, value: f32) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "Servo_set_MinPosition", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "Servo_set_MinPosition", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// The name of the servo.
     pub async fn set_name(&self, value: &str) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "Servo_set_Name", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "Servo_set_Name", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// The speed multiplier of the servo, specified by the in-game tweak menu.
     pub async fn set_speed(&self, value: f32) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "Servo_set_Speed", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "Servo_set_Speed", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// Moves the servo to the right.
     pub async fn move_right(&self) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "Servo_MoveRight", &[codec::arg(0, &self.id)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "Servo_MoveRight", vec![codec::arg(0, &self.id)])).await?;
         Ok(())
     }
 
     /// Moves the servo to the left.
     pub async fn move_left(&self) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "Servo_MoveLeft", &[codec::arg(0, &self.id)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "Servo_MoveLeft", vec![codec::arg(0, &self.id)])).await?;
         Ok(())
     }
 
     /// Moves the servo to the center.
     pub async fn move_center(&self) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "Servo_MoveCenter", &[codec::arg(0, &self.id)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "Servo_MoveCenter", vec![codec::arg(0, &self.id)])).await?;
         Ok(())
     }
 
     /// Moves the servo to the next preset.
     pub async fn move_next_preset(&self) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "Servo_MoveNextPreset", &[codec::arg(0, &self.id)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "Servo_MoveNextPreset", vec![codec::arg(0, &self.id)])).await?;
         Ok(())
     }
 
     /// Moves the servo to the previous preset.
     pub async fn move_prev_preset(&self) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "Servo_MovePrevPreset", &[codec::arg(0, &self.id)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "Servo_MovePrevPreset", vec![codec::arg(0, &self.id)])).await?;
         Ok(())
     }
 
@@ -289,13 +379,13 @@ impl Servo {
     /// * `position` - The position to move the servo to.
     /// * `speed` - Speed multiplier for the movement.
     pub async fn move_to(&self, position: f32, speed: f32) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "Servo_MoveTo", &[codec::arg(0, &self.id), codec::arg(1, &position), codec::arg(2, &speed)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "Servo_MoveTo", vec![codec::arg(0, &self.id), codec::arg(1, &position), codec::arg(2, &speed)])).await?;
         Ok(())
     }
 
     /// Stops the servo.
     pub async fn stop(&self) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "Servo_Stop", &[codec::arg(0, &self.id)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "Servo_Stop", vec![codec::arg(0, &self.id)])).await?;
         Ok(())
     }
 }
@@ -350,115 +440,157 @@ impl ServoGroup {
 
     /// Whether the group is expanded in the InfernalRobotics UI.
     pub async fn expanded(&self) -> crate::Result<bool> {
-        let data = self.client.invoke("InfernalRobotics", "ServoGroup_get_Expanded", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.expanded_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `expanded`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn expanded_stream(&self) -> crate::Result<crate::Stream<bool>> {
-        self.client.stream("InfernalRobotics", "ServoGroup_get_Expanded", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.expanded_call().into()).await
+    }
+
+    /// Builds the procedure call for `expanded` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn expanded_call(&self) -> crate::expr::Call<bool> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "ServoGroup_get_Expanded", vec![codec::arg(0, &self.id)]))
     }
 
     /// The key assigned to be the "forward" key for the group.
     pub async fn forward_key(&self) -> crate::Result<String> {
-        let data = self.client.invoke("InfernalRobotics", "ServoGroup_get_ForwardKey", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.forward_key_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `forward_key`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn forward_key_stream(&self) -> crate::Result<crate::Stream<String>> {
-        self.client.stream("InfernalRobotics", "ServoGroup_get_ForwardKey", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.forward_key_call().into()).await
+    }
+
+    /// Builds the procedure call for `forward_key` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn forward_key_call(&self) -> crate::expr::Call<String> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "ServoGroup_get_ForwardKey", vec![codec::arg(0, &self.id)]))
     }
 
     /// The name of the group.
     pub async fn name(&self) -> crate::Result<String> {
-        let data = self.client.invoke("InfernalRobotics", "ServoGroup_get_Name", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.name_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `name`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn name_stream(&self) -> crate::Result<crate::Stream<String>> {
-        self.client.stream("InfernalRobotics", "ServoGroup_get_Name", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.name_call().into()).await
+    }
+
+    /// Builds the procedure call for `name` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn name_call(&self) -> crate::expr::Call<String> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "ServoGroup_get_Name", vec![codec::arg(0, &self.id)]))
     }
 
     /// The parts containing the servos in the group.
     pub async fn parts(&self) -> crate::Result<Vec<super::space_center::Part>> {
-        let data = self.client.invoke("InfernalRobotics", "ServoGroup_get_Parts", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.parts_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `parts`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn parts_stream(&self) -> crate::Result<crate::Stream<Vec<super::space_center::Part>>> {
-        self.client.stream("InfernalRobotics", "ServoGroup_get_Parts", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.parts_call().into()).await
+    }
+
+    /// Builds the procedure call for `parts` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn parts_call(&self) -> crate::expr::Call<Vec<super::space_center::Part>> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "ServoGroup_get_Parts", vec![codec::arg(0, &self.id)]))
     }
 
     /// The key assigned to be the "reverse" key for the group.
     pub async fn reverse_key(&self) -> crate::Result<String> {
-        let data = self.client.invoke("InfernalRobotics", "ServoGroup_get_ReverseKey", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.reverse_key_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `reverse_key`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn reverse_key_stream(&self) -> crate::Result<crate::Stream<String>> {
-        self.client.stream("InfernalRobotics", "ServoGroup_get_ReverseKey", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.reverse_key_call().into()).await
+    }
+
+    /// Builds the procedure call for `reverse_key` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn reverse_key_call(&self) -> crate::expr::Call<String> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "ServoGroup_get_ReverseKey", vec![codec::arg(0, &self.id)]))
     }
 
     /// The servos that are in the group.
     pub async fn servos(&self) -> crate::Result<Vec<Servo>> {
-        let data = self.client.invoke("InfernalRobotics", "ServoGroup_get_Servos", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.servos_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `servos`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn servos_stream(&self) -> crate::Result<crate::Stream<Vec<Servo>>> {
-        self.client.stream("InfernalRobotics", "ServoGroup_get_Servos", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.servos_call().into()).await
+    }
+
+    /// Builds the procedure call for `servos` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn servos_call(&self) -> crate::expr::Call<Vec<Servo>> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "ServoGroup_get_Servos", vec![codec::arg(0, &self.id)]))
     }
 
     /// The speed multiplier for the group.
     pub async fn speed(&self) -> crate::Result<f32> {
-        let data = self.client.invoke("InfernalRobotics", "ServoGroup_get_Speed", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.speed_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `speed`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn speed_stream(&self) -> crate::Result<crate::Stream<f32>> {
-        self.client.stream("InfernalRobotics", "ServoGroup_get_Speed", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.speed_call().into()).await
+    }
+
+    /// Builds the procedure call for `speed` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn speed_call(&self) -> crate::expr::Call<f32> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "ServoGroup_get_Speed", vec![codec::arg(0, &self.id)]))
     }
 
     /// Whether the group is expanded in the InfernalRobotics UI.
     pub async fn set_expanded(&self, value: bool) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "ServoGroup_set_Expanded", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "ServoGroup_set_Expanded", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// The key assigned to be the "forward" key for the group.
     pub async fn set_forward_key(&self, value: &str) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "ServoGroup_set_ForwardKey", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "ServoGroup_set_ForwardKey", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// The name of the group.
     pub async fn set_name(&self, value: &str) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "ServoGroup_set_Name", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "ServoGroup_set_Name", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// The key assigned to be the "reverse" key for the group.
     pub async fn set_reverse_key(&self, value: &str) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "ServoGroup_set_ReverseKey", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "ServoGroup_set_ReverseKey", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// The speed multiplier for the group.
     pub async fn set_speed(&self, value: f32) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "ServoGroup_set_Speed", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "ServoGroup_set_Speed", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
@@ -468,49 +600,55 @@ impl ServoGroup {
     ///
     /// * `name` - Name of servo to find.
     pub async fn servo_with_name(&self, name: &str) -> crate::Result<Option<Servo>> {
-        let data = self.client.invoke("InfernalRobotics", "ServoGroup_ServoWithName", &[codec::arg(0, &self.id), codec::arg(1, &name)]).await?;
+        let data = self.client.invoke(self.servo_with_name_call(name).into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `servo_with_name`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn servo_with_name_stream(&self, name: &str) -> crate::Result<crate::Stream<Option<Servo>>> {
-        self.client.stream("InfernalRobotics", "ServoGroup_ServoWithName", &[codec::arg(0, &self.id), codec::arg(1, &name)]).await
+        self.client.stream(self.servo_with_name_call(name).into()).await
+    }
+
+    /// Builds the procedure call for `servo_with_name` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn servo_with_name_call(&self, name: &str) -> crate::expr::Call<Option<Servo>> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "ServoGroup_ServoWithName", vec![codec::arg(0, &self.id), codec::arg(1, &name)]))
     }
 
     /// Moves all of the servos in the group to the right.
     pub async fn move_right(&self) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "ServoGroup_MoveRight", &[codec::arg(0, &self.id)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "ServoGroup_MoveRight", vec![codec::arg(0, &self.id)])).await?;
         Ok(())
     }
 
     /// Moves all of the servos in the group to the left.
     pub async fn move_left(&self) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "ServoGroup_MoveLeft", &[codec::arg(0, &self.id)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "ServoGroup_MoveLeft", vec![codec::arg(0, &self.id)])).await?;
         Ok(())
     }
 
     /// Moves all of the servos in the group to the center.
     pub async fn move_center(&self) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "ServoGroup_MoveCenter", &[codec::arg(0, &self.id)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "ServoGroup_MoveCenter", vec![codec::arg(0, &self.id)])).await?;
         Ok(())
     }
 
     /// Moves all of the servos in the group to the next preset.
     pub async fn move_next_preset(&self) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "ServoGroup_MoveNextPreset", &[codec::arg(0, &self.id)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "ServoGroup_MoveNextPreset", vec![codec::arg(0, &self.id)])).await?;
         Ok(())
     }
 
     /// Moves all of the servos in the group to the previous preset.
     pub async fn move_prev_preset(&self) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "ServoGroup_MovePrevPreset", &[codec::arg(0, &self.id)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "ServoGroup_MovePrevPreset", vec![codec::arg(0, &self.id)])).await?;
         Ok(())
     }
 
     /// Stops the servos in the group.
     pub async fn stop(&self) -> crate::Result<()> {
-        self.client.invoke("InfernalRobotics", "ServoGroup_Stop", &[codec::arg(0, &self.id)]).await?;
+        self.client.invoke(codec::call("InfernalRobotics", "ServoGroup_Stop", vec![codec::arg(0, &self.id)])).await?;
         Ok(())
     }
 }
@@ -561,38 +699,56 @@ impl InfernalRobotics {
 
     /// Whether Infernal Robotics is installed.
     pub async fn available(&self) -> crate::Result<bool> {
-        let data = self.client.invoke("InfernalRobotics", "get_Available", &[]).await?;
+        let data = self.client.invoke(self.available_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `available`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn available_stream(&self) -> crate::Result<crate::Stream<bool>> {
-        self.client.stream("InfernalRobotics", "get_Available", &[]).await
+        self.client.stream(self.available_call().into()).await
+    }
+
+    /// Builds the procedure call for `available` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn available_call(&self) -> crate::expr::Call<bool> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "get_Available", vec![]))
     }
 
     /// Whether Infernal Robotics API is ready.
     pub async fn ready(&self) -> crate::Result<bool> {
-        let data = self.client.invoke("InfernalRobotics", "get_Ready", &[]).await?;
+        let data = self.client.invoke(self.ready_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `ready`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn ready_stream(&self) -> crate::Result<crate::Stream<bool>> {
-        self.client.stream("InfernalRobotics", "get_Ready", &[]).await
+        self.client.stream(self.ready_call().into()).await
+    }
+
+    /// Builds the procedure call for `ready` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn ready_call(&self) -> crate::expr::Call<bool> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "get_Ready", vec![]))
     }
 
     /// A list of all the servo groups in the given `vessel`.
     pub async fn servo_groups(&self, vessel: &super::space_center::Vessel) -> crate::Result<Vec<ServoGroup>> {
-        let data = self.client.invoke("InfernalRobotics", "ServoGroups", &[codec::arg(0, &vessel)]).await?;
+        let data = self.client.invoke(self.servo_groups_call(vessel).into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `servo_groups`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn servo_groups_stream(&self, vessel: &super::space_center::Vessel) -> crate::Result<crate::Stream<Vec<ServoGroup>>> {
-        self.client.stream("InfernalRobotics", "ServoGroups", &[codec::arg(0, &vessel)]).await
+        self.client.stream(self.servo_groups_call(vessel).into()).await
+    }
+
+    /// Builds the procedure call for `servo_groups` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn servo_groups_call(&self, vessel: &super::space_center::Vessel) -> crate::expr::Call<Vec<ServoGroup>> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "ServoGroups", vec![codec::arg(0, &vessel)]))
     }
 
     /// Returns the servo group in the given `vessel` with the given `name`, or `None` if none exists. If multiple servo groups have the same name, only one of them is returned.
@@ -602,14 +758,20 @@ impl InfernalRobotics {
     /// * `vessel` - Vessel to check.
     /// * `name` - Name of servo group to find.
     pub async fn servo_group_with_name(&self, vessel: &super::space_center::Vessel, name: &str) -> crate::Result<Option<ServoGroup>> {
-        let data = self.client.invoke("InfernalRobotics", "ServoGroupWithName", &[codec::arg(0, &vessel), codec::arg(1, &name)]).await?;
+        let data = self.client.invoke(self.servo_group_with_name_call(vessel, name).into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `servo_group_with_name`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn servo_group_with_name_stream(&self, vessel: &super::space_center::Vessel, name: &str) -> crate::Result<crate::Stream<Option<ServoGroup>>> {
-        self.client.stream("InfernalRobotics", "ServoGroupWithName", &[codec::arg(0, &vessel), codec::arg(1, &name)]).await
+        self.client.stream(self.servo_group_with_name_call(vessel, name).into()).await
+    }
+
+    /// Builds the procedure call for `servo_group_with_name` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn servo_group_with_name_call(&self, vessel: &super::space_center::Vessel, name: &str) -> crate::expr::Call<Option<ServoGroup>> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "ServoGroupWithName", vec![codec::arg(0, &vessel), codec::arg(1, &name)]))
     }
 
     /// Returns the servo in the given `vessel` with the given `name` or `None` if none exists. If multiple servos have the same name, only one of them is returned.
@@ -619,13 +781,19 @@ impl InfernalRobotics {
     /// * `vessel` - Vessel to check.
     /// * `name` - Name of the servo to find.
     pub async fn servo_with_name(&self, vessel: &super::space_center::Vessel, name: &str) -> crate::Result<Option<Servo>> {
-        let data = self.client.invoke("InfernalRobotics", "ServoWithName", &[codec::arg(0, &vessel), codec::arg(1, &name)]).await?;
+        let data = self.client.invoke(self.servo_with_name_call(vessel, name).into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `servo_with_name`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn servo_with_name_stream(&self, vessel: &super::space_center::Vessel, name: &str) -> crate::Result<crate::Stream<Option<Servo>>> {
-        self.client.stream("InfernalRobotics", "ServoWithName", &[codec::arg(0, &vessel), codec::arg(1, &name)]).await
+        self.client.stream(self.servo_with_name_call(vessel, name).into()).await
+    }
+
+    /// Builds the procedure call for `servo_with_name` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn servo_with_name_call(&self, vessel: &super::space_center::Vessel, name: &str) -> crate::expr::Call<Option<Servo>> {
+        crate::expr::Call::new(codec::call("InfernalRobotics", "ServoWithName", vec![codec::arg(0, &vessel), codec::arg(1, &name)]))
     }
 }

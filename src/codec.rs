@@ -42,6 +42,17 @@ pub fn arg(position: u32, value: &(impl Encode + ?Sized)) -> proto::Argument {
     }
 }
 
+/// Builds a [`ProcedureCall`](crate::ProcedureCall) from a service name,
+/// procedure name, and arguments.
+pub fn call(service: &str, procedure: &str, arguments: Vec<proto::Argument>) -> proto::ProcedureCall {
+    proto::ProcedureCall {
+        service: service.to_string(),
+        procedure: procedure.to_string(),
+        arguments,
+        ..Default::default()
+    }
+}
+
 fn malformed(msg: impl Into<String>) -> Error {
     Error::Decode(prost::DecodeError::new(msg.into()))
 }
@@ -356,8 +367,9 @@ macro_rules! impl_codec_for_message {
     )+};
 }
 
+// `proto::Event` is absent: the schema's Event type decodes to the typed
+// [`crate::Event`] wrapper instead.
 impl_codec_for_message!(
-    proto::Event,
     proto::ProcedureCall,
     proto::Stream,
     proto::Status,

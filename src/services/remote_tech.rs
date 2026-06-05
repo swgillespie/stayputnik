@@ -63,97 +63,133 @@ impl Antenna {
 
     /// Whether the antenna has a connection.
     pub async fn has_connection(&self) -> crate::Result<bool> {
-        let data = self.client.invoke("RemoteTech", "Antenna_get_HasConnection", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.has_connection_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `has_connection`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn has_connection_stream(&self) -> crate::Result<crate::Stream<bool>> {
-        self.client.stream("RemoteTech", "Antenna_get_HasConnection", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.has_connection_call().into()).await
+    }
+
+    /// Builds the procedure call for `has_connection` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn has_connection_call(&self) -> crate::expr::Call<bool> {
+        crate::expr::Call::new(codec::call("RemoteTech", "Antenna_get_HasConnection", vec![codec::arg(0, &self.id)]))
     }
 
     /// Get the part containing this antenna.
     pub async fn part(&self) -> crate::Result<super::space_center::Part> {
-        let data = self.client.invoke("RemoteTech", "Antenna_get_Part", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.part_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `part`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn part_stream(&self) -> crate::Result<crate::Stream<super::space_center::Part>> {
-        self.client.stream("RemoteTech", "Antenna_get_Part", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.part_call().into()).await
+    }
+
+    /// Builds the procedure call for `part` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn part_call(&self) -> crate::expr::Call<super::space_center::Part> {
+        crate::expr::Call::new(codec::call("RemoteTech", "Antenna_get_Part", vec![codec::arg(0, &self.id)]))
     }
 
     /// The object that the antenna is targetting. This property can be used to set the target to `RemoteTech.Target.None` or `RemoteTech.Target.ActiveVessel`. To set the target to a celestial body, ground station or vessel see `RemoteTech.Antenna.TargetBody`, `RemoteTech.Antenna.TargetGroundStation` and `RemoteTech.Antenna.TargetVessel`.
     pub async fn target(&self) -> crate::Result<Target> {
-        let data = self.client.invoke("RemoteTech", "Antenna_get_Target", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.target_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `target`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn target_stream(&self) -> crate::Result<crate::Stream<Target>> {
-        self.client.stream("RemoteTech", "Antenna_get_Target", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.target_call().into()).await
+    }
+
+    /// Builds the procedure call for `target` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn target_call(&self) -> crate::expr::Call<Target> {
+        crate::expr::Call::new(codec::call("RemoteTech", "Antenna_get_Target", vec![codec::arg(0, &self.id)]))
     }
 
     /// The celestial body the antenna is targetting.
     pub async fn target_body(&self) -> crate::Result<super::space_center::CelestialBody> {
-        let data = self.client.invoke("RemoteTech", "Antenna_get_TargetBody", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.target_body_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `target_body`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn target_body_stream(&self) -> crate::Result<crate::Stream<super::space_center::CelestialBody>> {
-        self.client.stream("RemoteTech", "Antenna_get_TargetBody", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.target_body_call().into()).await
+    }
+
+    /// Builds the procedure call for `target_body` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn target_body_call(&self) -> crate::expr::Call<super::space_center::CelestialBody> {
+        crate::expr::Call::new(codec::call("RemoteTech", "Antenna_get_TargetBody", vec![codec::arg(0, &self.id)]))
     }
 
     /// The ground station the antenna is targetting.
     pub async fn target_ground_station(&self) -> crate::Result<String> {
-        let data = self.client.invoke("RemoteTech", "Antenna_get_TargetGroundStation", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.target_ground_station_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `target_ground_station`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn target_ground_station_stream(&self) -> crate::Result<crate::Stream<String>> {
-        self.client.stream("RemoteTech", "Antenna_get_TargetGroundStation", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.target_ground_station_call().into()).await
+    }
+
+    /// Builds the procedure call for `target_ground_station` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn target_ground_station_call(&self) -> crate::expr::Call<String> {
+        crate::expr::Call::new(codec::call("RemoteTech", "Antenna_get_TargetGroundStation", vec![codec::arg(0, &self.id)]))
     }
 
     /// The vessel the antenna is targetting.
     pub async fn target_vessel(&self) -> crate::Result<super::space_center::Vessel> {
-        let data = self.client.invoke("RemoteTech", "Antenna_get_TargetVessel", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.target_vessel_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `target_vessel`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn target_vessel_stream(&self) -> crate::Result<crate::Stream<super::space_center::Vessel>> {
-        self.client.stream("RemoteTech", "Antenna_get_TargetVessel", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.target_vessel_call().into()).await
+    }
+
+    /// Builds the procedure call for `target_vessel` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn target_vessel_call(&self) -> crate::expr::Call<super::space_center::Vessel> {
+        crate::expr::Call::new(codec::call("RemoteTech", "Antenna_get_TargetVessel", vec![codec::arg(0, &self.id)]))
     }
 
     /// The object that the antenna is targetting. This property can be used to set the target to `RemoteTech.Target.None` or `RemoteTech.Target.ActiveVessel`. To set the target to a celestial body, ground station or vessel see `RemoteTech.Antenna.TargetBody`, `RemoteTech.Antenna.TargetGroundStation` and `RemoteTech.Antenna.TargetVessel`.
     pub async fn set_target(&self, value: Target) -> crate::Result<()> {
-        self.client.invoke("RemoteTech", "Antenna_set_Target", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("RemoteTech", "Antenna_set_Target", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// The celestial body the antenna is targetting.
     pub async fn set_target_body(&self, value: &super::space_center::CelestialBody) -> crate::Result<()> {
-        self.client.invoke("RemoteTech", "Antenna_set_TargetBody", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("RemoteTech", "Antenna_set_TargetBody", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// The ground station the antenna is targetting.
     pub async fn set_target_ground_station(&self, value: &str) -> crate::Result<()> {
-        self.client.invoke("RemoteTech", "Antenna_set_TargetGroundStation", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("RemoteTech", "Antenna_set_TargetGroundStation", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 
     /// The vessel the antenna is targetting.
     pub async fn set_target_vessel(&self, value: &super::space_center::Vessel) -> crate::Result<()> {
-        self.client.invoke("RemoteTech", "Antenna_set_TargetVessel", &[codec::arg(0, &self.id), codec::arg(1, &value)]).await?;
+        self.client.invoke(codec::call("RemoteTech", "Antenna_set_TargetVessel", vec![codec::arg(0, &self.id), codec::arg(1, &value)])).await?;
         Ok(())
     }
 }
@@ -208,110 +244,164 @@ impl Comms {
 
     /// The antennas for this vessel.
     pub async fn antennas(&self) -> crate::Result<Vec<Antenna>> {
-        let data = self.client.invoke("RemoteTech", "Comms_get_Antennas", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.antennas_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `antennas`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn antennas_stream(&self) -> crate::Result<crate::Stream<Vec<Antenna>>> {
-        self.client.stream("RemoteTech", "Comms_get_Antennas", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.antennas_call().into()).await
+    }
+
+    /// Builds the procedure call for `antennas` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn antennas_call(&self) -> crate::expr::Call<Vec<Antenna>> {
+        crate::expr::Call::new(codec::call("RemoteTech", "Comms_get_Antennas", vec![codec::arg(0, &self.id)]))
     }
 
     /// Whether the vessel has any connection.
     pub async fn has_connection(&self) -> crate::Result<bool> {
-        let data = self.client.invoke("RemoteTech", "Comms_get_HasConnection", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.has_connection_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `has_connection`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn has_connection_stream(&self) -> crate::Result<crate::Stream<bool>> {
-        self.client.stream("RemoteTech", "Comms_get_HasConnection", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.has_connection_call().into()).await
+    }
+
+    /// Builds the procedure call for `has_connection` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn has_connection_call(&self) -> crate::expr::Call<bool> {
+        crate::expr::Call::new(codec::call("RemoteTech", "Comms_get_HasConnection", vec![codec::arg(0, &self.id)]))
     }
 
     /// Whether the vessel has a connection to a ground station.
     pub async fn has_connection_to_ground_station(&self) -> crate::Result<bool> {
-        let data = self.client.invoke("RemoteTech", "Comms_get_HasConnectionToGroundStation", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.has_connection_to_ground_station_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `has_connection_to_ground_station`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn has_connection_to_ground_station_stream(&self) -> crate::Result<crate::Stream<bool>> {
-        self.client.stream("RemoteTech", "Comms_get_HasConnectionToGroundStation", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.has_connection_to_ground_station_call().into()).await
+    }
+
+    /// Builds the procedure call for `has_connection_to_ground_station` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn has_connection_to_ground_station_call(&self) -> crate::expr::Call<bool> {
+        crate::expr::Call::new(codec::call("RemoteTech", "Comms_get_HasConnectionToGroundStation", vec![codec::arg(0, &self.id)]))
     }
 
     /// Whether the vessel has a flight computer on board.
     pub async fn has_flight_computer(&self) -> crate::Result<bool> {
-        let data = self.client.invoke("RemoteTech", "Comms_get_HasFlightComputer", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.has_flight_computer_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `has_flight_computer`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn has_flight_computer_stream(&self) -> crate::Result<crate::Stream<bool>> {
-        self.client.stream("RemoteTech", "Comms_get_HasFlightComputer", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.has_flight_computer_call().into()).await
+    }
+
+    /// Builds the procedure call for `has_flight_computer` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn has_flight_computer_call(&self) -> crate::expr::Call<bool> {
+        crate::expr::Call::new(codec::call("RemoteTech", "Comms_get_HasFlightComputer", vec![codec::arg(0, &self.id)]))
     }
 
     /// Whether the vessel can be controlled locally.
     pub async fn has_local_control(&self) -> crate::Result<bool> {
-        let data = self.client.invoke("RemoteTech", "Comms_get_HasLocalControl", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.has_local_control_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `has_local_control`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn has_local_control_stream(&self) -> crate::Result<crate::Stream<bool>> {
-        self.client.stream("RemoteTech", "Comms_get_HasLocalControl", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.has_local_control_call().into()).await
+    }
+
+    /// Builds the procedure call for `has_local_control` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn has_local_control_call(&self) -> crate::expr::Call<bool> {
+        crate::expr::Call::new(codec::call("RemoteTech", "Comms_get_HasLocalControl", vec![codec::arg(0, &self.id)]))
     }
 
     /// The shortest signal delay to the vessel, in seconds.
     pub async fn signal_delay(&self) -> crate::Result<f64> {
-        let data = self.client.invoke("RemoteTech", "Comms_get_SignalDelay", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.signal_delay_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `signal_delay`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn signal_delay_stream(&self) -> crate::Result<crate::Stream<f64>> {
-        self.client.stream("RemoteTech", "Comms_get_SignalDelay", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.signal_delay_call().into()).await
+    }
+
+    /// Builds the procedure call for `signal_delay` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn signal_delay_call(&self) -> crate::expr::Call<f64> {
+        crate::expr::Call::new(codec::call("RemoteTech", "Comms_get_SignalDelay", vec![codec::arg(0, &self.id)]))
     }
 
     /// The signal delay between the vessel and the closest ground station, in seconds.
     pub async fn signal_delay_to_ground_station(&self) -> crate::Result<f64> {
-        let data = self.client.invoke("RemoteTech", "Comms_get_SignalDelayToGroundStation", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.signal_delay_to_ground_station_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `signal_delay_to_ground_station`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn signal_delay_to_ground_station_stream(&self) -> crate::Result<crate::Stream<f64>> {
-        self.client.stream("RemoteTech", "Comms_get_SignalDelayToGroundStation", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.signal_delay_to_ground_station_call().into()).await
+    }
+
+    /// Builds the procedure call for `signal_delay_to_ground_station` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn signal_delay_to_ground_station_call(&self) -> crate::expr::Call<f64> {
+        crate::expr::Call::new(codec::call("RemoteTech", "Comms_get_SignalDelayToGroundStation", vec![codec::arg(0, &self.id)]))
     }
 
     /// Get the vessel.
     pub async fn vessel(&self) -> crate::Result<super::space_center::Vessel> {
-        let data = self.client.invoke("RemoteTech", "Comms_get_Vessel", &[codec::arg(0, &self.id)]).await?;
+        let data = self.client.invoke(self.vessel_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `vessel`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn vessel_stream(&self) -> crate::Result<crate::Stream<super::space_center::Vessel>> {
-        self.client.stream("RemoteTech", "Comms_get_Vessel", &[codec::arg(0, &self.id)]).await
+        self.client.stream(self.vessel_call().into()).await
+    }
+
+    /// Builds the procedure call for `vessel` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn vessel_call(&self) -> crate::expr::Call<super::space_center::Vessel> {
+        crate::expr::Call::new(codec::call("RemoteTech", "Comms_get_Vessel", vec![codec::arg(0, &self.id)]))
     }
 
     /// The signal delay between the this vessel and another vessel, in seconds.
     pub async fn signal_delay_to_vessel(&self, other: &super::space_center::Vessel) -> crate::Result<f64> {
-        let data = self.client.invoke("RemoteTech", "Comms_SignalDelayToVessel", &[codec::arg(0, &self.id), codec::arg(1, &other)]).await?;
+        let data = self.client.invoke(self.signal_delay_to_vessel_call(other).into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `signal_delay_to_vessel`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn signal_delay_to_vessel_stream(&self, other: &super::space_center::Vessel) -> crate::Result<crate::Stream<f64>> {
-        self.client.stream("RemoteTech", "Comms_SignalDelayToVessel", &[codec::arg(0, &self.id), codec::arg(1, &other)]).await
+        self.client.stream(self.signal_delay_to_vessel_call(other).into()).await
+    }
+
+    /// Builds the procedure call for `signal_delay_to_vessel` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn signal_delay_to_vessel_call(&self, other: &super::space_center::Vessel) -> crate::expr::Call<f64> {
+        crate::expr::Call::new(codec::call("RemoteTech", "Comms_SignalDelayToVessel", vec![codec::arg(0, &self.id), codec::arg(1, &other)]))
     }
 }
 
@@ -361,49 +451,73 @@ impl RemoteTech {
 
     /// Whether RemoteTech is installed.
     pub async fn available(&self) -> crate::Result<bool> {
-        let data = self.client.invoke("RemoteTech", "get_Available", &[]).await?;
+        let data = self.client.invoke(self.available_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `available`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn available_stream(&self) -> crate::Result<crate::Stream<bool>> {
-        self.client.stream("RemoteTech", "get_Available", &[]).await
+        self.client.stream(self.available_call().into()).await
+    }
+
+    /// Builds the procedure call for `available` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn available_call(&self) -> crate::expr::Call<bool> {
+        crate::expr::Call::new(codec::call("RemoteTech", "get_Available", vec![]))
     }
 
     /// The names of the ground stations.
     pub async fn ground_stations(&self) -> crate::Result<Vec<String>> {
-        let data = self.client.invoke("RemoteTech", "get_GroundStations", &[]).await?;
+        let data = self.client.invoke(self.ground_stations_call().into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `ground_stations`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn ground_stations_stream(&self) -> crate::Result<crate::Stream<Vec<String>>> {
-        self.client.stream("RemoteTech", "get_GroundStations", &[]).await
+        self.client.stream(self.ground_stations_call().into()).await
+    }
+
+    /// Builds the procedure call for `ground_stations` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn ground_stations_call(&self) -> crate::expr::Call<Vec<String>> {
+        crate::expr::Call::new(codec::call("RemoteTech", "get_GroundStations", vec![]))
     }
 
     /// Get a communications object, representing the communication capability of a particular vessel.
     pub async fn comms(&self, vessel: &super::space_center::Vessel) -> crate::Result<Comms> {
-        let data = self.client.invoke("RemoteTech", "Comms", &[codec::arg(0, &vessel)]).await?;
+        let data = self.client.invoke(self.comms_call(vessel).into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `comms`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn comms_stream(&self, vessel: &super::space_center::Vessel) -> crate::Result<crate::Stream<Comms>> {
-        self.client.stream("RemoteTech", "Comms", &[codec::arg(0, &vessel)]).await
+        self.client.stream(self.comms_call(vessel).into()).await
+    }
+
+    /// Builds the procedure call for `comms` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn comms_call(&self, vessel: &super::space_center::Vessel) -> crate::expr::Call<Comms> {
+        crate::expr::Call::new(codec::call("RemoteTech", "Comms", vec![codec::arg(0, &vessel)]))
     }
 
     /// Get the antenna object for a particular part.
     pub async fn antenna(&self, part: &super::space_center::Part) -> crate::Result<Antenna> {
-        let data = self.client.invoke("RemoteTech", "Antenna", &[codec::arg(0, &part)]).await?;
+        let data = self.client.invoke(self.antenna_call(part).into()).await?;
         Decode::decode_krpc(&self.client, &data)
     }
 
     /// Streamed variant of `antenna`: the server pushes the value
     /// at the stream's update rate instead of being polled.
     pub async fn antenna_stream(&self, part: &super::space_center::Part) -> crate::Result<crate::Stream<Antenna>> {
-        self.client.stream("RemoteTech", "Antenna", &[codec::arg(0, &part)]).await
+        self.client.stream(self.antenna_call(part).into()).await
+    }
+
+    /// Builds the procedure call for `antenna` without invoking it,
+    /// e.g. to reference its value in an [`Expr`](crate::expr::Expr) tree.
+    pub fn antenna_call(&self, part: &super::space_center::Part) -> crate::expr::Call<Antenna> {
+        crate::expr::Call::new(codec::call("RemoteTech", "Antenna", vec![codec::arg(0, &part)]))
     }
 }
