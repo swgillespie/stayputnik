@@ -1,3 +1,23 @@
+//! Conversion between Rust values and kRPC's wire encoding.
+//!
+//! kRPC encodes every procedure argument and return value as a standalone
+//! protobuf-style value: varints for integers (zigzag for signed),
+//! little-endian for floats, length-prefixed bytes for strings, and
+//! protobuf messages for collections ([`List`](crate::krpc::schema::List),
+//! [`Dictionary`](crate::krpc::schema::Dictionary), and friends). The
+//! [`Encode`] and [`Decode`] traits implement that mapping; [`arg`] packs
+//! an encoded value into a positioned procedure argument.
+//!
+//! [`Decode`] takes a [`ClientRef`] so that decoded remote-object handles
+//! (and any collection containing them) capture the connection they came
+//! from for future calls; scalar impls ignore it.
+//!
+//! This module is mainly the vocabulary of the generated service bindings
+//! in [`services`](crate::services). User code rarely needs it directly,
+//! but the traits are public: every generated class implements
+//! `Encode`/`Decode` by its remote object id, and implementing them by
+//! hand is only useful if you are issuing raw procedure calls.
+
 use prost::Message;
 
 use crate::krpc::schema as proto;

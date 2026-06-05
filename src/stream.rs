@@ -15,6 +15,32 @@ use crate::{ClientRef, Error, Result};
 /// error reported by the server.
 pub(crate) type StreamValue = std::result::Result<Vec<u8>, proto::Error>;
 
+/// Opaque identifier the server assigned to a stream.
+///
+/// Holding one is a witness that the server issued it; there is no way to
+/// construct one or extract the underlying value. Use the `Debug`/`Display`
+/// impls for logging.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct StreamId(u64);
+
+impl StreamId {
+    pub(crate) fn new(raw: u64) -> Self {
+        Self(raw)
+    }
+}
+
+impl std::fmt::Display for StreamId {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
+impl crate::codec::Encode for StreamId {
+    fn encode_krpc(&self) -> Vec<u8> {
+        self.0.encode_krpc()
+    }
+}
+
 type ValueSender = watch::Sender<Option<StreamValue>>;
 type ValueReceiver = watch::Receiver<Option<StreamValue>>;
 
@@ -30,12 +56,12 @@ struct Entry {
 /// channel of each live `Stream` handle.
 #[derive(Default)]
 pub(crate) struct StreamRegistry {
-    entries: Mutex<HashMap<u64, Entry>>,
+    entries: Mutex<HashMap<StreamId, Entry>>,
 }
 
 impl StreamRegistry {
     /// Subscribes to stream `id`, creating the channel on first use.
-    pub(crate) fn register(&self, id: u64) -> ValueReceiver {
+    pub(crate) fn register(&self, id: StreamId) -> ValueReceiver {
         let mut entries = self.entries.lock().unwrap();
         match entries.get_mut(&id) {
             Some(entry) => {
@@ -52,7 +78,7 @@ impl StreamRegistry {
 
     /// Drops one subscription to stream `id`. Returns true if it was the
     /// last one, in which case the caller should remove the server stream.
-    pub(crate) fn release(&self, id: u64) -> bool {
+    pub(crate) fn release(&self, id: StreamId) -> bool {
         let mut entries = self.entries.lock().unwrap();
         match entries.get_mut(&id) {
             Some(entry) if entry.refs > 1 => {
@@ -70,7 +96,7 @@ impl StreamRegistry {
     pub(crate) fn dispatch(&self, update: proto::StreamUpdate) {
         let entries = self.entries.lock().unwrap();
         for result in update.results {
-            if let Some(entry) = entries.get(&result.id) {
+            if let Some(entry) = entries.get(&StreamId::new(result.id)) {
                 let pr = result.result.unwrap_or_default();
                 let value = match pr.error {
                     Some(e) => Err(e),
@@ -110,7 +136,7 @@ impl StreamRegistry {
 /// [`Stream::next`] shadows `StreamExt::next`; its semantics are the same,
 /// minus the `Option` wrapper.
 pub struct Stream<T> {
-    id: u64,
+    id: StreamId,
     client: ClientRef,
     registry: Arc<StreamRegistry>,
     rx: ValueReceiver,
@@ -124,7 +150,7 @@ pub struct Stream<T> {
 
 impl<T: Decode> Stream<T> {
     pub(crate) fn new(
-        id: u64,
+        id: StreamId,
         client: ClientRef,
         registry: Arc<StreamRegistry>,
         rx: ValueReceiver,
@@ -140,8 +166,8 @@ impl<T: Decode> Stream<T> {
         }
     }
 
-    /// The id the server assigned to this stream.
-    pub fn id(&self) -> u64 {
+    /// The opaque id the server assigned to this stream.
+    pub fn id(&self) -> StreamId {
         self.id
     }
 

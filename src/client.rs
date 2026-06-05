@@ -7,7 +7,7 @@ use tokio::sync::{mpsc, oneshot, Mutex};
 
 use crate::codec::{arg, Decode};
 use crate::krpc::schema as proto;
-use crate::stream::{Stream, StreamRegistry};
+use crate::stream::{Stream, StreamId, StreamRegistry};
 use crate::{Error, Result};
 
 /// A connection to a kRPC server.
@@ -139,7 +139,7 @@ impl ClientRef {
         let data = self
             .invoke("KRPC", "AddStream", &[arg(0, &call), arg(1, &true)])
             .await?;
-        let id = proto::Stream::decode(data.as_slice())?.id;
+        let id = StreamId::new(proto::Stream::decode(data.as_slice())?.id);
         let rx = registry.register(id);
         Ok(Stream::new(id, self.clone(), registry, rx))
     }
