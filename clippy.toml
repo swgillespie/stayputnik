@@ -1,0 +1,4 @@
+# ClientRef contains a Mutex, so clippy::mutable_key_type flags any map/set
+# keyed by a generated class handle. Handle Eq/Hash only use the remote object
+# id, never the client, so the lint is a false positive for these types.
+ignore-interior-mutability = ["stayputnik::client::ClientRef"]
